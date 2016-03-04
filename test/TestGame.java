@@ -12,7 +12,7 @@ public class TestGame {
 
 		JFrame frame=new JFrame("The great chess program!");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Game game = new Game();
+        //Game game = new Game();
     	game.setPiecesForNewGame();
         UserInterface ui= new UserInterface(game);
         frame.add(ui);

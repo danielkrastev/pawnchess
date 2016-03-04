@@ -295,7 +295,7 @@ public class Game {
 
 		synchronized (this) {
 			try {
-				wait();
+				this.wait();
 				int column = mouseMover.getClickedColumn();
 				int row = mouseMover.getClickedRow();
 
@@ -310,7 +310,7 @@ public class Game {
 				playersMove.setCurrentSquare(current);
 				System.out.print("target square:");
 
-				wait();
+				this.wait();
 				column = mouseMover.getClickedColumn();
 				row = mouseMover.getClickedRow();
 
@@ -359,10 +359,9 @@ public class Game {
 	 * return true; } } return false; }
 	 */
 	private void updateWhitePieces() {
-
 		whitePieces = new HashSet<Piece>();
-		Square[] chessBouardArray = CHESS_BOARD.toArray();
-		for (Square square : chessBouardArray) {
+		Square[] chessBoardArray = CHESS_BOARD.toArray();
+		for (Square square : chessBoardArray) {
 			if (square.isTaken()) {
 				Piece piece = square.getPiece();
 				if (piece.getPieceColour().equals(PieceColour.WHITE)) {
@@ -373,10 +372,9 @@ public class Game {
 	}
 
 	private void updateBlackPieces() {
-
 		blackPieces = new HashSet<Piece>();
-		Square[] chessBouardArray = CHESS_BOARD.toArray();
-		for (Square square : chessBouardArray) {
+		Square[] chessBoardArray = CHESS_BOARD.toArray();
+		for (Square square : chessBoardArray) {
 			if (square.isTaken()) {
 				Piece piece = square.getPiece();
 				if (piece.getPieceColour().equals(PieceColour.BLACK)) {
@@ -387,20 +385,16 @@ public class Game {
 	}
 
 	private void revertBoard(Move mv) {
-
 		CHESS_BOARD.setPiece(mv.getTargetSquare().getPiece(),
 				mv.getCurrentSquare());
 		mv.getTargetSquare().setTaken(false);
-
 	}
 
 	private Move alphaBetaPruning(int depth, int beta, int alpha, Move move,
 			int player) throws InvalidMoveException {
-
 		ArrayList<Move> possibleMoves = getPossibleMoves();
 		if (depth == 0 || possibleMoves.size() == 0) {
 			move.multiplyRatingBy(player); // -1 or 1
-
 			return move;
 		}
 		player = 1 - player;
@@ -453,14 +447,11 @@ public class Game {
 		 * move.getTargetSquare().getColumn() + " " + +
 		 * move.getTargetSquare().getRow());
 		 */
-
 	}
 
 	ArrayList<Move> getPossibleMoves() {
-
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
 		ArrayList<Square> accessableSquares;
-
 		if (currentPlayer.equals(PieceColour.WHITE)) {
 			for (Piece piece : whitePieces) {
 				accessableSquares = moveValidator.getPossibleSquares(piece);
@@ -486,7 +477,6 @@ public class Game {
 	}
 
 	private void undoMove(Move move) {
-
 		CHESS_BOARD.setPiece(move.getPiece(), move.getCurrentSquare());
 		CHESS_BOARD.freeSquare(move.getTargetSquare());
 	}

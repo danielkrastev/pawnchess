@@ -18,7 +18,6 @@ public class UserInterface extends JPanel {
 	Square markedSquare;
 
 	public UserInterface(final Game game) {
-
 		super();
 		this.chessGraphics = new ChessGraphics();
 		this.game = game;
@@ -26,11 +25,9 @@ public class UserInterface extends JPanel {
 		MouseMover mover = new MouseMover();
 		this.addMouseListener(mover);
 		game.setMouseMover(mover);
-		
 	}
 
 	public void paintComponent(Graphics graphics) {
-		
 		super.paintComponent(graphics);
 		this.setBackground(Color.WHITE);
 		chessGraphics.drawChessBoard(graphics, game);
@@ -39,13 +36,11 @@ public class UserInterface extends JPanel {
 	}
 	
 	public class MouseMover implements MouseListener{
-
 		private int columnClicked;
 		private int rowClicked;
 		
 		@Override
 		public void mouseClicked(MouseEvent event) {
-
 			synchronized(game){
 				columnClicked = event.getX()/64;
 				rowClicked = 9 - event.getY()/64;
