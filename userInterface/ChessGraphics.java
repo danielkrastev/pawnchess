@@ -1,6 +1,5 @@
 package userInterface;
 
-import exceptions.InvalidSquareException;
 import game.Game;
 
 import java.awt.Color;
@@ -41,7 +40,7 @@ public class ChessGraphics {
 		markedSquare = new ImageIcon(pathToMarkedSquare).getImage();
 	}
 
-	void drawChessBoard(Graphics graphics, Game game) throws InvalidSquareException {
+	void drawChessBoard(Graphics graphics, Game game) {
 		
 		for (Square sq : game.getChessBoard().toArray()){
 			

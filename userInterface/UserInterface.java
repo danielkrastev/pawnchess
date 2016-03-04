@@ -2,19 +2,13 @@ package userInterface;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import exceptions.InvalidSquareException;
 import board.Square;
 import game.Game;
-import pieces.Pawn;
-import pieces.King;
-import pieces.Piece.PieceColour;
 
 public class UserInterface extends JPanel {
 
@@ -38,12 +32,10 @@ public class UserInterface extends JPanel {
 	public void paintComponent(Graphics graphics) {
 		
 		super.paintComponent(graphics);
-		this.setBackground(Color.CYAN);
-		try{
+		this.setBackground(Color.WHITE);
 		chessGraphics.drawChessBoard(graphics, game);
 		chessGraphics.drawPieces(graphics, game, this);
 		chessGraphics.markSquare(graphics, markedSquare, this);
-		}catch (InvalidSquareException e){}
 	}
 	
 	public class MouseMover implements MouseListener{

@@ -1,10 +1,8 @@
 package pieces;
 
 import java.util.ArrayList;
-
 import board.Square;
 import exceptions.InvalidMoveException;
-import exceptions.InvalidSquareException;
 
 public abstract class Piece {
 
@@ -48,7 +46,7 @@ public abstract class Piece {
 	}
 	
 	abstract public boolean canMove(Square targetSquare)
-			throws InvalidMoveException, InvalidSquareException;
+			throws InvalidMoveException;
 
 	public abstract ArrayList<Square> getAccesableSquares();
 	public abstract ArrayList<Square> getAttackedSquares();

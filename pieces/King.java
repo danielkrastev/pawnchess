@@ -1,15 +1,9 @@
 package pieces;
 
 import java.util.ArrayList;
-import java.util.List;
-
-
-
-import exceptions.InvalidMoveException;
-import exceptions.InvalidSquareException;
-import game.Game;
 
 import board.Square;
+import exceptions.InvalidMoveException;
 
 public class King extends Piece {
 
@@ -30,9 +24,7 @@ public class King extends Piece {
 	}
 
 	@Override
-	public boolean canMove(Square targetSquare) throws InvalidMoveException,
-			InvalidSquareException {
-
+	public boolean canMove(Square targetSquare) throws InvalidMoveException {
 		if (targetSquare.isValidSquare() && isMoveValid(targetSquare) && isSquareAccessible(targetSquare)) {
 			return true;
 		}
@@ -40,7 +32,6 @@ public class King extends Piece {
 	}
 
 	private boolean isSquareAccessible(Square targetSquare) {
-	
 		if (!targetSquare.isTaken()){
 			return true;
 		}

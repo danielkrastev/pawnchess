@@ -1,7 +1,6 @@
 package board;
 
 import pieces.Piece;
-import exceptions.InvalidSquareException;
 
 public class Square {
 
@@ -134,7 +133,6 @@ public class Square {
 	}
 
 	public boolean isOneSquareLeftUpFrom(Square square) {
-
 		if ((this.column == square.column - 1) && (this.row == square.row + 1)) {
 			return true;
 		} else {
@@ -144,7 +142,6 @@ public class Square {
 	}
 
 	public boolean isOneSquareRightUpFrom(Square square) {
-
 		if ((this.column == square.column + 1) && (this.row == square.row + 1)) {
 			return true;
 		} else {
@@ -154,7 +151,6 @@ public class Square {
 	}
 
 	public boolean isOneSquareLeftDownFrom(Square square) {
-
 		if ((this.column == square.column - 1) && (this.row == square.row - 1)) {
 			return true;
 		} else {
@@ -164,7 +160,6 @@ public class Square {
 	}
 
 	public boolean isOneSquareRightDownFrom(Square square) {
-
 		if ((this.column == square.column + 1) && (this.row == square.row - 1)) {
 			return true;
 		} else {
@@ -173,7 +168,6 @@ public class Square {
 	}
 
 	public boolean isTwoSquaresUpFrom(Square pos) {
-
 		if ((this.column == pos.column) && (this.row == pos.row + 2)) {
 			return true;
 		} else {
@@ -182,7 +176,6 @@ public class Square {
 	}
 
 	public boolean isTwoSquaresdDownFrom(Square pos) {
-
 		if ((this.column == pos.column) && (this.row == pos.row - 2)) {
 			return true;
 		} else {
@@ -191,13 +184,10 @@ public class Square {
 	}
 
 	public String getPositionOnBoard() {
-
 		return new String(this.getColumn() + "," + this.getRow());
-
 	}
 
 	public Square oneSquareLeft() {
-
 		Square sq = new Square(column - 1, row);
 		if (sq.isValidSquare()) {
 			return sq;
@@ -225,7 +215,6 @@ public class Square {
 	}
 
 	public Square oneSquareRight() {
-
 		Square sq = new Square(column + 1, row);
 		if (sq.isValidSquare()) {
 			return sq;
@@ -245,7 +234,6 @@ public class Square {
 	}
 
 	public Square oneSquareDown() {
-
 		Square sq = new Square(column, row - 1);
 		if (sq.isValidSquare()) {
 			return sq;
@@ -254,10 +242,7 @@ public class Square {
 		}
 	}
 
-	/*******************************************/
-
 	public Square oneSquareLeftUp() {
-
 		Square sq = new Square(column - 1, row + 1);
 		if (sq.isValidSquare()) {
 			return sq;
@@ -277,7 +262,6 @@ public class Square {
 	}
 
 	public Square oneSquareLeftDown() {
-
 		Square sq = new Square(column - 1, row - 1);
 		if (sq.isValidSquare()) {
 			return sq;
@@ -288,7 +272,6 @@ public class Square {
 	}
 
 	public Square oneSquareRightDown() {
-
 		Square sq = new Square(column + 1, row - 1);
 		if (sq.isValidSquare()) {
 			return sq;
@@ -298,7 +281,6 @@ public class Square {
 	}
 
 	public boolean equals(Object o) {
-
 		if (o instanceof Square) {
 			Square square = (Square) o;
 

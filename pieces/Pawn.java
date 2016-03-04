@@ -1,12 +1,9 @@
 package pieces;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import board.Square;
 import exceptions.InvalidMoveException;
-import exceptions.InvalidSquareException;
-import game.Game;
 
 public class Pawn extends Piece {
 
@@ -17,8 +14,7 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public boolean canMove(Square targetSquare) throws InvalidMoveException,
-			InvalidSquareException {
+	public boolean canMove(Square targetSquare) throws InvalidMoveException {
 
 		if (targetSquare.isValidSquare() && isMoveValid(targetSquare)) {
 			return true;

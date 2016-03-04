@@ -1,24 +1,17 @@
 package game;
 
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Stack;
 
+import board.ChessBoard;
+import board.Square;
 import exceptions.InvalidMoveException;
-import exceptions.InvalidSquareException;
-import exceptions.NotYourTurnException;
 import pieces.King;
 import pieces.Pawn;
 import pieces.Piece;
 import pieces.Piece.PieceColour;
 import userInterface.UserInterface;
-import board.ChessBoard;
-import board.Square;
 
 public class Game {
 
@@ -97,10 +90,6 @@ public class Game {
 					Thread.sleep(1000);
 					changeTurn();
 				}
-			} catch (InvalidSquareException e) {
-				e.printStackTrace();
-			} catch (NotYourTurnException e) {
-				e.printStackTrace();
 			} catch (InvalidMoveException e) {
 				System.out.println("you must escape from attack");
 				revertBoard(listOfMoves.get(listOfMoves.size() - 1));
@@ -123,8 +112,8 @@ public class Game {
 		return this.attackedSquaresFromBlack;
 	}
 
-	private boolean makeMove(Move move) throws NotYourTurnException,
-			InvalidMoveException, InvalidSquareException {
+	private boolean makeMove(Move move) throws
+			InvalidMoveException {
 
 		Square currentSquare = CHESS_BOARD.getSquare((move.getCurrentSquare()));
 
@@ -406,8 +395,7 @@ public class Game {
 	}
 
 	private Move alphaBetaPruning(int depth, int beta, int alpha, Move move,
-			int player) throws NotYourTurnException, InvalidMoveException,
-			InvalidSquareException {
+			int player) throws InvalidMoveException {
 
 		ArrayList<Move> possibleMoves = getPossibleMoves();
 		if (depth == 0 || possibleMoves.size() == 0) {
