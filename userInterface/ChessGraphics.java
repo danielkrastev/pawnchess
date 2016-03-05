@@ -32,7 +32,6 @@ public class ChessGraphics {
     private Image markedSquare;
 	
 	ChessGraphics() {
-
 		whiteKing = new ImageIcon(pathToWhiteKing).getImage();
 		blackKing = new ImageIcon(pathToBlackKing).getImage();
 		whitePawn = new ImageIcon(pathToWhitePawn).getImage();
@@ -41,9 +40,7 @@ public class ChessGraphics {
 	}
 
 	void drawChessBoard(Graphics graphics, Game game) {
-		
 		for (Square sq : game.getChessBoard().toArray()){
-			
 			if (sq.isWhite()){
 				graphics.setColor(WOODEN_BOARD_WHITE);
 			}else {
@@ -54,6 +51,7 @@ public class ChessGraphics {
 	}
 
 	void drawPieces(Graphics graphics, Game game, UserInterface ui) {
+		System.out.println("DRAW PIECES CALLED");
 		for (Square sq : game.getChessBoard().toArray()) {
 			if (sq.isTaken()) {
 				if (sq.getPiece() instanceof Pawn) {
@@ -74,11 +72,9 @@ public class ChessGraphics {
 				}
 			}
 		}
-		ui.repaint();
 	}
 
 	public void markSquare(Graphics graphics, Square sq, UserInterface ui) {
-		
 		if (sq != null && sq.isTaken()){
 			graphics.drawImage(markedSquare, sq.getX(), sq.getY(), ui);
 		}

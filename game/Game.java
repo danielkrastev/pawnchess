@@ -26,7 +26,7 @@ public class Game {
 	private HashMap<Square, Integer> attackedSquaresFromBlack;
 	private ArrayList<Move> listOfMoves;
 	private PieceColour currentPlayer;
-
+	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
 	static private final int DEPTH = 1;
 
@@ -70,6 +70,7 @@ public class Game {
 				} else {
 					currentMove = alphaBetaPruning(DEPTH, 500, -500, null, 0);
 					System.out.println("computer decides:" + currentMove);
+					gui.repaint();
 				}
 
 				boolean isMoveValid = moveValidator.validate(currentMove);
@@ -290,8 +291,8 @@ public class Game {
 		Square current;
 		Square target;
 
-		System.out.println("waiting for your move:");
-		System.out.print("current square: ");
+		System.out.println("Waiting for your move:");
+		System.out.print("Current square: ");
 
 		synchronized (this) {
 			try {
@@ -300,9 +301,9 @@ public class Game {
 				int row = mouseMover.getClickedRow();
 
 				Square temp = CHESS_BOARD.getSquare(column, row);
-				if (!temp.isTaken()
-						|| temp.getPiece().isBlack()) {
-					throw new InvalidMoveException("Piece not clicked on!");
+				if ( !temp.isTaken()
+					|| temp.getPiece().isBlack()) {
+						throw new InvalidMoveException("Piece not clicked on!");
 				}
 
 				current = CHESS_BOARD.getSquare(column, row);
@@ -323,7 +324,7 @@ public class Game {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (InvalidMoveException e) {
-				return getPlayersMove();
+				getPlayersMove();
 			}
 		}
 		return null;
@@ -499,5 +500,10 @@ public class Game {
 
 	public void setMouseMover(UserInterface.MouseMover mover) {
 		this.mouseMover = mover;
+	}
+
+	public void setUI(UserInterface gui) {
+		this.gui=gui;
+		
 	}
 }

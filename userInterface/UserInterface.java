@@ -25,9 +25,11 @@ public class UserInterface extends JPanel {
 		MouseMover mover = new MouseMover();
 		this.addMouseListener(mover);
 		game.setMouseMover(mover);
+		game.setUI(this);
 	}
 
 	public void paintComponent(Graphics graphics) {
+		System.out.println("I am called NOW!!!!");
 		super.paintComponent(graphics);
 		this.setBackground(Color.WHITE);
 		chessGraphics.drawChessBoard(graphics, game);
@@ -45,6 +47,7 @@ public class UserInterface extends JPanel {
 				columnClicked = event.getX()/64;
 				rowClicked = 9 - event.getY()/64;
 				markedSquare = game.getChessBoard().getSquare(columnClicked, rowClicked);
+			    UserInterface.this.repaint();
 				game.notify();
 			}
 		}
