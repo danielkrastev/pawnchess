@@ -29,7 +29,6 @@ public class UserInterface extends JPanel {
 	}
 
 	public void paintComponent(Graphics graphics) {
-		System.out.println("I am called NOW!!!!");
 		super.paintComponent(graphics);
 		this.setBackground(Color.WHITE);
 		chessGraphics.drawChessBoard(graphics, game);

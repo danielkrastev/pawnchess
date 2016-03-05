@@ -51,7 +51,6 @@ public class ChessGraphics {
 	}
 
 	void drawPieces(Graphics graphics, Game game, UserInterface ui) {
-		System.out.println("DRAW PIECES CALLED");
 		for (Square sq : game.getChessBoard().toArray()) {
 			if (sq.isTaken()) {
 				if (sq.getPiece() instanceof Pawn) {

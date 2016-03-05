@@ -1,5 +1,6 @@
 package game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,8 +13,12 @@ import pieces.Pawn;
 import pieces.Piece;
 import pieces.Piece.PieceColour;
 import userInterface.UserInterface;
+import java.util.logging.*;
 
 public class Game {
+
+	private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
+	
 
 	private final ChessBoard CHESS_BOARD;
 
@@ -29,10 +34,18 @@ public class Game {
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
 	static private final int DEPTH = 1;
-
 	private MoveValidator moveValidator;
 
 	public Game() {
+		
+		try{
+			FileHandler fileHandler = new FileHandler("chess-game.log");
+			fileHandler.setFormatter(new SimpleFormatter());
+			LOGGER.addHandler(fileHandler);
+			
+		}catch (IOException e){
+			e.printStackTrace();
+		}
 
 		CHESS_BOARD = new ChessBoard();
 
@@ -49,7 +62,7 @@ public class Game {
 	}
 
 	public void start() {
-
+		
 		updateWhitePieces();
 		updateBlackPieces();
 		updateAttackedSquaresFromWhite();
@@ -57,7 +70,8 @@ public class Game {
 
 		while (true) {
 			try {
-				System.out.println(currentPlayer.toString() + " to move:");
+				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:");
+				//System.out.println(currentPlayer.toString() + " to move:");
 				System.out.println(this);
 
 				if (isCheckDeclared()) {
