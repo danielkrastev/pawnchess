@@ -1,5 +1,6 @@
 package game;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,12 @@ public class Game {
 	public Game() {
 		
 		try{
-			FileHandler fileHandler = new FileHandler("chess-game.log");
+			File logdir = new File ("/var/log/pawnchess/");
+			if ( !logdir.exists()){
+				logdir.mkdirs();
+			}
+			File logfile = new File("/var/log/pawnchess/chess-game.log");
+			FileHandler fileHandler = new FileHandler(logfile.getAbsolutePath());
 			fileHandler.setFormatter(new SimpleFormatter());
 			LOGGER.addHandler(fileHandler);
 			
@@ -70,12 +76,10 @@ public class Game {
 
 		while (true) {
 			try {
-				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:");
-				//System.out.println(currentPlayer.toString() + " to move:");
-				System.out.println(this);
+				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:\nCurrent position:\n" + this.toString());
 
 				if (isCheckDeclared()) {
-					System.out.println("Check!");
+					LOGGER.log(Level.INFO, "Check!");
 				}
 
 				Move currentMove;
@@ -83,8 +87,7 @@ public class Game {
 					currentMove = getPlayersMove();
 				} else {
 					currentMove = alphaBetaPruning(DEPTH, 500, -500, null, 0);
-					System.out.println("computer decides:" + currentMove);
-					gui.repaint();
+					LOGGER.log(Level.INFO, "The program decides" + currentMove);
 				}
 
 				boolean isMoveValid = moveValidator.validate(currentMove);
@@ -95,6 +98,10 @@ public class Game {
 					updateBlackPieces();
 					updateAttackedSquaresFromWhite();
 					updateAttackedSquaresFromBlack();
+					gui.repaint();
+					if (currentPlayer.equals(PieceColour.WHITE)) {
+						Thread.sleep(2000);
+					}
 
 					/*
 					 * if (isCheckDeclared()) { if
@@ -102,11 +109,10 @@ public class Game {
 					 * currentMove)) { System.out.println("End of game!");
 					 * break; } }
 					 */
-					Thread.sleep(1000);
 					changeTurn();
 				}
 			} catch (InvalidMoveException e) {
-				System.out.println("you must escape from attack");
+				LOGGER.log(Level.INFO, "You must escape from attack");
 				revertBoard(listOfMoves.get(listOfMoves.size() - 1));
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -135,7 +141,7 @@ public class Game {
 		Piece piece = currentSquare.getPiece();
 
 		if (!piece.getPieceColour().equals(currentPlayer)) {
-			System.out.println("not your turn");
+			LOGGER.log(Level.INFO, "Not your turn!");
 			return false;
 		}
 
@@ -228,7 +234,6 @@ public class Game {
 	}
 
 	private void updateAttackedSquaresFromBlack() {
-
 		attackedSquaresFromBlack = new HashMap<Square, Integer>();
 		ArrayList<Square> attackedSquares;
 		int counter;
@@ -248,7 +253,6 @@ public class Game {
 	}
 
 	public void setPiecesForNewGame() {
-
 		CHESS_BOARD.setPiece(WHITE_KING, CHESS_BOARD.getSquare(5, 1));
 		CHESS_BOARD.setPiece(BLACK_KING, CHESS_BOARD.getSquare(5, 8));
 
@@ -292,7 +296,6 @@ public class Game {
 	}
 
 	private void changeTurn() {
-
 		if (currentPlayer.equals(PieceColour.WHITE)) {
 			currentPlayer = PieceColour.BLACK;
 		} else {
@@ -305,8 +308,7 @@ public class Game {
 		Square current;
 		Square target;
 
-		System.out.println("Waiting for your move:");
-		System.out.print("Current square: ");
+		LOGGER.log(Level.INFO, "Waiting for your move:\nCurrent square: ");
 
 		synchronized (this) {
 			try {
@@ -321,16 +323,17 @@ public class Game {
 				}
 
 				current = CHESS_BOARD.getSquare(column, row);
-				System.out.println(current.printCoordinates());
+				LOGGER.log(Level.INFO, current.printCoordinates());
 				playersMove.setCurrentSquare(current);
-				System.out.print("target square:");
+				
+				LOGGER.log(Level.INFO, "target square:");
 
 				this.wait();
 				column = mouseMover.getClickedColumn();
 				row = mouseMover.getClickedRow();
 
 				target = CHESS_BOARD.getSquare(column, row);
-				System.out.println(target.printCoordinates());
+				LOGGER.log(Level.INFO, target.printCoordinates());
 				playersMove.setTargetSquare(target);
 
 				return playersMove;
@@ -518,6 +521,5 @@ public class Game {
 
 	public void setUI(UserInterface gui) {
 		this.gui=gui;
-		
 	}
 }

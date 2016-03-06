@@ -40,7 +40,7 @@ public class ChessBoard {
 			}
 			sb.append("\n");
 		}
-		sb.append("******************************");
+		sb.append("\n******************************\n");
 		return sb.toString();
 	}
 

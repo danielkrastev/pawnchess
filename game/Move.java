@@ -44,10 +44,10 @@ public class Move {
 	
 @Override
 public String toString(){
-	 return String.format("[%d %d] [%d %d]", this.getCurrentSquare().getColumn(),
-			 								 this.getCurrentSquare().getRow(),
-			 								 this.getTargetSquare().getColumn(),
-			 								 this.getTargetSquare().getRow()
+	 return String.format("[%d %d] [%d %d]", this.getCurrentSquare().getRow(),
+			 								 this.getCurrentSquare().getColumn(),
+			 								 this.getTargetSquare().getRow(),
+			 								 this.getTargetSquare().getColumn()
 			 								 );
  }
 

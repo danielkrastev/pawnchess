@@ -90,9 +90,9 @@ public class Square {
 		} else {
 			if (this.isValidSquare()) {
 				if (this.isWhite()) {
-					return " W ";
+					return "   ";
 				} else {
-					return " B ";
+					return " # ";
 				}
 			}
 		}

@@ -8,6 +8,10 @@ public class Edge extends Square {
 	}
 	
 	public String toString() {
-		return "#";
+		if (this.row == 9 || this.row == 0){
+			return "===";
+		} else {
+			return "||";
+		}	
 	}
 }
