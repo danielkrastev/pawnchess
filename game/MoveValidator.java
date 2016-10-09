@@ -45,16 +45,18 @@ public class MoveValidator {
 		if (king.isWhite()) {
 			for (Object sq : king.getAccesableSquares().toArray()) {
 				Square targetSquare = CHESS_BOARD.getSquare((Square) sq);
-				if (!targetSquare.isTaken()) {
+				if ( ! targetSquare.isTaken() &&
+					 ! game.getAttackedSquaresFromBlack().containsKey(sq)) {
 					possibleSquares.add(targetSquare);
 				} else // square is taken
 				if (targetSquare.getPiece().isBlack()) {
+					
 					Pawn blackPawn = (Pawn) targetSquare.getPiece();// only
 																	// possible
 																	// that this
 																	// piece is
 																	// pawn
-					if (!isProtected(blackPawn)) {
+					if ( ! isProtected(blackPawn)) {
 						possibleSquares.add(targetSquare);
 					}
 				}

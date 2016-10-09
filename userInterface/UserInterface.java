@@ -42,13 +42,7 @@ public class UserInterface extends JPanel {
 		
 		@Override
 		public void mouseClicked(MouseEvent event) {
-			synchronized(game){
-				columnClicked = event.getX()/64;
-				rowClicked = 9 - event.getY()/64;
-				markedSquare = game.getChessBoard().getSquare(columnClicked, rowClicked);
-			    UserInterface.this.repaint();
-				game.notify();
-			}
+	
 		}
 
 		public int getClickedColumn() {
@@ -86,8 +80,14 @@ public class UserInterface extends JPanel {
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+		public void mouseReleased(MouseEvent event) {
+			synchronized(game){
+				columnClicked = event.getX()/64;
+				rowClicked = 9 - event.getY()/64;
+				markedSquare = game.getChessBoard().getSquare(columnClicked, rowClicked);
+			    UserInterface.this.repaint();
+				game.notify();
+			}
 			
 		}
 	}

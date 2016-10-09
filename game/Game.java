@@ -77,7 +77,6 @@ public class Game {
 		while (true) {
 			try {
 				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:\nCurrent position:\n" + this.toString());
-
 				if (isCheckDeclared()) {
 					LOGGER.log(Level.INFO, "Check!");
 				}
@@ -93,6 +92,7 @@ public class Game {
 				boolean isMoveValid = moveValidator.validate(currentMove);
 
 				if (isMoveValid == true) {
+					LOGGER.log(Level.INFO, "THE MOVE IS VALID");
 					makeMove(currentMove);
 					updateWhitePieces();
 					updateBlackPieces();
@@ -110,6 +110,8 @@ public class Game {
 					 * break; } }
 					 */
 					changeTurn();
+				} else {
+					LOGGER.log(Level.INFO, "THE MOVE IS NOT VALID");
 				}
 			} catch (InvalidMoveException e) {
 				LOGGER.log(Level.INFO, "You must escape from attack");
@@ -246,7 +248,7 @@ public class Game {
 					if (attackedSquaresFromBlack.containsKey(square)) {
 						counter += attackedSquaresFromBlack.get(square);
 					}
-					attackedSquaresFromWhite.put(square, counter);
+					attackedSquaresFromBlack.put(square, counter);
 				}
 			}
 		}
@@ -467,7 +469,7 @@ public class Game {
 		 */
 	}
 
-	ArrayList<Move> getPossibleMoves() {
+	 ArrayList<Move> getPossibleMoves() {
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
 		ArrayList<Square> accessableSquares;
 		if (currentPlayer.equals(PieceColour.WHITE)) {
