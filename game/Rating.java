@@ -36,40 +36,15 @@ public class Rating {
 			{ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 	public static int positionRating(Game game) {
-
 		int rating = 0;
-
 		rating += rateMaterial(game);
 		rating += ratePosition(game);
 		return rating;
 	}
 
 	private static int rateMaterial(Game game) {
-
-		int pawnPts = 0;
-
-		for (Piece p : game.getBlackPieces()) {
-			if (p instanceof Pawn) {
-				if (game.getCurrentPlayer().equals(PieceColour.BLACK)) {
-					pawnPts++;
-				} else {
-					pawnPts--;
-				}
-			}
-		}
-		for (Piece p : game.getWhitePieces()) {
-			if (p instanceof Pawn) {
-				if (game.getCurrentPlayer().equals(PieceColour.WHITE)) {
-					pawnPts--;
-				} else {
-					pawnPts++;
-				}
-			}
-		}
-
-		return pawnPts;
-
-	}
+		return game.getBlackPieces().size() - game.getWhitePieces().size();
+	}		
 
 	private static int ratePosition(Game game) {
 
@@ -116,5 +91,4 @@ public class Rating {
 		}
 		return positionPts;
 	}
-
 }

@@ -17,10 +17,7 @@ import userInterface.UserInterface;
 import java.util.logging.*;
 
 public class Game {
-
 	private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
-	
-
 	private final ChessBoard CHESS_BOARD;
 
 	private final King WHITE_KING = new King(PieceColour.WHITE);
@@ -73,8 +70,7 @@ public class Game {
 		updateBlackPieces();
 		updateAttackedSquaresFromWhite();
 		updateAttackedSquaresFromBlack();
-
-		while (true) {
+		while(true) {
 			try {
 				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:\nCurrent position:\n" + this.toString());
 				if (isCheckDeclared()) {
@@ -85,7 +81,7 @@ public class Game {
 				if (currentPlayer.equals(PieceColour.WHITE)) {
 					currentMove = getPlayersMove();
 				} else {
-					currentMove = alphaBetaPruning(DEPTH, 500, -500, null, 0);
+					currentMove = alphaBetaPruning(DEPTH, 500, -500, null, true);
 					LOGGER.log(Level.INFO, "The program decides" + currentMove);
 				}
 
@@ -411,62 +407,36 @@ public class Game {
 	}
 
 	private Move alphaBetaPruning(int depth, int beta, int alpha, Move move,
-			int player) throws InvalidMoveException {
+			boolean  maximizingPlayer) throws InvalidMoveException {
 		ArrayList<Move> possibleMoves = getPossibleMoves();
-		if (depth == 0 || possibleMoves.size() == 0) {
-			move.multiplyRatingBy(player); // -1 or 1
+		if (depth == 0 || possibleMoves.size() == 0) { //not sure about this
 			return move;
 		}
-		player = 1 - player;
-
-		for (Move possibleMove : possibleMoves) {
-			makeMove(possibleMove);
-			changeTurn();
-			Move returnMove = alphaBetaPruning(depth - 1, beta, alpha,
-					possibleMove, player);
-			int value = returnMove.getRating(this);
-			changeTurn();
-			undoMove(returnMove);
-
-			if (player == 0) {
-				if (value <= beta) {
-					beta = value;
-					if (depth == DEPTH) {
-						move = returnMove;
-					}
-				}
-			} else {
-				if (value > alpha) {
-					alpha = value;
-					if (depth == DEPTH) {
-						move = returnMove;
-					}
+		
+		Move strongestMove = new Move();
+		
+		if (maximizingPlayer) { // True if black for now
+			for (Move possibleMove : possibleMoves) {
+				possibleMove.calculateRating(this);
+				strongestMove = Move.max(strongestMove,
+						alphaBetaPruning(depth-1, beta, alpha, possibleMove, false));
+				alpha = Math.max(alpha, strongestMove.getRating());
+				if (beta <= alpha) {
+					break;
 				}
 			}
-			if (alpha >= beta) {
-				if (player == 0) {
-					move.setRating(beta);
-					return move;
-				} else {
-					move.setRating(alpha);
-					return move;
+		}else {
+			for (Move possibleMove : possibleMoves) {
+				possibleMove.calculateRating(this);
+				strongestMove = Move.min(strongestMove,
+						alphaBetaPruning(depth-1, beta, alpha, possibleMove, true));
+				beta = Math.min(beta, strongestMove.getRating());
+				if (beta <= alpha) {
+					break;
 				}
 			}
 		}
-		if (player == 0) {
-			move.setRating(beta);
-			return move;
-		} else {
-			move.setRating(alpha);
-			return move;
-		}
-		/*
-		 * System.out.println ("computer decides:" +
-		 * move.getCurrentSquare().getColumn() + " " + +
-		 * move.getCurrentSquare().getRow() + ";" +
-		 * move.getTargetSquare().getColumn() + " " + +
-		 * move.getTargetSquare().getRow());
-		 */
+	    return strongestMove;
 	}
 
 	 ArrayList<Move> getPossibleMoves() {
@@ -500,7 +470,7 @@ public class Game {
 		CHESS_BOARD.setPiece(move.getPiece(), move.getCurrentSquare());
 		CHESS_BOARD.freeSquare(move.getTargetSquare());
 	}
-
+	
 	public HashSet<Piece> getWhitePieces() {
 		return whitePieces;
 	}

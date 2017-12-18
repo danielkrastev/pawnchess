@@ -7,7 +7,7 @@ public class Move {
 
 	private Square currentSquare;
 	private Square targetSquare;
-	private int rating;
+	private int rating=0;
 
 	public Square getCurrentSquare() {
 		return currentSquare;
@@ -37,19 +37,23 @@ public class Move {
 		return currentSquare.getPiece();
 	}
 
-	public int getRating(Game game) {
-		//return Rating.positionRating(game);
-		return 0;
+	public void calculateRating(Game game) {
+	     this.rating = Rating.positionRating(game);
 	}
-	
-@Override
-public String toString(){
-	 return String.format("[%d %d] [%d %d]", this.getCurrentSquare().getRow(),
-			 								 this.getCurrentSquare().getColumn(),
-			 								 this.getTargetSquare().getRow(),
-			 								 this.getTargetSquare().getColumn()
-			 								 );
- }
+
+	public int getRating() {
+	    return this.rating;
+	}
+
+	@Override
+	public String toString(){
+		 return String.format("[%d %d] [%d %d]", 
+				             this.getCurrentSquare().getRow(),
+							 this.getCurrentSquare().getColumn(),
+							 this.getTargetSquare().getRow(),
+							 this.getTargetSquare().getColumn()
+							 );
+	 }
 
 	@Override
 	public boolean equals(Object o) {
@@ -64,5 +68,34 @@ public String toString(){
 	@Override
 	public int hashCode(){
 		return this.currentSquare.hashCode();
+	}
+	
+	public static Move max(Move first, Move second) {
+		if (null == first) {
+			return second;
+		}
+		if (null == second) {
+			return first;
+		}
+		if (first.getRating() > second.getRating()){
+			return first;
+		}else {
+			return second;
+		}
+	}
+	
+	
+	public static Move min(Move first, Move second) {
+		if (null == first) {
+			return second;
+		}
+		if (null == second) {
+			return first;
+		}
+		if (first.getRating() < second.getRating()){
+			return first;
+		}else {
+			return second;
+		}
 	}
 }
