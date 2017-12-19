@@ -24,6 +24,9 @@ public class ChessGraphics {
 	private final int squareSize = 64;
 	private final Color WOODEN_BOARD_BLACK = new Color(150, 50, 30);
 	private final Color WOODEN_BOARD_WHITE = new Color(255, 200, 100);
+	
+	private final Color FANCY_BOARD_BLACK = new Color(18, 142, 14);
+	private final Color FANCY_BOARD_WHITE = new Color(255, 252, 198);
 
 	private Image whiteKing;
 	private Image blackKing;
@@ -42,9 +45,9 @@ public class ChessGraphics {
 	void drawChessBoard(Graphics graphics, Game game) {
 		for (Square sq : game.getChessBoard().toArray()){
 			if (sq.isWhite()){
-				graphics.setColor(WOODEN_BOARD_WHITE);
+				graphics.setColor(FANCY_BOARD_WHITE);
 			}else {
-				graphics.setColor(WOODEN_BOARD_BLACK);
+				graphics.setColor(FANCY_BOARD_BLACK);
 			}
 			graphics.fillRect(sq.getX(), sq.getY(), squareSize, squareSize);
 		}
