@@ -20,9 +20,9 @@ public class MoveValidator {
 		this.CHESS_BOARD = game.getChessBoard();
 	}
 
-	public boolean validate(Move move) {
+	public boolean validate(Move move, boolean is_black) {
 
-		List<Move> possibleMoves = game.getPossibleMoves();
+		List<Move> possibleMoves = game.getPossibleMoves(is_black);
 		if (possibleMoves.contains(move)) {
 			return true;
 		}
@@ -48,8 +48,7 @@ public class MoveValidator {
 				if ( ! targetSquare.isTaken() &&
 					 ! game.getAttackedSquaresFromBlack().containsKey(sq)) {
 					possibleSquares.add(targetSquare);
-				} else // square is taken
-				if (targetSquare.getPiece().isBlack()) {
+				} else if (targetSquare.getPiece().isBlack()) {
 					
 					Pawn blackPawn = (Pawn) targetSquare.getPiece();// only
 																	// possible
@@ -64,7 +63,7 @@ public class MoveValidator {
 		} else {// king is black
 			for (Object sq : king.getAccesableSquares().toArray()) {
 				Square targetSquare = CHESS_BOARD.getSquare((Square) sq);
-				if (!targetSquare.isTaken()) {
+				if (! targetSquare.isTaken()) {
 					possibleSquares.add(targetSquare);
 				} else // square is taken
 				if (targetSquare.getPiece().isWhite()) {

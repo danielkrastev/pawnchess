@@ -31,7 +31,7 @@ public class Game {
 	private PieceColour currentPlayer;
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
-	static private final int DEPTH = 1;
+	static private final int DEPTH = 3;
 	private MoveValidator moveValidator;
 
 	public Game() {
@@ -72,20 +72,23 @@ public class Game {
 		updateAttackedSquaresFromBlack();
 		while(true) {
 			try {
-				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:\nCurrent position:\n" + this.toString());
+ 				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:\nCurrent position:\n" + this.toString());
 				if (isCheckDeclared()) {
 					LOGGER.log(Level.INFO, "Check!");
 				}
-
+				boolean is_black = true;
+				if (currentPlayer.equals(PieceColour.WHITE))
+					is_black = false;
+				
 				Move currentMove;
 				if (currentPlayer.equals(PieceColour.WHITE)) {
 					currentMove = getPlayersMove();
 				} else {
 					currentMove = alphaBetaPruning(DEPTH, 500, -500, null, true);
-					LOGGER.log(Level.INFO, "The program decides" + currentMove);
+					LOGGER.log(Level.INFO, "The program decides " + currentMove);
 				}
 
-				boolean isMoveValid = moveValidator.validate(currentMove);
+				boolean isMoveValid = moveValidator.validate(currentMove, is_black);
 
 				if (isMoveValid == true) {
 					LOGGER.log(Level.INFO, "THE MOVE IS VALID");
@@ -98,13 +101,6 @@ public class Game {
 					if (currentPlayer.equals(PieceColour.WHITE)) {
 						Thread.sleep(2000);
 					}
-
-					/*
-					 * if (isCheckDeclared()) { if
-					 * (isCheckMateDeclaredOrPawnreachedEnd(currentPlayer,
-					 * currentMove)) { System.out.println("End of game!");
-					 * break; } }
-					 */
 					changeTurn();
 				} else {
 					LOGGER.log(Level.INFO, "THE MOVE IS NOT VALID");
@@ -407,23 +403,23 @@ public class Game {
 	}
 
 	private Move alphaBetaPruning(int depth, int beta, int alpha, Move move,
-			boolean  maximizingPlayer) throws InvalidMoveException {
-		ArrayList<Move> possibleMoves = getPossibleMoves();
+			boolean  is_black) throws InvalidMoveException {
+		ArrayList<Move> possibleMoves = getPossibleMoves(is_black);
 		if (depth == 0 || possibleMoves.size() == 0) { //not sure about this
 			return move;
 		}
 		
-		Move strongestMove = new Move();
+		Move strongestMove = possibleMoves.get(0);
 		
-		if (maximizingPlayer) { // True if black for now
+		if (is_black) { // maximizing player
 			for (Move possibleMove : possibleMoves) {
 				possibleMove.calculateRating(this);
 				strongestMove = Move.max(strongestMove,
 						alphaBetaPruning(depth-1, beta, alpha, possibleMove, false));
 				alpha = Math.max(alpha, strongestMove.getRating());
-				if (beta <= alpha) {
-					break;
-				}
+				//if (beta <= alpha) {
+				//	break;
+				//}
 			}
 		}else {
 			for (Move possibleMove : possibleMoves) {
@@ -431,18 +427,21 @@ public class Game {
 				strongestMove = Move.min(strongestMove,
 						alphaBetaPruning(depth-1, beta, alpha, possibleMove, true));
 				beta = Math.min(beta, strongestMove.getRating());
-				if (beta <= alpha) {
-					break;
-				}
+				//if (beta <= alpha) {
+				//	break;
+				//}
 			}
 		}
+		assert (strongestMove != null);
 	    return strongestMove;
 	}
 
-	 ArrayList<Move> getPossibleMoves() {
+	 ArrayList<Move> getPossibleMoves(boolean is_black) {
+		boolean is_white = ! is_black;
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
 		ArrayList<Square> accessableSquares;
-		if (currentPlayer.equals(PieceColour.WHITE)) {
+
+		if (is_white) {
 			for (Piece piece : whitePieces) {
 				accessableSquares = moveValidator.getPossibleSquares(piece);
 				for (Square target : accessableSquares) {
