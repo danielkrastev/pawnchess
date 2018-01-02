@@ -31,7 +31,7 @@ public class Game {
 	private PieceColour currentPlayer;
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
-	static private final int DEPTH = 3;
+	static private final int DEPTH = 0;
 	private MoveValidator moveValidator;
 
 	public Game() {
@@ -84,7 +84,7 @@ public class Game {
 				if (currentPlayer.equals(PieceColour.WHITE)) {
 					currentMove = getPlayersMove();
 				} else {
-					currentMove = alphaBetaPruning(DEPTH, 500, -500, null, true);
+					currentMove = miniMax(DEPTH, 500, -500, null, true);
 					LOGGER.log(Level.INFO, "The program decides " + currentMove);
 				}
 
@@ -127,36 +127,23 @@ public class Game {
 		return this.attackedSquaresFromBlack;
 	}
 
-	private boolean makeMove(Move move) throws
+	private Game makeMove(Move move) throws
 			InvalidMoveException {
 
 		Square currentSquare = CHESS_BOARD.getSquare((move.getCurrentSquare()));
 
 		Piece piece = currentSquare.getPiece();
 
-		if (!piece.getPieceColour().equals(currentPlayer)) {
+		if ( ! piece.getPieceColour().equals(currentPlayer)) {
 			LOGGER.log(Level.INFO, "Not your turn!");
-			return false;
+			throw new InvalidMoveException("Not your turn!");
 		}
 
-		/*if (piece.canMove(move.getTargetSquare()) && isMoveValid(move, piece)) {
+		CHESS_BOARD.freeSquare(piece.getPosition());
+		CHESS_BOARD.setPiece(piece, move.getTargetSquare());
 
-			if (isCheckDeclared() && !isMoveEscapingChess(move, currentPlayer)) {
-				System.out.println("you must escape from attack");
-				return false;
-			}*/
+		return true;
 
-			CHESS_BOARD.freeSquare(piece.getPosition());
-			CHESS_BOARD.setPiece(piece, move.getTargetSquare());
-
-			return true;
-
-		/*} else {
-			if (currentPlayer.equals(PieceColour.WHITE)) {
-				System.out.println("invalid move");
-			}
-			return false;
-		}*/
 	}
 
 	private boolean isMoveEscapingChess(Move move, PieceColour turn) {
@@ -402,30 +389,25 @@ public class Game {
 		mv.getTargetSquare().setTaken(false);
 	}
 
-	private Move alphaBetaPruning(int depth, int beta, int alpha, Move move,
-			boolean  is_black) throws InvalidMoveException {
-		ArrayList<Move> possibleMoves = getPossibleMoves(is_black);
-		if (depth == 0 || possibleMoves.size() == 0) { //not sure about this
-			return move;
+	static int miniMax(int depth, Game position, boolean  is_black){
+		if (depth == 0) {
+			return Rating.positionRating(position);
 		}
 		
-		Move strongestMove = possibleMoves.get(0);
-		
+		ArrayList<Move> possibleMoves = position.getPossibleMoves(is_black);
+
 		if (is_black) { // maximizing player
+			int best_move_rating = Integer.MIN_VALUE;
 			for (Move possibleMove : possibleMoves) {
-				possibleMove.calculateRating(this);
-				strongestMove = Move.max(strongestMove,
-						alphaBetaPruning(depth-1, beta, alpha, possibleMove, false));
-				alpha = Math.max(alpha, strongestMove.getRating());
-				//if (beta <= alpha) {
-				//	break;
-				//}
+				possible_position = position.makeMove(possibleMove);
+				int current_move_rating = miniMax(depth-1, position, false);
+				
 			}
 		}else {
 			for (Move possibleMove : possibleMoves) {
 				possibleMove.calculateRating(this);
 				strongestMove = Move.min(strongestMove,
-						alphaBetaPruning(depth-1, beta, alpha, possibleMove, true));
+						miniMax(depth-1, beta, alpha, possibleMove, true));
 				beta = Math.min(beta, strongestMove.getRating());
 				//if (beta <= alpha) {
 				//	break;
