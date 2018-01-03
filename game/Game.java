@@ -65,11 +65,16 @@ public class Game {
 	}
 
 	public void start() {
+
+		//updateWhitePieces();
+		//updateBlackPieces();
+		//updateAttackedSquaresFromWhite();
+		//updateAttackedSquaresFromBlack();
 		
-		updateWhitePieces();
-		updateBlackPieces();
-		updateAttackedSquaresFromWhite();
-		updateAttackedSquaresFromBlack();
+		Position new_game = new Position()
+		
+		
+		
 		while(true) {
 			try {
  				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:\nCurrent position:\n" + this.toString());

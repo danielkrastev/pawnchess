@@ -52,7 +52,7 @@ public class ChessBoard {
 				piece.setPosition(target);
 				SQUARES[target.getColumn()][target.getRow()].setPiece(piece);
 				SQUARES[target.getColumn()][target.getRow()].setTaken(true);
-			
+	
 				return true;
 		} else {
 			return false;
@@ -63,11 +63,11 @@ public class ChessBoard {
 	}
 
 	public Square getSquare(Square square) {
-      if (square.isValidSquare()){
-		return SQUARES[square.getColumn()][square.getRow()];
+		if (square.isValidSquare()) {
+			return SQUARES[square.getColumn()][square.getRow()];
+		}
+		return null;
 	}
-      return null;
-      }
 
 	public Piece getPiece(Square square) {
 		return square.getPiece();
