@@ -18,39 +18,22 @@ import java.util.logging.*;
 
 public class Game {
 	private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
-	private final ChessBoard CHESS_BOARD;
-
-	private final King WHITE_KING = new King(PieceColour.WHITE);
-	private final King BLACK_KING = new King(PieceColour.BLACK);
 
 	private HashSet<Piece> whitePieces;
 	private HashSet<Piece> blackPieces;
 	private HashMap<Square, Integer> attackedSquaresFromWhite;
 	private HashMap<Square, Integer> attackedSquaresFromBlack;
 	private ArrayList<Move> listOfMoves;
-	private PieceColour currentPlayer;
+	
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
 	static private final int DEPTH = 0;
 	private MoveValidator moveValidator;
+	private Position currentPosition;
 
-	public Game() {
+	public Game() throws Exception {
 		
-		try{
-			File logdir = new File ("/var/log/pawnchess/");
-			if ( !logdir.exists()){
-				logdir.mkdirs();
-			}
-			File logfile = new File("/var/log/pawnchess/chess-game.log");
-			FileHandler fileHandler = new FileHandler(logfile.getAbsolutePath());
-			fileHandler.setFormatter(new SimpleFormatter());
-			LOGGER.addHandler(fileHandler);
-			
-		}catch (IOException e){
-			e.printStackTrace();
-		}
-
-		CHESS_BOARD = new ChessBoard();
+		currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
 
 		whitePieces = new HashSet<Piece>();
 		blackPieces = new HashSet<Piece>();
@@ -59,37 +42,33 @@ public class Game {
 		attackedSquaresFromWhite = new HashMap<Square, Integer>();
 		attackedSquaresFromBlack = new HashMap<Square, Integer>();
 
-		moveValidator = new MoveValidator(this);
-		setPiecesForNewGame();
-		currentPlayer = PieceColour.WHITE;
+		//moveValidator = new MoveValidator(this);
 	}
 
-	public void start() {
+	public void start() throws Exception {
 
 		//updateWhitePieces();
 		//updateBlackPieces();
 		//updateAttackedSquaresFromWhite();
 		//updateAttackedSquaresFromBlack();
 		
-		Position new_game = new Position()
-		
-		
-		
 		while(true) {
 			try {
- 				LOGGER.log(Level.INFO, currentPlayer.toString() + " to move:\nCurrent position:\n" + this.toString());
-				if (isCheckDeclared()) {
-					LOGGER.log(Level.INFO, "Check!");
-				}
+ 				LOGGER.log(Level.INFO, currentPosition.getCurrentPlayer() + 
+ 						" to move:\nCurrent position:\n" + currentPosition.toString());
+				//if (isCheckDeclared()) {
+				//	LOGGER.log(Level.INFO, "Check!");
+				//}
 				boolean is_black = true;
-				if (currentPlayer.equals(PieceColour.WHITE))
+				if (currentPosition.getCurrentPlayer().equals(PieceColour.WHITE))
 					is_black = false;
+				boolean is_white = ! is_black;
 				
-				Move currentMove;
-				if (currentPlayer.equals(PieceColour.WHITE)) {
+				Move currentMove = new Move();
+				if (is_white) {
 					currentMove = getPlayersMove();
 				} else {
-					currentMove = miniMax(DEPTH, 500, -500, null, true);
+					//currentMove = miniMax(DEPTH, position, true);
 					LOGGER.log(Level.INFO, "The program decides " + currentMove);
 				}
 
@@ -103,7 +82,7 @@ public class Game {
 					updateAttackedSquaresFromWhite();
 					updateAttackedSquaresFromBlack();
 					gui.repaint();
-					if (currentPlayer.equals(PieceColour.WHITE)) {
+					if (is_white) {
 						Thread.sleep(2000);
 					}
 					changeTurn();
@@ -120,10 +99,7 @@ public class Game {
 		}
 	}
 
-	public ChessBoard getChessBoard() {
-		return CHESS_BOARD;
-	}
-
+	
 	public HashMap<Square, Integer> getAttackedSquaresFromWhite() {
 		return this.attackedSquaresFromWhite;
 	}
@@ -187,6 +163,14 @@ public class Game {
 		return false;
 	}
 
+	
+	public ChessBoard getChessBoard() {
+		return this.getCurrentPosition().getChessBoard();
+	}
+
+	private Position getCurrentPosition() {
+		return this.currentPosition;
+	}
 
 	private boolean isCheckDeclared() {
 
@@ -236,45 +220,6 @@ public class Game {
 				}
 			}
 		}
-	}
-
-	public void setPiecesForNewGame() {
-		CHESS_BOARD.setPiece(WHITE_KING, CHESS_BOARD.getSquare(5, 1));
-		CHESS_BOARD.setPiece(BLACK_KING, CHESS_BOARD.getSquare(5, 8));
-
-		Pawn p0 = new Pawn(PieceColour.WHITE, CHESS_BOARD.getSquare(1, 2));
-		CHESS_BOARD.setPiece(p0, CHESS_BOARD.getSquare(1, 2));
-		Pawn p1 = new Pawn(PieceColour.WHITE, CHESS_BOARD.getSquare(2, 2));
-		CHESS_BOARD.setPiece(p1, CHESS_BOARD.getSquare(2, 2));
-		Pawn p2 = new Pawn(PieceColour.WHITE, CHESS_BOARD.getSquare(3, 2));
-		CHESS_BOARD.setPiece(p2, CHESS_BOARD.getSquare(3, 2));
-		Pawn p3 = new Pawn(PieceColour.WHITE, CHESS_BOARD.getSquare(4, 2));
-		CHESS_BOARD.setPiece(p3, CHESS_BOARD.getSquare(4, 2));
-		Pawn p4 = new Pawn(PieceColour.WHITE, CHESS_BOARD.getSquare(5, 2));
-		CHESS_BOARD.setPiece(p4, CHESS_BOARD.getSquare(5, 2));
-		Pawn p5 = new Pawn(PieceColour.WHITE, CHESS_BOARD.getSquare(6, 2));
-		CHESS_BOARD.setPiece(p5, CHESS_BOARD.getSquare(6, 2));
-		Pawn p6 = new Pawn(PieceColour.WHITE, CHESS_BOARD.getSquare(7, 2));
-		CHESS_BOARD.setPiece(p6, CHESS_BOARD.getSquare(7, 2));
-		Pawn p7 = new Pawn(PieceColour.WHITE, CHESS_BOARD.getSquare(8, 2));
-		CHESS_BOARD.setPiece(p7, CHESS_BOARD.getSquare(8, 2));
-
-		Pawn p_0 = new Pawn(PieceColour.BLACK, CHESS_BOARD.getSquare(1, 7));
-		CHESS_BOARD.setPiece(p_0, CHESS_BOARD.getSquare(1, 7));
-		Pawn p_1 = new Pawn(PieceColour.BLACK, CHESS_BOARD.getSquare(2, 7));
-		CHESS_BOARD.setPiece(p_1, CHESS_BOARD.getSquare(2, 7));
-		Pawn p_2 = new Pawn(PieceColour.BLACK, CHESS_BOARD.getSquare(3, 7));
-		CHESS_BOARD.setPiece(p_2, CHESS_BOARD.getSquare(3, 7));
-		Pawn p_3 = new Pawn(PieceColour.BLACK, CHESS_BOARD.getSquare(4, 7));
-		CHESS_BOARD.setPiece(p_3, CHESS_BOARD.getSquare(4, 7));
-		Pawn p_4 = new Pawn(PieceColour.BLACK, CHESS_BOARD.getSquare(5, 7));
-		CHESS_BOARD.setPiece(p_4, CHESS_BOARD.getSquare(5, 7));
-		Pawn p_5 = new Pawn(PieceColour.BLACK, CHESS_BOARD.getSquare(6, 7));
-		CHESS_BOARD.setPiece(p_5, CHESS_BOARD.getSquare(6, 7));
-		Pawn p_6 = new Pawn(PieceColour.BLACK, CHESS_BOARD.getSquare(7, 7));
-		CHESS_BOARD.setPiece(p_6, CHESS_BOARD.getSquare(7, 7));
-		Pawn p_7 = new Pawn(PieceColour.BLACK, CHESS_BOARD.getSquare(8, 7));
-		CHESS_BOARD.setPiece(p_7, CHESS_BOARD.getSquare(8, 7));
 	}
 
 	public String toString() {
@@ -394,7 +339,7 @@ public class Game {
 		mv.getTargetSquare().setTaken(false);
 	}
 
-	static int miniMax(int depth, Game position, boolean  is_black){
+	static int miniMax(int depth, Position position, boolean  is_black){
 		if (depth == 0) {
 			return Rating.positionRating(position);
 		}

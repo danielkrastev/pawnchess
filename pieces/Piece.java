@@ -30,9 +30,7 @@ public abstract class Piece {
 	}
 
 	public String toString() {
-
 		return "Unidentified square";
-
 	}
 
 	public boolean isWhite(){

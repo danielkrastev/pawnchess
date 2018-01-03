@@ -25,7 +25,6 @@ public class ChessBoard {
 		
 		for (int i = 1; i <= 8; i++) {
 			for (int j = 1; j <= 8; j++) {
-
 				SQUARES[i][j] = new Square(i, j);
 				SQUARES[i][j].setTaken(false);
 			}
@@ -45,26 +44,24 @@ public class ChessBoard {
 	}
 
 	public boolean setPiece(Piece piece, Square target) {
-		if (!target.isTaken()
-			|| (target.isTaken()
-			&& !target.getPiece().getPieceColour()
-						.equals(piece.getPieceColour()))) {
-				piece.setPosition(target);
-				SQUARES[target.getColumn()][target.getRow()].setPiece(piece);
-				SQUARES[target.getColumn()][target.getRow()].setTaken(true);
-	
-				return true;
+		if (!target.isTaken() || (target.isTaken() && 
+				                 ! target.getPiece().getPieceColour().
+						           equals(piece.getPieceColour()))) {
+			piece.setPosition(target);
+			SQUARES[target.getRow()][target.getColumn()].setPiece(piece);
+			SQUARES[target.getRow()][target.getColumn()].setTaken(true);
+			return true;
 		} else {
 			return false;
 		}
 	}
-	public Square getSquare(int column, int row) {
-		return SQUARES[column][row];
+	public Square getSquare(int row, int column) {
+		return SQUARES[row][column];
 	}
 
 	public Square getSquare(Square square) {
 		if (square.isValidSquare()) {
-			return SQUARES[square.getColumn()][square.getRow()];
+			return SQUARES[square.getRow()][square.getColumn()];
 		}
 		return null;
 	}
@@ -79,6 +76,11 @@ public class ChessBoard {
 
 	public Square[][] getChessBoard() {
 		return this.SQUARES;
+	}
+	
+	public void setEmptyField(int row, int col){
+		Square field = this.getSquare(row, col);
+		this.freeSquare(field);
 	}
 
 	public Square[] toArray() {

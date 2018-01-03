@@ -45,18 +45,19 @@ public class Rating {
 			{ 0, 2, 2, 4, 5, 5, 4, 3, 2, 0 }, { 0, 2, 2, 4, 5, 5, 4, 3, 2, 0 },
 			{ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-	public static int positionRating(Game game) {
+	public static int positionRating(Position game) {
 		int rating = 0;
 		rating += rateMaterial(game);
 		rating += ratePosition(game);
 		return rating;
 	}
 
-	private static int rateMaterial(Game game) {
-		return game.getBlackPieces().size() - game.getWhitePieces().size();
+	private static int rateMaterial(Position game) {
+		//return game.getBlackPieces().size() - game.getWhitePieces().size();
+		return 1;
 	}		
 
-	private static int ratePosition(Game game) {
+	private static int ratePosition(Position game) {
 
 		int positionPts = 0;
 
