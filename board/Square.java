@@ -13,13 +13,11 @@ public class Square {
 	public Square() {
 	}
 
-	public Square(int column, int row) {
-
-		this.column = column;
+	public Square(int row, int column) {
 		this.row = row;
+		this.column = column;
 		this.taken = false;
 		this.piece = null;
-
 	}
 
 	public Piece getPiece() {

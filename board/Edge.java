@@ -2,9 +2,9 @@ package board;
 
 public class Edge extends Square {
 
-	public Edge (int column, int row){
-		this.column = column;
+	public Edge (int row, int column){
 		this.row = row;
+		this.column = column;
 	}
 	
 	public String toString() {

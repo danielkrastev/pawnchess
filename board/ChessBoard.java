@@ -35,7 +35,7 @@ public class ChessBoard {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 9; i >= 0; i--) {
 			for (int j = 0; j <= 9 ; j++) {
-				sb.append(SQUARES[j][i].toString());
+				sb.append(SQUARES[i][j].toString());
 			}
 			sb.append("\n");
 		}
@@ -89,7 +89,7 @@ public class ChessBoard {
 		
 		for (int i = 1; i <= 8; i++) {
 			for (int j = 1; j <= 8; j++) {
-				result[k++] = SQUARES[j][i];
+				result[k++] = SQUARES[i][j];
 			}
 		}
 		return result;

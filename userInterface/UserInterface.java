@@ -21,7 +21,7 @@ public class UserInterface extends JPanel {
 		super();
 		this.chessGraphics = new ChessGraphics();
 		this.game = game;
-		
+
 		MouseMover mover = new MouseMover();
 		this.addMouseListener(mover);
 		game.setMouseMover(mover);
@@ -35,14 +35,14 @@ public class UserInterface extends JPanel {
 		chessGraphics.drawPieces(graphics, game, this);
 		chessGraphics.markSquare(graphics, markedSquare, this);
 	}
-	
+
 	public class MouseMover implements MouseListener{
 		private int columnClicked;
 		private int rowClicked;
-		
+
 		@Override
 		public void mouseClicked(MouseEvent event) {
-	
+
 		}
 
 		public int getClickedColumn() {
