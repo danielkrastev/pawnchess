@@ -21,7 +21,6 @@ public class MoveValidator {
 	}
 
 	public boolean validate(Move move, boolean is_black) {
-
 		List<Move> possibleMoves = game.getPossibleMoves(is_black);
 		if (possibleMoves.contains(move)) {
 			return true;

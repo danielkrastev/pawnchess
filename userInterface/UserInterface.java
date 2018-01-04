@@ -84,11 +84,10 @@ public class UserInterface extends JPanel {
 			synchronized(game){
 				columnClicked = event.getX()/64;
 				rowClicked = 9 - event.getY()/64;
-				markedSquare = game.getChessBoard().getSquare(columnClicked, rowClicked);
+				markedSquare = game.getChessBoard().getSquare(rowClicked, columnClicked);
 			    UserInterface.this.repaint();
 				game.notify();
 			}
-			
 		}
 	}
 }

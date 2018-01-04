@@ -266,7 +266,6 @@ public class Square {
 		} else {
 			return null;
 		}
-
 	}
 
 	public Square oneSquareRightDown() {
@@ -303,6 +302,6 @@ public class Square {
 	}
 
 	public String printCoordinates() {
-		return String.format("[%d %d]", this.row, this.column); 
+		return String.format("[%d %d]", this.row, this.column);
 	}
 }

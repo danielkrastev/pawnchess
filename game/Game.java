@@ -42,7 +42,7 @@ public class Game {
 		attackedSquaresFromWhite = new HashMap<Square, Integer>();
 		attackedSquaresFromBlack = new HashMap<Square, Integer>();
 
-		//moveValidator = new MoveValidator(this);
+		moveValidator = new MoveValidator(this);
 	}
 
 	public void start() throws Exception {
@@ -247,13 +247,13 @@ public class Game {
 				int column = mouseMover.getClickedColumn();
 				int row = mouseMover.getClickedRow();
 
-				Square temp = CHESS_BOARD.getSquare(column, row);
+				Square temp = this.getChessBoard().getSquare(row, column);
 				if ( !temp.isTaken()
 					|| temp.getPiece().isBlack()) {
 						throw new InvalidMoveException("Piece not clicked on!");
 				}
 
-				current = CHESS_BOARD.getSquare(column, row);
+				current = this.getChessBoard().getSquare(row, column);
 				LOGGER.log(Level.INFO, current.printCoordinates());
 				playersMove.setCurrentSquare(current);
 				
@@ -263,7 +263,7 @@ public class Game {
 				column = mouseMover.getClickedColumn();
 				row = mouseMover.getClickedRow();
 
-				target = CHESS_BOARD.getSquare(column, row);
+				target = this.getChessBoard().getSquare(row, column);
 				LOGGER.log(Level.INFO, target.printCoordinates());
 				playersMove.setTargetSquare(target);
 
@@ -374,7 +374,7 @@ public class Game {
 		ArrayList<Square> accessableSquares;
 
 		if (is_white) {
-			for (Piece piece : whitePieces) {
+			for (Piece piece : currentPosition.getWhitePieces()) {
 				accessableSquares = moveValidator.getPossibleSquares(piece);
 				for (Square target : accessableSquares) {
 					Move move = new Move();
