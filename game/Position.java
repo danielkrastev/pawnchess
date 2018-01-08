@@ -103,4 +103,11 @@ public class Position {
 		}
 		return whitePieces;
 	}
+
+	public void makeMove(Move currentMove) {
+		
+		
+		
+		
+	}
 }

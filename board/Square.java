@@ -186,7 +186,7 @@ public class Square {
 	}
 
 	public Square oneSquareLeft() {
-		Square sq = new Square(column - 1, row);
+		Square sq = new Square(row, column - 1);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -195,7 +195,7 @@ public class Square {
 	}
 
 	public Square twoSquaresUp() {
-		Square sq = new Square(column, row + 2);
+		Square sq = new Square(row + 2, column);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -204,7 +204,7 @@ public class Square {
 	}
 
 	public Square twoSquaresDown() {
-		Square sq = new Square(column, row - 2);
+		Square sq = new Square(row - 2, column);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -213,7 +213,7 @@ public class Square {
 	}
 
 	public Square oneSquareRight() {
-		Square sq = new Square(column + 1, row);
+		Square sq = new Square(row, column + 1);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -223,7 +223,7 @@ public class Square {
 
 	public Square oneSquareUp() {
 
-		Square sq = new Square(column, row + 1);
+		Square sq = new Square(row + 1, column);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -232,7 +232,7 @@ public class Square {
 	}
 
 	public Square oneSquareDown() {
-		Square sq = new Square(column, row - 1);
+		Square sq = new Square(row - 1, column);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -241,7 +241,7 @@ public class Square {
 	}
 
 	public Square oneSquareLeftUp() {
-		Square sq = new Square(column - 1, row + 1);
+		Square sq = new Square(row + 1, column - 1);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -251,7 +251,7 @@ public class Square {
 
 	public Square oneSquareRightUp() {
 
-		Square sq = new Square(column + 1, row + 1);
+		Square sq = new Square(row + 1, column + 1);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -260,7 +260,7 @@ public class Square {
 	}
 
 	public Square oneSquareLeftDown() {
-		Square sq = new Square(column - 1, row - 1);
+		Square sq = new Square(row - 1, column - 1);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {
@@ -269,7 +269,7 @@ public class Square {
 	}
 
 	public Square oneSquareRightDown() {
-		Square sq = new Square(column + 1, row - 1);
+		Square sq = new Square(row - 1, column + 1);
 		if (sq.isValidSquare()) {
 			return sq;
 		} else {

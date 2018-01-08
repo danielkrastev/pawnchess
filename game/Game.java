@@ -24,7 +24,7 @@ public class Game {
 	private HashMap<Square, Integer> attackedSquaresFromWhite;
 	private HashMap<Square, Integer> attackedSquaresFromBlack;
 	private ArrayList<Move> listOfMoves;
-	
+
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
 	static private final int DEPTH = 0;
@@ -32,7 +32,7 @@ public class Game {
 	private Position currentPosition;
 
 	public Game() throws Exception {
-		
+
 		currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
 
 		whitePieces = new HashSet<Piece>();
@@ -75,6 +75,7 @@ public class Game {
 				boolean isMoveValid = moveValidator.validate(currentMove, is_black);
 
 				if (isMoveValid == true) {
+					currentPosition.makeMove(currentMove);
 					LOGGER.log(Level.INFO, "THE MOVE IS VALID");
 					makeMove(currentMove);
 					updateWhitePieces();
@@ -239,7 +240,7 @@ public class Game {
 		Square current;
 		Square target;
 
-		LOGGER.log(Level.INFO, "Waiting for your move:\nCurrent square: ");
+		LOGGER.log(Level.INFO, "Waiting for player's move:\nCurrent square: ");
 
 		synchronized (this) {
 			try {
