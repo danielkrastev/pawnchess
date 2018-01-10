@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import board.ChessBoard;
 import board.Square;
@@ -42,57 +43,50 @@ public class Game {
 		attackedSquaresFromWhite = new HashMap<Square, Integer>();
 		attackedSquaresFromBlack = new HashMap<Square, Integer>();
 
-		moveValidator = new MoveValidator(this);
 	}
 
 	public void start() throws Exception {
 
-		//updateWhitePieces();
-		//updateBlackPieces();
-		//updateAttackedSquaresFromWhite();
-		//updateAttackedSquaresFromBlack();
-		
-		while(true) {
+		// updateWhitePieces();
+		// updateBlackPieces();
+		// updateAttackedSquaresFromWhite();
+		// updateAttackedSquaresFromBlack();
+
+		while (true) {
 			try {
- 				LOGGER.log(Level.INFO, currentPosition.getCurrentPlayer() + 
- 						" to move:\nCurrent position:\n" + currentPosition.toString());
-				//if (isCheckDeclared()) {
-				//	LOGGER.log(Level.INFO, "Check!");
-				//}
+				LOGGER.log(Level.INFO, currentPosition.getCurrentPlayer() + " to move:\nCurrent position:\n"
+						+ currentPosition.toString());
+				// if (isCheckDeclared()) {
+				// LOGGER.log(Level.INFO, "Check!");
+				// }
 				boolean is_black = true;
 				if (currentPosition.getCurrentPlayer().equals(PieceColour.WHITE))
 					is_black = false;
-				boolean is_white = ! is_black;
-				
-				Move currentMove = new Move();
+				boolean is_white = !is_black;
+
+				Move currentMove = null;
 				if (is_white) {
 					currentMove = getPlayersMove();
 				} else {
-					//currentMove = miniMax(DEPTH, position, true);
+					currentMove = getEngineMove(currentPosition);
 					LOGGER.log(Level.INFO, "The program decides " + currentMove);
 				}
-
-				boolean isMoveValid = moveValidator.validate(currentMove, is_black);
+				boolean isMoveValid = validate(currentMove, is_black);
 
 				if (isMoveValid == true) {
-					currentPosition.makeMove(currentMove);
 					LOGGER.log(Level.INFO, "THE MOVE IS VALID");
-					makeMove(currentMove);
-					updateWhitePieces();
-					updateBlackPieces();
-					updateAttackedSquaresFromWhite();
-					updateAttackedSquaresFromBlack();
+					currentPosition.makeMove(currentMove);
+					// updateWhitePieces();
+					// updateBlackPieces();
+					// updateAttackedSquaresFromWhite();
+					// updateAttackedSquaresFromBlack();
 					gui.repaint();
 					if (is_white) {
 						Thread.sleep(2000);
 					}
-					changeTurn();
 				} else {
 					LOGGER.log(Level.INFO, "THE MOVE IS NOT VALID");
 				}
-			} catch (InvalidMoveException e) {
-				LOGGER.log(Level.INFO, "You must escape from attack");
-				revertBoard(listOfMoves.get(listOfMoves.size() - 1));
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -100,32 +94,25 @@ public class Game {
 		}
 	}
 
-	
+	private Move getEngineMove(Position currentPosition) {
+		//miniMax(DEPTH, currentPosition, true);
+		return new Move(new int [] {7,5}, new int [] {5,5}); 
+	}
+
+	public boolean validate(Move move, boolean is_black) {
+		List<Move> possibleMoves = currentPosition.getPossibleMoves(is_black);
+		if (possibleMoves.contains(move)){
+			return true;
+		}
+		return false;
+	}
+
 	public HashMap<Square, Integer> getAttackedSquaresFromWhite() {
 		return this.attackedSquaresFromWhite;
 	}
 
 	public HashMap<Square, Integer> getAttackedSquaresFromBlack() {
 		return this.attackedSquaresFromBlack;
-	}
-
-	private Game makeMove(Move move) throws
-			InvalidMoveException {
-
-		Square currentSquare = CHESS_BOARD.getSquare((move.getCurrentSquare()));
-
-		Piece piece = currentSquare.getPiece();
-
-		if ( ! piece.getPieceColour().equals(currentPlayer)) {
-			LOGGER.log(Level.INFO, "Not your turn!");
-			throw new InvalidMoveException("Not your turn!");
-		}
-
-		CHESS_BOARD.freeSquare(piece.getPosition());
-		CHESS_BOARD.setPiece(piece, move.getTargetSquare());
-
-		return true;
-
 	}
 
 	private boolean isMoveEscapingChess(Move move, PieceColour turn) {
@@ -225,14 +212,6 @@ public class Game {
 
 	public String toString() {
 		return CHESS_BOARD.toString();
-	}
-
-	private void changeTurn() {
-		if (currentPlayer.equals(PieceColour.WHITE)) {
-			currentPlayer = PieceColour.BLACK;
-		} else {
-			currentPlayer = PieceColour.WHITE;
-		}
 	}
 
 	public Move getPlayersMove() {
@@ -369,34 +348,6 @@ public class Game {
 	    return strongestMove;
 	}
 
-	 ArrayList<Move> getPossibleMoves(boolean is_black) {
-		boolean is_white = ! is_black;
-		ArrayList<Move> possibleMoves = new ArrayList<Move>();
-		ArrayList<Square> accessableSquares;
-
-		if (is_white) {
-			for (Piece piece : currentPosition.getWhitePieces()) {
-				accessableSquares = moveValidator.getPossibleSquares(piece);
-				for (Square target : accessableSquares) {
-					Move move = new Move();
-					move.setCurrentSquare(piece.getPosition());
-					move.setTargetSquare(target);
-					possibleMoves.add(move);
-				}
-			}
-		} else { // black to move
-			for (Piece piece : blackPieces) {
-				accessableSquares = moveValidator.getPossibleSquares(piece);
-				for (Square target : accessableSquares) {
-					Move move = new Move();
-					move.setCurrentSquare(piece.getPosition());
-			    	move.setTargetSquare(target);
-					possibleMoves.add(move);
-				}
-			}
-		}
-		return possibleMoves;
-	}
 
 	private void undoMove(Move move) {
 		CHESS_BOARD.setPiece(move.getPiece(), move.getCurrentSquare());

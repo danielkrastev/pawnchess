@@ -72,9 +72,6 @@ public class King extends Piece {
 		return false;
 	}
 
-
-	//where the king can actually move
-		
 	//all the fields surrounding the king
 	public ArrayList<Square> getAccesableSquares() {
 

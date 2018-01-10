@@ -8,6 +8,22 @@ public class Move {
 	private Square currentSquare;
 	private Square targetSquare;
 	private int rating=0;
+	
+	public Move(Square currentSquare, Square targetSquare) {
+		this.currentSquare = currentSquare;
+		this.targetSquare = targetSquare;
+	}
+	
+	public Move() {
+		this.currentSquare = null;
+		this.targetSquare = null;
+	}
+
+	
+	public Move(int [] current, int [] target) {
+		this.currentSquare = new Square(current[0], current[1]);
+		this.targetSquare = new Square(target[0], target[1]);
+	}
 
 	public Square getCurrentSquare() {
 		return currentSquare;
@@ -83,7 +99,6 @@ public class Move {
 			return second;
 		}
 	}
-	
 	
 	public static Move min(Move first, Move second) {
 		if (null == first) {

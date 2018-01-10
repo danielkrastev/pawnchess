@@ -15,7 +15,6 @@ public class Pawn extends Piece {
 
 	@Override
 	public boolean canMove(Square targetSquare) throws InvalidMoveException {
-
 		if (targetSquare.isValidSquare() && isMoveValid(targetSquare)) {
 			return true;
 		}
@@ -23,7 +22,6 @@ public class Pawn extends Piece {
 	}
 
 	private boolean isMoveValid(Square targetSquare) {
-
 		Square currentPosition = this.getPosition();
 		Piece.PieceColour colour = this.getPieceColour();
 
@@ -76,9 +74,7 @@ public class Pawn extends Piece {
 
 	@Override
 	public ArrayList<Square> getAccesableSquares() {
-
 		ArrayList<Square> accessableSquares = new ArrayList<Square>();
-
 		if (this.isWhite()) {
 			if (this.getPosition().getRow() == 2) {
 				accessableSquares.add(position.twoSquaresUp());
@@ -96,9 +92,7 @@ public class Pawn extends Piece {
 
 	@Override
 	public ArrayList<Square> getAttackedSquares() {
-
 		ArrayList<Square> attackedSquares = new ArrayList<Square>();
-
 		Square target;
 		if (this.isWhite()) {
 			target = position.oneSquareLeftUp();

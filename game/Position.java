@@ -92,22 +92,91 @@ public class Position {
 	}
 	
 	public List<Piece> getWhitePieces() {
-		List<Piece> whitePieces = new ArrayList<Piece>();
-		for (Square sq : chessBoard.toArray()) {
-			if (sq.isTaken()) {
-				Piece piece = sq.getPiece();
-				if (piece.isWhite()) {
-					whitePieces.add(piece);
-				}
+		List<Piece> pieces =  getPieces();
+		List<Piece> whitePieces =  new ArrayList<Piece>();
+		for (Piece p: pieces){
+			if (p.isBlack()) {
+				whitePieces.add(p);
 			}
 		}
 		return whitePieces;
 	}
 
+	public List<Piece> getBlackPieces() {
+		List<Piece> pieces =  getPieces();
+		List<Piece> blackPieces =  new ArrayList<Piece>();
+		for (Piece p: pieces){
+			if (p.isBlack()){
+				blackPieces.add(p);
+			}
+		}
+		return blackPieces;
+	}
+
+	public List<Piece> getPieces() {
+		List<Piece> pieces = new ArrayList<Piece>();
+		for (Square sq : chessBoard.toArray()) {
+			if (sq.isTaken()) {
+				Piece piece = sq.getPiece();
+				pieces.add(piece);
+			}
+		}
+		return pieces;
+	}
+	
+	private void changeTurn() {
+		if (currentPlayer.equals(PieceColour.WHITE)) {
+			currentPlayer = PieceColour.BLACK;
+		} else {
+			currentPlayer = PieceColour.WHITE;
+		}
+	}
+	
 	public void makeMove(Move currentMove) {
-		
-		
-		
-		
+		Square current_field = currentMove.getCurrentSquare();
+		Square target_field = currentMove.getTargetSquare();
+		Piece p = chessBoard.getPiece(current_field);
+		chessBoard.freeSquare(currentMove.getCurrentSquare());
+		chessBoard.setPiece(p, target_field);
+		changeTurn();
+	}
+	
+	public ArrayList<Square> getPossibleFields(Piece piece) {
+		if (piece instanceof King) {
+			King king = (King) piece;
+			return getPossibleSquaresForKing(king);
+		} else {
+			Pawn pawn = (Pawn) piece;
+			return getPossibleSquaresForPawn(pawn);
+		}
+	}
+	
+	ArrayList<Move> getPossibleMoves(boolean is_black) {
+		boolean is_white = ! is_black;
+		ArrayList<Move> possibleMoves = new ArrayList<Move>();
+		ArrayList<Square> accessableSquares;
+
+		if (is_white) {
+			for (Piece piece : getWhitePieces()) {
+				accessableSquares = getPossibleFields(piece);
+				for (Square target : accessableSquares) {
+					Move move = new Move();
+					move.setCurrentSquare(piece.getPosition());
+					move.setTargetSquare(target);
+					possibleMoves.add(move);
+				}
+			}
+		} else { // black to move
+			for (Piece piece : getBlackPieces()) {
+				accessableSquares = getPossibleFields(piece);
+				for (Square target : accessableSquares) {
+					Move move = new Move();
+					move.setCurrentSquare(piece.getPosition());
+			    	move.setTargetSquare(target);
+					possibleMoves.add(move);
+				}
+			}
+		}
+		return possibleMoves;
 	}
 }
