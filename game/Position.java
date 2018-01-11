@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import board.ChessBoard;
@@ -150,6 +151,106 @@ public class Position {
 			return getPossibleSquaresForPawn(pawn);
 		}
 	}
+	
+	private ArrayList<Square> getPossibleSquaresForKing(King king) {
+		ArrayList<Square> possibleSquares = new ArrayList<Square>();
+		if (king.isWhite()) {
+			for (Object sq : king.getAccesableSquares().toArray()) {
+				Square targetSquare = chessBoard.getSquare((Square) sq);
+				if ( ! targetSquare.isTaken() &&
+					 ! getAttackedSquaresFromBlack().contains(sq)) {
+					possibleSquares.add(targetSquare);
+				} else if (targetSquare.isTaken() && targetSquare.getPiece().isBlack()) {
+
+					Pawn blackPawn = (Pawn) targetSquare.getPiece();// only
+																	// possible
+																	// that this
+																	// piece is
+																	// pawn
+					if ( ! isProtected(blackPawn)) {
+						possibleSquares.add(targetSquare);
+					}
+				}
+			}
+		} else {// king is black
+			for (Object sq : king.getAccesableSquares().toArray()) {
+				Square targetSquare = chessBoard.getSquare((Square) sq);
+				if (! targetSquare.isTaken()) {
+					possibleSquares.add(targetSquare);
+				} else // square is taken
+				if (targetSquare.getPiece().isWhite()) {
+					Pawn whitePawn = (Pawn) targetSquare.getPiece();// only
+																	// possible
+																	// that this
+																	// piece is
+																	// pawn
+					if (!isProtected(whitePawn)) {
+						possibleSquares.add(targetSquare);
+					}
+				}
+			}
+		}
+		return possibleSquares;
+	}
+	
+	public List<Square> getAttackedSquaresFromBlack() {
+		List<Square> attackedSquaresFromBlack = new ArrayList<Square>();
+		for(Piece p : getBlackPieces()) {
+			List<Square> attackedSquares = p.getAttackedSquares();
+			for (Square as : attackedSquares) {
+				if (! (as instanceof board.Edge)) {
+					attackedSquaresFromBlack.add(as);
+				}
+			}
+		}
+		return attackedSquaresFromBlack;
+	}
+	
+	private boolean is_protected(Pawn pawn) {
+		Square pos = pawn.getPosition();
+		if (pawn.isWhite()) {
+			
+			
+			
+		}else { //pawn is black
+			Square upLeft = pos.oneSquareLeftUp();
+			Piece p = upLeft.getPiece();
+			if (p instanceof Pawn && p.isBlack()) {
+				return true;
+			}
+			Square upRight = pos.oneSquareRightUp();
+			p = upRight.getPiece();
+			if (p instanceof Pawn && p.isBlack()) {
+				return true;
+			}
+			
+			King blackKing = getBlackKing();
+			
+			
+		}
+	} 
+	
+	private King getBlackKing() {
+		
+		
+		
+		
+	}
+	
+	public List<Square> getAttackedSquaresFromWhite() {
+		List<Square> attackedSquaresFromWhite = new ArrayList<Square>();
+		for(Piece p : getBlackPieces()) {
+			List<Square> attackedSquares = p.getAttackedSquares();
+			for (Square as : attackedSquares) {
+				if (! (as instanceof board.Edge)) {
+					attackedSquaresFromWhite.add(as);
+				}
+			}
+		}
+		return attackedSquaresFromWhite;
+	}
+	
+
 	
 	ArrayList<Move> getPossibleMoves(boolean is_black) {
 		boolean is_white = ! is_black;
