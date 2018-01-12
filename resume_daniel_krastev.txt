@@ -1,0 +1,41 @@
+Daniel Krastev, 
+Date of birth - 16.05.1991
+Current location - Sofia, Bulgaria
+Email - dmkrustev@gmail.com
+phone - +359 879 59 83 04
+
+Education - from 09.2010  to 09.2015 - 
+            Sofia University, Faculty of Mathematics and Informatics
+            Bachelor in Computer Science
+
+Experience -
+10.2012 – 02.2014
+GeomatBG LTD., Sofia
+Database operator
+
+Experience with SQL database. Knowledge and
+ESRI certificate in working with ArcGIS for desktop.
+
+07.2014 - 12.2014
+VMWare Bulgaria
+Intern (for Java developer)
+
+Worked on and successfully demonstrated a client-server in-memory 
+communication protocol based on shared memory. 
+The programming language was Java. Operated on Windows and Linux. 
+
+01.2015 - Until now
+BATM Telco Systems
+Software develper
+One year experience with Java. 
+Two years experience with Python, MongoDB, Bash, git, REST APIs.
+Knowledge in Linux.
+Experience with Openstack (https://www.openstack.org/)
+
+Social skills and communication abilities - average for a programmer. 
+
+Foreign languages - English, good written and spoken
+(I have also studied Russian, German and Romanian)
+
+Other activities
+
