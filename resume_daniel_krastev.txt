@@ -1,4 +1,4 @@
-Daniel Krastev, 
+Daniel Krastev,  
 Date of birth - 16.05.1991
 Current location - Sofia, Bulgaria
 Email - dmkrustev@gmail.com
@@ -31,6 +31,7 @@ One year experience with Java.
 Two years experience with Python, MongoDB, Bash, git, REST APIs.
 Knowledge in Linux.
 Experience with Openstack (https://www.openstack.org/)
+Participated in Mirantis training course on Docker containers.
 
 Social skills and communication abilities - average for a programmer. 
 
@@ -38,4 +39,18 @@ Foreign languages - English, good written and spoken
 (I have also studied Russian, German and Romanian)
 
 Other activities
+I am concerned with the problems in the society and I
+don't hesitate to take part in events aiming them.
+I am a strong believer in education.
+In 2016 I supported a school math competition.
+In 2015 I raised funds for sport playground equipment in 
+a local school.
+
+Music fan and appreciator. Trying to learn playing the guitar
+and the piano.
+
+Recent books that I read:
+Holmes S. (2015) Getting MEAN with Mongo, Express, Angular, and Node
+Hunter K. L. Irresistible APIs: Designing Web APIs That Developers Will Love
+Kasparov G. Deep Thinking: Where Machine Intelligence Ends and Human Creativity Begins
 
