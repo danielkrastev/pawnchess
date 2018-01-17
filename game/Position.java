@@ -231,10 +231,12 @@ public class Position {
 	} 
 	
 	private King getBlackKing() {
-		
-		
-		
-		
+		for (Piece p : this.getBlackPieces()) {
+			if (p instanceof King) {
+				return (King) p;
+			}
+		}
+		return null;
 	}
 	
 	public List<Square> getAttackedSquaresFromWhite() {
