@@ -1,0 +1,55 @@
+For sequences, (strings, lists, tuples), use the fact that empty 
+sequences are false.    
+
+if not seq:
+
+if seq:
+
+Never the less objects should be compared to None instead of to False
+in some situations (actually in every)
+
+NEVER USE if not some_object
+
+find an element that matches criteria:
+hwtype = next(h for h in hwtypes_list if getattr(h, "device-type")
+ == hwtype_name)
+ 
+ 
+Functions are first-class objects, and can be built dynamically:
+
+def make_callback(m_type, other_type, *attrs):
+    def callback(msg):
+        m = m_type(msg)
+        a = other_type()
+        for attr in attrs:
+            setattr(a, attr, getattr(m, attr))
+        pub2.publish(a)
+    return callback
+
+callback1 = make_callback(MsgX, msg_type_a, 'x')
+callback2 = make_callback(MsgY, msg_type_b, 't', 'u')
+
+Calling super constructor
+class Lion(object): # Declare base classes like this (new-style objects)
+
+    def __init__(self, force):
+        print("Parent constructor")
+        self.force = force
+
+    def __str__(self):
+        return "My force is %s" % self.force
+
+    def set_force(self, force):
+        self.force = force
+        
+    def __eq__(self, other):
+        return self.force == other.force
+    
+    def __hash__(self):
+        return self.force*154
+
+class Tiger(Lion):
+    def __init__(self, force):
+        super(Tiger, self).__init__(force)
+
+t = Tiger(34)

@@ -1,0 +1,410 @@
+scp your_username@remotehost.edu:foobar.txt /some/local/directory
+
+scp root@10.3.140.140:\install\batm-5.0.R2\TelcoOrchestrator-5.0.R2.16920-Linux-x86_64-Install ./
+scp root@10.3.140.140:/install/batm-5.0.R2/TelcoOrchestrator-5.0.R2.18121-Linux-x86_64-Install .
+tar -xvf
+tar -cvf tecmint-14-09-12.tar /home/tecmint
+/install/batm-5.0.R2/TelcoOrchestrator-5.0.R2.16932-Linux-x86_64-Install
+
+CM-100 10.3.199.2 - Binox
+TVE 10.3.199.11
+
+C:\Python27\;C:\Program Files (x86)\Maven\apache-maven-3.3.3\bin;C:\Program Files\Java\jdk1.8.0_25\bin;C:\ProgramData\Oracle\Java\javapath;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\;%ANT_HOME%\bin;C:\Program Files\TortoiseHg\;C:\Program Files (x86)\OpenSSH\bin;C:\Program Files (x86)\Skype\Phone\;C:\MinGW\bin
+
+
+EdgeGenie CM Binox
+inner port 169.254.0.2
+
+
+neutron net-create net123 --shared --provider:network_type vlan --provider:physical_network physnet1 --provider:segmentation_id 123
+#< - - This creates Network with name net123 which uses VLAN 123
+neutron subnet-create net123 --disable-dhcp --no-gateway 192.168.123.0/24
+#< - - This assigns dummy IP subnet to the network. Mandatory for neutron
+
+
+neutron port-create vlan_100 --binding:vnic-type direct
+
+nova boot --flavor m1.medium --image Vyatta --nic port-id=76b8e7f3-b43c-4e4d-9fc1-fd4f632c72aa
+
+
+To debug neutron server add
+ eventlet.monkey_patch(os=False, thread=False)
+ in .../neutron/common/eventlet_utils.py
+ 
+ To add an attribute first add it to
+/neutron/api/v2/attributes.py
+
+To add a column to the cli neutron output 
+change /neutronclient/neutron/v2_0/network.py class ListNetwork
+
+to run openstack script ./start.sh /home/telco eth0 |& tee openstack.log
+lsb_release -a
+
+sudo apt-get install virtualbox-guest-x11
+
+if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "success"
+
+Ask the package management what files the package contains:
+dpkg -L <packagename>
+
+To install lightweight desktop environment:
+sudo apt-get install xorg gnome-core gnome-system-tools gnome-app-install
+
+
+mysql  -u root -padmin <<EOF
+use neutron;
+ALTER TABLE neutron.networks ADD  network_mode  boolean NOT NULL default true
+EOF
+
+from /usr/bin/
+ln -s /home/telco/Sublime\ Text\ 2/sublime_text sublime
+
+lsb_release -a
+
+
+sed -i "s/^/rm -rf /" file
+
+To enter EG database
+<%InstallDir%>/mysql/bin/mysql -u root -proot -P 3333 -h <local_ip>
+
+
+To configure ip address: 
+ip link add link eno2 name eno2.4091 type vlan id 4091 
+ip link set dev eno2.4091 up 
+ip addr add dev eno2.4091 IP/MASK
+
+Hey Saloni,
+I could build with DPDK on current master, following INSTALL.DPDK.
+Could you make sure you updated the `config/common_linuxapp` and
+set `CONFIG_RTE_BUILD_COMBINE_LIBS=y` (listed in step 2 in
+INSTALL.DPDK)?
+If you missed this step, you will have the `cannot link with dpdk` error,
+Thanks,
+Alex Wang,
+
+arp -s 10.3.127.1    00:a0:12:96:02:41
+
+To install networking-ovs-dpdk-server:
+
+apt-get install python-pip
+#get the package archive 
+git clone -b stable/kilo https://github.com/openstack/networking-ovs-dpdk.git
+chmod 755 networking-ovs-dpdk/setup.py
+./networking-ovs-dpdk/setup.py install
+edit /etc/neutron/plugins/ml2/ml2_conf.ini and add 'ovsdpdk' to mechanism_drivers
+Do we have to install driver.py.patched and config.py.patched on the controller
+Do we have to add [libvirt] section to nova.conf on the controller ?
+
+==================================
+To configure dpdk flavor:
+                    <name> <id> <ram> <disk> <vcpus>
+ nova flavor-create dpdk     6  1024     20    1
+                  <name/id>  <set/unset>             <key=value>   
+ nova flavor-key    dpdk         set       hw:mem_page_size=1048576
+
+ 
+To debug openstack remptely see http://www.pydev.org/manual_adv_remote_debugger.html
+
+
+The PyDev debugging does not play well with green threading, so we'll need to temporarily disable that in order to get debugging to work.
+This is obviously not an optimal solution, but I have not yet found a better way around this.
+
+Open up swift/common/wsgi.py and find the line like this: (It should be around line 411)
+
+eventlet.patcher.monkey_patch(all=False, socket=True, thread=True)
+Change the line to this:
+#eventlet.patcher.monkey_patch(all=False, socket=True, thread=True)
+eventlet.patcher.monkey_patch(all=False, socket=True, thread=False)
+This disables green threading. If you don't do this, the remote debugging will not work properly.
+
+To fix the path edit the file ./pysrc/pydevd_file_utils.py adding a line like this
+PATHS_FROM_ECLIPSE_TO_PYTHON = [(r'/home/daniel/openstack-kilo-src', r'/usr/lib/python2.7/site-packages')]
+
+
+Using a remote debugger
+=======================
+
+Some modern IDE such as pycharm (commercial) or Eclipse (open source) support remote debugging.  In order to run nova with remote debugging, start the nova process
+with the following parameters
+--remote_debug-host <host IP where the debugger is running>
+--remote_debug-port <port it is listening on>
+======================================================
+
+Use folowing steps to repackage dep package:
+
+1: Extract deb package
+    # dpkg-deb -x <package.deb> <dir>
+
+2: Extract control-information from a package
+    # dpkg-deb -e <package.deb> <dir/DEBIAN>
+
+3. After completed to make changes to the package, repack the deb
+    # dpkg-deb -b <dir> <new-package.deb>
+
+=============================
+To create link between directories:
+#     Source                             Link
+ln -s /home/jake/doc/test/2000/something /home/jake/xxx
+
+=============================
+back server is 10.3.127.193
+=======================================
+
+RPM packages:
+dnf download <package>
+rpm2cpio <package>.rpm > <package>.cpio
+mkdir my_package && cd my_package
+cpio -ivmd < ../<package>.cpio
+
+import sys
+sys.path.append("/usr/lib/python2.7/site-packages/pydevd/pysrc")
+import pydevd
+pydevd.settrace('10.3.72.53', port=5678, stdoutToServer=True, stderrToServer=True,suspend=True)
+
+to curl openstack web server via curl:
+openstack --os-identity-api-version 2 token issue
+
+curl -H "X-AUTH-TOKEN: <the token>" -XGET 'http://127.0.0.1:9090/v1/backups'
+curl -XGET 'http://127.0.0.1:9200/freezer/jobs/_search'
+
+to clear the elasticsearch database:
+curl -XDELETE 'http://127.0.0.1:9200/_all'
+freezer-db-init -y -c /etc/freezer/freezer-api.conf
+restart scheduler
+
+======================================
+
+git clone --bare https://github.com/openstack/freezer-web-ui
+edit .git/config
+
+=============================================== -> delete all files with extension
+find . -type f -name '*.pyc' -delete
+
+export OS_USER_DOMAIN_NAME=Default
+export OS_PROJECT_DOMAIN_NAME=Default
+
+===================================================
+Add your public key to the server:
+$ ssh-keygen
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub openstack@10.3.140.140 
+
+
+#time zone is needed for django configuration
+timezone=$(file /etc/localtime | cut -d '/' -f 7)/$(file /etc/localtime | cut -d '/' -f 8)
+timezone=$(timedatectl | grep "Time zone" | awk {'print $3'})
+
+======================================================
+
+#escape quotes
+timezone=$(echo "$tz" | tr -d '"')
+
+#remove leading and trailing spaces 
+
+timezone="$(echo -e "${timezone}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+
+========================================================
+
+xquery for $i in //tve where $i/hardware/serial-number = "VM158S0054545" return $i
+
+find . -type f -name '*.o' -delete
+
+switch to the apache user:
+sudo -u apache "/bin/bash"
+
+install uwsgi 
+dnf install python-devel
+dnf groupinstall "Development Tools"
+dnf install gcc
+install from source
+
+uwsgi --http :8080 --wsgi-file foo.py --callable wsgi_app
+
+curl -H "Content-Type: application/json" -H "Authorization: 123" -H "Account-ID: 123" -X GET 127.0.0.1:8000/tve
+
+ec437e8e45165f4090ff18fb4f1932ab
+
+curl -H "Content-Type: application/json" -H "Authentication: 123" -X GET http://127.0.0.1:8000/tves
+
+curl -H "Content-Type: application/json" -H "Authentication: 123" -k -X GET https://127.0.0.1:8000/tves
+
+curl -H "Content-Type: application/json" -H "Authentication: 123" -k -d "@_tve_config.json" -X POST https://127.0.0.1:8000/tves
+
+curl -H "Content-Type: application/json" -k -d "@tve_config.json" -X POST https://10.3.71.26:62626/tves
+
+curl -H "Content-Type: application/json" -H "Authentication: 4194d1706ed1f408d5e02d672777019f4d5385c766a8c6ca8acba3167d36a7b9" -k -d "@tve_config.json" -X POST https://10.3.71.26:62626/tves
+
+curl -H "Content-Type: application/json" -H "Authentication: 76983f5ee851007b778d393189ac4c24a4f30b55dc23c438cf17721c35aaf2dd" -k -X GET https://10.3.71.26:62626/tves/
+
+curl -H "Content-Type: application/json" -k -d"@update.json" -X PUT https://10.3.71.26:62626/tves/api/ec437e8e45165f4090ff18fb4f1938ib
+
+curl -H "Content-Type: application/json" -k -d "@tve_config.json" -X POST https://10.3.99.17:62626/tves/
+
+curl -H "Content-Type: application/json" -k -d "@tve_config.json" -X POST https://localhost:62626/tves/
+
+curl -H "Content-Type: application/json" -H "Authentication: 138d96da0cb62d6ebcbc2a25094952e57d7f29a34149ca8136eb4a173fb3b595" -k -d"@_update.json" -X PUT https://10.3.99.17:62626/tves/
+
+curl -H "Content-Type: application/json" -k -X GET https://localhost:62626/tves/all
+                                                                     
+curl -H "Content-Type: application/json" -k -d "@type_config.json" -XPOST https://localhost:62626/types
+
+curl -H "Content-Type: application/json" -k -d "@tve_config2.json" -XPOST https://localhost:62626/types
+
+curl -H "Content-Type: application/json" -H "Authentication: dd243ebbe7136e37ee5c571141d26df35866ac7d06c7b579b4e8c6e0a7ce32f0" -k -X GET https://10.3.99.17:62626/tves/
+
+curl -H "Content-Type: application/json" -H "Authentication: c51ddbb458439bfa16ec4509c91f1bfa006b26677b54a82923dd5de5658ca0fe" -H "Authorization: 4194d1706ed1f408d5e02d672777019f4d5385c766a8c6ca8acba3167d36a7b9" -k -X GET https://localhost:62626/tves/
+
+curl -H "Content-Type: application/json" -k -d "@type_config.json" -XPOST https://10.3.99.17:62626/types                                         
+                                         
+curl -H "Content-Type: application/json" -H "Authentication: dd243ebbe7136e37ee5c571141d26df35866ac7d06c7b579b4e8c6e0a7ce32f0" -k -d"@update_status.json" -X PUT https://10.3.99.17:62626/tves/   
+
+#to create disk image:
+virt-sparsify --tmp / --compress fedora_minimal-1-clone-2.qcow2 verizon_poc/mitaka_controller_10102016.qcow2
+cd verizon_poc                 
+qemu-img convert -f qcow2 mitaka_controller_10102016.qcow2 -O vdi mitaka_controller_10102016.vdi
+                                    
+awk '{print $1}'
+
+dd243ebbe7136e37ee5c571141d26df35866ac7d06c7b579b4e8c6e0a7ce32f0
+                                    
+glance image-create --name red_hat.img  --disk-format qcow2 --container-format bare --file red_hat.img
+neutron net-create net1
+neutron subnet-create net1 10.2.4.0/24                                                                                       
+
+nova boot --image red_hat.img --flavor m1.small Red Hat
+
+nova boot --image red_hat.img --flavor dpdk.1CPU.1RAM.10HDD  --nic net-name=net1 RedHat
+
+openstack server create --image red_hat.img --flavor dpdk.1CPU.1RAM.10HDD RedHat --nic net-name=net1
+
+
+curl -H "Content-Type: application/json" -k -X GET https://10.3.99.17:62626/types
+curl -H "Content-Type: application/json" -k -X DELETE https://10.3.99.17:62626/types
+
+
+curl -H "Content-Type: application/json"  -H "Authentication: c51ddbb458439bfa16ec4509c91f1bfa006b26677b54a82923dd5de5658ca0fe" -k -X POST https://localhost:62626/binox/
+curl -H "Content-Type: application/json" -H "Authentication: dd243ebbe7136e37ee5c571141d26df35866ac7d06c7b579b4e8c6e0a7ce32f0" -k -X GET https://10.3.99.17:62626/tves/
+
+ll /sys/class/net
+
+
+db.tves.update({"_id" : ObjectId("583863f9b18cfb04a8d302d5")},{$set: {"current.ip" : "10.3.199.25"}})
+
+#get a keystone token
+
+curl -i \
+  -H "Content-Type: application/json" \
+  -d '
+{ "auth": {
+    "identity": {
+      "methods": ["password"],
+      "password": {
+        "user": {
+          "name": "admin",
+          "domain": { "name": "default" },
+          "password": "admin"
+        }
+      }
+    },
+    "scope": {
+      "project": {
+        "name": "admin",
+        "domain": { "name": "default" }
+      }
+    }
+  }
+}' \
+  http://10.3.99.20:35357/v3/auth/tokens ; echo
+
+tar -xvf horizon-9.1.1.dev22.tar.gz 
+cd horizon-9.1.1.dev22
+python setup.py install
+
+
+mv /usr/share/openstack-dashboard/openstack_dashboard/api /usr/share/openstack-dashboard/openstack_dashboard/api_backup
+mv /usr/share/openstack-dashboard/openstack_dashboard/dashboards /usr/share/openstack-dashboard/openstack_dashboard/dashboards_backup
+
+ln -s  /usr/lib/python2.7/site-packages/openstack_dashboard/api   /usr/share/openstack-dashboard/openstack_dashboard/api 
+ln -s  /usr/lib/python2.7/site-packages/openstack_dashboard/dashboards   /usr/share/openstack-dashboard/openstack_dashboard/dashboards
+
+sync_json_sections("//test/new/asdf/bjhv", "/home/daniel/json/test.json", "/home/daniel/json/test2.json")
+
+for i in `git branch -r`; do git checkout -b $(echo $i | cut -f2 -d/); git branch --set-upstream-to=origin/$(echo $i -f2 -d/); done
+
+
+# Set this to True if running on multi-domain model. When this is enabled, it
+# will require user to enter the Domain name in addition to username for login.
+OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = False
+
+echo -n 4adfa12g412f312f3g124fdf | sha256sum
+
+curl -H "Content-Type: application/json" -k -d "@tve_config.json" -X PUT http://10.3.71.121:62626/tves/
+
+curl -H "Content-Type: application/json" -H "X-Auth-Token: <your_token>" -X GET http://10.3.199.13:8774/v2.1/42ee4a6669484e0fb71df0d7fb6c4bca/servers
+
+# How to create a branch
+git branch february_release   # create a local branch
+git checkout february_release # switch to the new local branch
+git push origin february_release  # create a remote branch from the local branch and push the local branch to it 
+git branch --set-upstream-to=origin/february_release # link the local branch to the remote branch
+# You are ready to switch between the two branches in 'origin'
+
+echo "Changing the freezer endpoints..."
+source /root/admin-openrc.sh
+for i in $(openstack endpoint list | grep freezer | cut -f2 -d" ") ; do openstack endpoint set --url http://orchestrator:9090 $i ; done
+
+echo "done ---------------------------------"
+
+kernel=$(grep ^menuentry /boot/grub2/grub.cfg  | grep x86_64 | awk {'print $2" "$3 " "$4" "$5" "$6'} | tr -d \')
+
+#registry.sh:
+cd registry
+rm -rf $(ls | grep -v tar)
+last=$(ls -lat | grep registry | awk '{print $9}' | head -1)
+tar -xvf $last
+registry_dir=$(ls | grep -v tar)
+cd $registry_dir
+python setup.py install
+systemctl restart inventory-poller
+systemctl status inventory-poller
+systemctl restart httpd
+systemctl status httpd
+
+mongorestore --host=127.0.0.1 --port=27017 --dir=inventory_backup --drop
+
+UserKnownHostsFile=/dev/null
+
+
+==================================
+dmesg
+dd if=telco_CM100_installer_4.2.10.16.iso of=/dev/sdb bs=4096
+==================================
+
+dnf install dnf-plugin-system-upgrade
+dnf system-upgrade download --releasever=25
+
+curl -H "Content-Type: application/json" -H "Authentication: b02d033f57d6fcced9d684557717b7245bd295f023ac928472cce7bc99f804b7" -k -X GET https://10.3.199.107:62626/tves/
+
+curl -H "Content-Type: application/json"  -H "X-Auth-Token:gAAAAABZpr8yxYTywhWY-PURKcTYYscC8JIrksRpoSGksOd-oc34-yIkUcVfiyIy8dRL6Yvydwxjs9x4ngIFy_uog-24v9m_O_fRGmJPfSWnYPawhSSXxPdmpDgcpfZqx6Zuz6YeNqd8KnMZTyZ9LbOq9S3nyZrMVMzstZdHyc5DXpCtwH630c8 " -X GET http://10.3.166.106:62625/v2/network_services
+
+db.tves.update({"_id" : ObjectId("59a66292b18cfb240761ec40")}, {$set: {"current.status" : "unreachable"}})
+
+sudo iptables --flush
+
+curl --verbose --header "Content-Type: application/json" --data "{ \"status\":\"running\" }" --request POST http://127.0.0.1:63636/status?serial-number=1234567890 
+curl --verbose --header "Content-Type: application/json" --data "{ \"status\":\"running\" }" --request POST http://10.3.199.106:63636/status?serial-number=3590101325 
+       
+curl --verbose --insecure --header "Content-Type: application/json" -k --request POST http://orchestrator:63636/status?serial-number=`cat /config/.serial-number` --data "{ \"status\":\"running\" }"
+
+db.tves.update({"_id" : ObjectId("59b78941b18cfb4dd7e016bb")}, {$set: {"json.tve.config.networking.quagga.bgpd-config.config-server" : "10.3.199.103"}})
+db.tves.update({"_id" : ObjectId("59b78941b18cfb4dd7e016bb")}, {$set: {"json.tve.config.networking.quagga.zebrad-config.config-server" : "10.3.199.103"}})
+db.tves.update({"_id" : ObjectId("59b78941b18cfb4dd7e016bb")}, {$set: {"json.tve.config.networking.quagga.ospfd-config.config-server" : "10.3.199.103"}})
+
+ curl -H "Content-Type: application/json"  -H "X-Auth-Token: gAAAAABZt_AuUWKrHtzzMk-DvSy1nl415LdFKypq3dMLZZj8so6SIlTI8R8NDRmdaxAvXgTgXDjW_hEY3Ia5Zpja5N1A-20PXPr95sESIG6AK18FFpCfs4n9-9seAoJzUP2x6MOi5bYiem7OAXSTTLTxvFnxMo5G03ahmSqh-xM7J4XEqZEFlwM" -X GET http://15.0.3.34:7373/v1/config/networking/quagga/ospf/file
+Fernet keys
+db.controllers.update({"_id" : ObjectId("5a1c06db4c761374713a1eb8")}, {$set: {"ipv6.enabled" : true}})
+db.controllers.update({"_id" : ObjectId("5a1c06db4c761374713a1eb8")}, {$set: {"ipv6.enabled" : false}})
+
+db.controllers.update({"_id" : ObjectId("5a1c06db4c761374713a1eb8")}, {$set: {"ipv6.enabled" : false}})
+
+tcpdump -w 401.pcap -i control -s 0

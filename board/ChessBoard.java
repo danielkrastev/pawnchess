@@ -67,7 +67,8 @@ public class ChessBoard {
 	}
 
 	public Piece getPiece(Square square) {
-		return square.getPiece();
+		return  getSquare(square).getPiece();
+		//return square.getPiece();
 	}
 
 	public void freeSquare(Square sq) {

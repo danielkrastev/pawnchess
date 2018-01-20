@@ -96,7 +96,7 @@ public class Position {
 		List<Piece> pieces =  getPieces();
 		List<Piece> whitePieces =  new ArrayList<Piece>();
 		for (Piece p: pieces){
-			if (p.isBlack()) {
+			if (p.isWhite()) {
 				whitePieces.add(p);
 			}
 		}
@@ -206,11 +206,9 @@ public class Position {
 		return attackedSquaresFromBlack;
 	}
 	
-	private boolean is_protected(Pawn pawn) {
+	private boolean isProtected(Pawn pawn) {
 		Square pos = pawn.getPosition();
 		if (pawn.isWhite()) {
-			
-			
 			
 		}else { //pawn is black
 			Square upLeft = pos.oneSquareLeftUp();
@@ -225,16 +223,20 @@ public class Position {
 			}
 			
 			King blackKing = getBlackKing();
-			
-			
+			if (blackKing.getAccesableSquares().contains(pos)){
+				return true;
+			}
 		}
+		return false;
 	} 
 	
 	private King getBlackKing() {
-		
-		
-		
-		
+		for (Piece p : this.getBlackPieces()) {
+			if (p instanceof King) {
+				return (King) p;
+			}
+		}
+		return null;
 	}
 	
 	public List<Square> getAttackedSquaresFromWhite() {
@@ -249,14 +251,12 @@ public class Position {
 		}
 		return attackedSquaresFromWhite;
 	}
-	
 
 	
 	ArrayList<Move> getPossibleMoves(boolean is_black) {
 		boolean is_white = ! is_black;
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
 		ArrayList<Square> accessableSquares;
-
 		if (is_white) {
 			for (Piece piece : getWhitePieces()) {
 				accessableSquares = getPossibleFields(piece);
@@ -280,4 +280,33 @@ public class Position {
 		}
 		return possibleMoves;
 	}
+	
+	private  ArrayList<Square> getPossibleSquaresForPawn(Pawn pawn) {
+		ArrayList<Square> possibleSquares = new ArrayList<Square>();
+		for (Object sq : pawn.getAccesableSquares()) {
+			Square targetSquare = chessBoard.getSquare((Square) sq);
+			if (!targetSquare.isTaken()) {
+				possibleSquares.add(targetSquare);
+			}
+		}
+		if (pawn.isWhite()) {
+			for (Object sq : pawn.getAttackedSquares().toArray()) {
+				Square targetSquare = chessBoard.getSquare((Square) sq);
+				if (targetSquare.isTaken() && targetSquare.getPiece().isBlack()
+						&& (targetSquare.getPiece() instanceof Pawn)) {
+					possibleSquares.add(targetSquare);
+				}
+			}
+		} else {// pawn is black
+			for (Object sq : pawn.getAttackedSquares().toArray()) {
+				Square targetSquare = chessBoard.getSquare((Square) sq);
+				if (targetSquare.isTaken() && targetSquare.getPiece().isWhite()
+						&& (targetSquare.getPiece() instanceof Pawn)) {
+					possibleSquares.add(targetSquare);
+				}
+			}
+		}
+		return possibleSquares;
+	}
+	
 }
