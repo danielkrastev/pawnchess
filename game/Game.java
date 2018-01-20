@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 import board.ChessBoard;
 import board.Square;
@@ -31,7 +32,8 @@ public class Game {
 	static private final int DEPTH = 0;
 	private MoveValidator moveValidator;
 	private Position currentPosition;
-
+	private Random randomGenerator;
+	
 	public Game() throws Exception {
 
 		currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
@@ -42,7 +44,8 @@ public class Game {
 
 		attackedSquaresFromWhite = new HashMap<Square, Integer>();
 		attackedSquaresFromBlack = new HashMap<Square, Integer>();
-
+		
+		randomGenerator = new Random();
 	}
 
 	public void start() throws Exception {
@@ -51,8 +54,9 @@ public class Game {
 		// updateBlackPieces();
 		// updateAttackedSquaresFromWhite();
 		// updateAttackedSquaresFromBlack();
-
-		while (true) {
+		boolean gameFinished = false;
+		
+		while (! gameFinished) {
 			try {
 				LOGGER.log(Level.INFO, currentPosition.getCurrentPlayer() + " to move:\nCurrent position:\n"
 						+ currentPosition.toString());
@@ -76,11 +80,23 @@ public class Game {
 				if (isMoveValid == true) {
 					LOGGER.log(Level.INFO, "THE MOVE IS VALID");
 					currentPosition.makeMove(currentMove);
-					// updateWhitePieces();
-					// updateBlackPieces();
-					// updateAttackedSquaresFromWhite();
-					// updateAttackedSquaresFromBlack();
 					gui.repaint();
+					
+					//check if pawn reached 8th or 1st rank.
+					Piece piece = currentMove.getPiece();
+					if(piece instanceof Pawn){
+						if(currentMove.getTargetSquare().getRow() == 1 || 
+     						currentMove.getTargetSquare().getRow() == 8	) {
+							LOGGER.log(Level.INFO, "Game ended!");
+							gameFinished = true;
+							if(piece.isWhite()) {
+								LOGGER.log(Level.INFO, "White won!");
+							}
+							else {
+								LOGGER.log(Level.INFO, "Black won");
+							}
+						}
+					}
 					if (is_white) {
 						Thread.sleep(2000);
 					}
@@ -96,7 +112,10 @@ public class Game {
 
 	private Move getEngineMove(Position currentPosition) {
 		//miniMax(DEPTH, currentPosition, true);
-		return new Move(new int [] {7,5}, new int [] {5,5}); 
+		List<Move> possibleMoves = currentPosition.getPossibleMoves(true);
+		int index = randomGenerator.nextInt(possibleMoves.size());
+		return possibleMoves.get(index);
+		//return new Move(new int [] {7,5}, new int [] {5,5}); 
 	}
 
 	public boolean validate(Move move, boolean is_black) {
