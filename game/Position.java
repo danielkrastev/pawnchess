@@ -142,6 +142,15 @@ public class Position {
 		changeTurn();
 	}
 	
+	public Position makeMove(Move currentMove) {
+		Square current_field = currentMove.getCurrentSquare();
+		Square target_field = currentMove.getTargetSquare();
+		Piece p = chessBoard.getPiece(current_field);
+		chessBoard.freeSquare(currentMove.getCurrentSquare());
+		chessBoard.setPiece(p, target_field);
+		changeTurn();
+	}
+	
 	public ArrayList<Square> getPossibleFields(Piece piece) {
 		if (piece instanceof King) {
 			King king = (King) piece;

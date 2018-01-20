@@ -348,7 +348,7 @@ public class Game {
 		if (is_black) { // maximizing player
 			int best_move_rating = Integer.MIN_VALUE;
 			for (Move possibleMove : possibleMoves) {
-				possible_position = position.makeMove(possibleMove);
+				Position possible_position = position.makeMove(possibleMove);
 				int current_move_rating = miniMax(depth-1, position, false);
 				
 			}
