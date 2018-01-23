@@ -9,9 +9,9 @@ public class Rating {
 
 	private static final int[][] whitePawnsRatingBoard = {
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
-			{ 0, 7, 7, 7, 7, 7, 7, 7, 7, 0 },
-			{ 0, 5, 5, 5, 5, 5, 5, 5, 5, 0 },
+			{ 0, 100, 100, 100, 100, 100, 100, 100, 100, 0 },
+			{ 0, 80, 80, 80, 80, 80, 80, 80, 80, 0 },
+			{ 0, 50, 50, 50, 50, 50, 50, 50, 50, 0 },
 			{ 0, 4, 4, 4, 4, 4, 4, 4, 4, 0 },
 			{ 0, 3, 3, 3, 3, 3, 3, 3, 3, 0 },
 			{ 0, 2, 2, 2, 2, 2, 2, 2, 2, 0 },
@@ -26,9 +26,9 @@ public class Rating {
 			{ 0, 2, 2, 2, 2, 2, 2, 2, 2, 0 },
 			{ 0, 3, 3, 3, 3, 3, 3, 3, 3, 0 }, 
 			{ 0, 4, 4, 4, 4, 4, 4, 4, 4, 0 },
-			{ 0, 5, 5, 5, 5, 5, 5, 5, 5, 0 },
-			{ 0, 7, 7, 7, 7, 7, 7, 7, 7, 0 },
-			{ 0, 9, 9, 9, 9, 9, 9, 9, 9, 0 },
+			{ 0, 50, 50, 50, 50, 50, 50, 50, 50, 0 },
+			{ 0, 80, 80, 80, 80, 80, 80, 80, 80, 0 },
+			{ 0, 100, 100, 100, 100, 100, 100, 100, 100, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 	private static final int[][] whiteKingRatingBoard = {
@@ -45,19 +45,22 @@ public class Rating {
 			{ 0, 2, 2, 4, 5, 5, 4, 3, 2, 0 }, { 0, 2, 2, 4, 5, 5, 4, 3, 2, 0 },
 			{ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-	public static int positionRating(Position game) {
+	public static int ratePosition(Position game) {
 		int rating = 0;
-		rating += rateMaterial(game);
-		rating += ratePosition(game);
+		rating += calculateMaterialRating(game);
+		rating += calculatePiecePositionRating(game);
+		if (game.getCurrentPlayer() == PieceColour.WHITE){
+			rating = 0 - rating;
+		}
 		return rating;
 	}
 
-	private static int rateMaterial(Position game) {
-		//return game.getBlackPieces().size() - game.getWhitePieces().size();
-		return 1;
+	private static int calculateMaterialRating(Position game) {
+		return game.getBlackPieces().size() - game.getWhitePieces().size();
+		//return 1;
 	}		
 
-	private static int ratePosition(Position game) {
+	private static int calculatePiecePositionRating(Position game) {
 
 		int positionPts = 0;
 

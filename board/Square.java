@@ -1,5 +1,6 @@
 package board;
 
+import pieces.King;
 import pieces.Piece;
 
 public class Square {
@@ -12,7 +13,25 @@ public class Square {
 
 	public Square() {
 	}
-
+	
+	public Square(Square sq){
+		this.row = sq.getRow();
+		this.column = sq.getColumn();
+		this.taken = sq.isTaken();
+		this.piece = null;
+		
+		if (this.isTaken()) {
+			Piece oldPiece = sq.getPiece();
+			if (oldPiece instanceof King) {
+				King newKing = new King()
+				
+			}
+			
+			
+		}
+		
+	}
+	
 	public Square(int row, int column) {
 		this.row = row;
 		this.column = column;

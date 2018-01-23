@@ -10,24 +10,16 @@ public abstract class Piece {
 		WHITE, BLACK
 	}
 
-	protected Square position;
 	protected PieceColour pieceColour;
 
 	public PieceColour getPieceColour() {
 		return pieceColour;
 	}
-
+	
 	public void setPieceColour(PieceColour pieceColour) {
 		this.pieceColour = pieceColour;
 	}
 
-	public Square getPosition() {
-		return position;
-	}
-
-	public void setPosition(Square position) {
-		this.position = position;
-	}
 
 	public String toString() {
 		return "Unidentified square";

@@ -29,7 +29,7 @@ public class Game {
 
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
-	static private final int DEPTH = 0;
+	static private final int DEPTH = 2;
 	private MoveValidator moveValidator;
 	private Position currentPosition;
 	private Random randomGenerator;
@@ -111,10 +111,11 @@ public class Game {
 	}
 
 	private Move getEngineMove(Position currentPosition) {
-		//miniMax(DEPTH, currentPosition, true);
-		List<Move> possibleMoves = currentPosition.getPossibleMoves(true);
-		int index = randomGenerator.nextInt(possibleMoves.size());
-		return possibleMoves.get(index);
+		MoveRating mv = miniMax(DEPTH, currentPosition, true);
+		return mv.getMove();
+		//List<Move> possibleMoves = currentPosition.getPossibleMoves(true);
+		//int index = randomGenerator.nextInt(possibleMoves.size());
+		//return possibleMoves.get(index);
 		//return new Move(new int [] {7,5}, new int [] {5,5}); 
 	}
 
@@ -190,47 +191,9 @@ public class Game {
 		return false;
 	}
 
-	private void updateAttackedSquaresFromWhite() {
-
-		attackedSquaresFromWhite = new HashMap<Square, Integer>();
-		ArrayList<Square> attackedSquares;
-		int counter;
-		for (Piece piece : whitePieces) {
-			attackedSquares = piece.getAttackedSquares();
-			for (Object sqr : attackedSquares) {
-				if (sqr != null) {
-					counter = 1;
-					Square square = CHESS_BOARD.getSquare((Square) sqr);
-					if (attackedSquaresFromWhite.containsKey(square)) {
-						counter += attackedSquaresFromWhite.get(square);
-					}
-					attackedSquaresFromWhite.put(square, counter);
-				}
-			}
-		}
-	}
-
-	private void updateAttackedSquaresFromBlack() {
-		attackedSquaresFromBlack = new HashMap<Square, Integer>();
-		ArrayList<Square> attackedSquares;
-		int counter;
-		for (Piece piece : blackPieces) {
-			attackedSquares = piece.getAttackedSquares();
-			for (Object sqr : attackedSquares) {
-				if (sqr != null) {
-					counter = 1;
-					Square square = CHESS_BOARD.getSquare((Square) sqr);
-					if (attackedSquaresFromBlack.containsKey(square)) {
-						counter += attackedSquaresFromBlack.get(square);
-					}
-					attackedSquaresFromBlack.put(square, counter);
-				}
-			}
-		}
-	}
-
+	
 	public String toString() {
-		return CHESS_BOARD.toString();
+		return currentPosition.getChessBoard().toString();
 	}
 
 	public Move getPlayersMove() {
@@ -306,67 +269,48 @@ public class Game {
 	 * if (kingCannotMove && attackedSquaresFromBlack.get(attacker) == 1) {
 	 * return true; } } return false; }
 	 */
-	private void updateWhitePieces() {
-		whitePieces = new HashSet<Piece>();
-		Square[] chessBoardArray = CHESS_BOARD.toArray();
-		for (Square square : chessBoardArray) {
-			if (square.isTaken()) {
-				Piece piece = square.getPiece();
-				if (piece.getPieceColour().equals(PieceColour.WHITE)) {
-					whitePieces.add(piece);
-				}
-			}
-		}
-	}
-
-	private void updateBlackPieces() {
-		blackPieces = new HashSet<Piece>();
-		Square[] chessBoardArray = CHESS_BOARD.toArray();
-		for (Square square : chessBoardArray) {
-			if (square.isTaken()) {
-				Piece piece = square.getPiece();
-				if (piece.getPieceColour().equals(PieceColour.BLACK)) {
-					blackPieces.add(piece);
-				}
-			}
-		}
-	}
-
-	private void revertBoard(Move mv) {
-		CHESS_BOARD.setPiece(mv.getTargetSquare().getPiece(),
-				mv.getCurrentSquare());
-		mv.getTargetSquare().setTaken(false);
-	}
-
-	static int miniMax(int depth, Position position, boolean  is_black){
-		if (depth == 0) {
-			return Rating.positionRating(position);
-		}
-		
+	
+	static MoveRating miniMax(int depth, Position position, boolean  is_black){
 		ArrayList<Move> possibleMoves = position.getPossibleMoves(is_black);
+		if (depth <= 1) {
+			int bestRating = 0;
+			Move bestMove = null;
+			for (Move possibleMove : possibleMoves) {
+				Position possiblePosition = position._makeMove(possibleMove);
+				int rating = Rating.ratePosition(position);
 
+				if (rating > bestRating) {
+					bestRating = rating;
+					bestMove = possibleMove;
+				}
+			}
+			return new MoveRating(bestMove, bestRating);
+		}
 		if (is_black) { // maximizing player
 			int best_move_rating = Integer.MIN_VALUE;
+			MoveRating bestMove = new MoveRating(null, best_move_rating);
 			for (Move possibleMove : possibleMoves) {
-				Position possible_position = position.makeMove(possibleMove);
-				int current_move_rating = miniMax(depth-1, position, false);
-				
+				Position possible_position = position._makeMove(possibleMove);
+				MoveRating currentMoveRating = miniMax(depth-1, position, false);
+				if (currentMoveRating.getRating() > bestMove.getRating()) {
+					bestMove = currentMoveRating;
+				}
+				return bestMove;
 			}
 		}else {
+			int best_move_rating = Integer.MAX_VALUE;
+			MoveRating bestMove = new MoveRating(null, best_move_rating);
 			for (Move possibleMove : possibleMoves) {
-				possibleMove.calculateRating(this);
-				strongestMove = Move.min(strongestMove,
-						miniMax(depth-1, beta, alpha, possibleMove, true));
-				beta = Math.min(beta, strongestMove.getRating());
-				//if (beta <= alpha) {
-				//	break;
-				//}
+				Position possible_position = position._makeMove(possibleMove);
+				MoveRating currentMoveRating = miniMax(depth-1, position, false);
+				if (currentMoveRating.getRating() < bestMove.getRating()) {
+					bestMove = currentMoveRating;
+				}
+				return bestMove;
 			}
 		}
-		assert (strongestMove != null);
-	    return strongestMove;
+		return null;
 	}
-
 
 	private void undoMove(Move move) {
 		CHESS_BOARD.setPiece(move.getPiece(), move.getCurrentSquare());

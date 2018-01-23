@@ -21,13 +21,13 @@ public class Position {
 	 **/
 
 	private ChessBoard chessBoard;
+	private PieceColour currentPlayer;
+
 	
 	public ChessBoard getChessBoard() {
 		return chessBoard;
 	}
-
-	private PieceColour currentPlayer;
-
+	
 	public PieceColour getCurrentPlayer() {
 		return currentPlayer;
 	}
@@ -35,7 +35,13 @@ public class Position {
 	public void setCurrentPlayer(PieceColour currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
-
+	
+	
+	public Position(ChessBoard chessBoard, PieceColour currentPlayer) {
+	    this.chessBoard = chessBoard;
+	    this.currentPlayer = currentPlayer;
+	}
+	
 	public Position(String fen) throws Exception {
 		
 		this.chessBoard  = new ChessBoard();
@@ -142,13 +148,15 @@ public class Position {
 		changeTurn();
 	}
 	
-	public Position makeMove(Move currentMove) {
+	public Position _makeMove(Move currentMove) {
+		Position newPos = new Position(this.getChessBoard(), this.getCurrentPlayer());
 		Square current_field = currentMove.getCurrentSquare();
 		Square target_field = currentMove.getTargetSquare();
 		Piece p = chessBoard.getPiece(current_field);
 		chessBoard.freeSquare(currentMove.getCurrentSquare());
 		chessBoard.setPiece(p, target_field);
 		changeTurn();
+		return this;
 	}
 	
 	public ArrayList<Square> getPossibleFields(Piece piece) {

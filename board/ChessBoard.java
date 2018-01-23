@@ -31,6 +31,21 @@ public class ChessBoard {
 		}
 	}
 
+	public ChessBoard(ChessBoard cb) {
+		Square[][] newSquares = new Square[10][10];
+		Square[][] squares = cb.getSquares();
+		for (int i = 0; i <= 9; i++) {
+			for (int j = 0; j <= 9; j++) {
+				newSquares[i][j] = new Square(squares[i][j]);
+				
+				SQUARES[i][j] = new Square(i, j);
+				SQUARES[i][j].setTaken(false);
+			}
+		}
+		
+	}
+	
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 9; i >= 0; i--) {
@@ -75,7 +90,7 @@ public class ChessBoard {
 		sq.setTaken(false);
 	}
 
-	public Square[][] getChessBoard() {
+	public Square[][] getSquares() {
 		return this.SQUARES;
 	}
 	
