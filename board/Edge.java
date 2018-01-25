@@ -1,6 +1,6 @@
 package board;
 
-public class Edge extends Square {
+public class Edge extends Field {
 
 	public Edge (int row, int column){
 		this.row = row;

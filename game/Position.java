@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import board.ChessBoard;
-import board.Square;
+import board.Field;
 import pieces.Pawn;
 import pieces.Piece;
 import pieces.King;
@@ -68,20 +68,20 @@ public class Position {
 					col ++;
 					switch (c) {
 						case 'P':
-							Pawn white_pawn = new Pawn(PieceColour.WHITE, chessBoard.getSquare(row, col));
-							chessBoard.setPiece(white_pawn, chessBoard.getSquare(row, col));
+							Pawn white_pawn = new Pawn(PieceColour.WHITE, chessBoard.getField(row, col));
+							chessBoard.setPiece(white_pawn, chessBoard.getField(row, col));
 							break;
 						case 'p':
-							Pawn black_pawn = new Pawn(PieceColour.BLACK, chessBoard.getSquare(row, col));
-							chessBoard.setPiece(black_pawn, chessBoard.getSquare(row, col));
+							Pawn black_pawn = new Pawn(PieceColour.BLACK, chessBoard.getField(row, col));
+							chessBoard.setPiece(black_pawn, chessBoard.getField(row, col));
 							break;
 						case 'K':
-							King white_king = new King(PieceColour.WHITE, chessBoard.getSquare(row, col));
-							chessBoard.setPiece(white_king, chessBoard.getSquare(row, col));
+							King white_king = new King(PieceColour.WHITE, chessBoard.getField(row, col));
+							chessBoard.setPiece(white_king, chessBoard.getField(row, col));
 							break;
 						case 'k':
-							King black_king = new King(PieceColour.BLACK, chessBoard.getSquare(row, col));
-							chessBoard.setPiece(black_king, chessBoard.getSquare(row, col));
+							King black_king = new King(PieceColour.BLACK, chessBoard.getField(row, col));
+							chessBoard.setPiece(black_king, chessBoard.getField(row, col));
 							break;
 					}
 				}
@@ -122,7 +122,7 @@ public class Position {
 
 	public List<Piece> getPieces() {
 		List<Piece> pieces = new ArrayList<Piece>();
-		for (Square sq : chessBoard.toArray()) {
+		for (Field sq : chessBoard.toArray()) {
 			if (sq.isTaken()) {
 				Piece piece = sq.getPiece();
 				pieces.add(piece);
@@ -140,107 +140,107 @@ public class Position {
 	}
 	
 	public void makeMove(Move currentMove) {
-		Square current_field = currentMove.getCurrentSquare();
-		Square target_field = currentMove.getTargetSquare();
+		Field current_field = currentMove.getCurrentField();
+		Field target_field = currentMove.getTargetField();
 		Piece p = chessBoard.getPiece(current_field);
-		chessBoard.freeSquare(currentMove.getCurrentSquare());
+		chessBoard.freeField(currentMove.getCurrentField());
 		chessBoard.setPiece(p, target_field);
 		changeTurn();
 	}
 	
 	public Position _makeMove(Move currentMove) {
 		Position newPos = new Position(this.getChessBoard(), this.getCurrentPlayer());
-		Square current_field = currentMove.getCurrentSquare();
-		Square target_field = currentMove.getTargetSquare();
+		Field current_field = currentMove.getCurrentField();
+		Field target_field = currentMove.getTargetField();
 		Piece p = chessBoard.getPiece(current_field);
-		chessBoard.freeSquare(currentMove.getCurrentSquare());
+		chessBoard.freeField(currentMove.getCurrentField());
 		chessBoard.setPiece(p, target_field);
 		changeTurn();
 		return this;
 	}
 	
-	public ArrayList<Square> getPossibleFields(Piece piece) {
+	public ArrayList<Field> getPossibleFields(Piece piece) {
 		if (piece instanceof King) {
 			King king = (King) piece;
-			return getPossibleSquaresForKing(king);
+			return getPossibleFieldsForKing(king);
 		} else {
 			Pawn pawn = (Pawn) piece;
-			return getPossibleSquaresForPawn(pawn);
+			return getPossibleFieldsForPawn(pawn);
 		}
 	}
 	
-	private ArrayList<Square> getPossibleSquaresForKing(King king) {
-		ArrayList<Square> possibleSquares = new ArrayList<Square>();
+	private ArrayList<Field> getPossibleFieldsForKing(King king) {
+		ArrayList<Field> possibleFields = new ArrayList<Field>();
 		if (king.isWhite()) {
-			for (Object sq : king.getAccesableSquares().toArray()) {
-				Square targetSquare = chessBoard.getSquare((Square) sq);
-				if ( ! targetSquare.isTaken() &&
-					 ! getAttackedSquaresFromBlack().contains(sq)) {
-					possibleSquares.add(targetSquare);
-				} else if (targetSquare.isTaken() && targetSquare.getPiece().isBlack()) {
+			for (Object sq : king.getAccesableFields().toArray()) {
+				Field targetField = chessBoard.getField((Field) sq);
+				if ( ! targetField.isTaken() &&
+					 ! getAttackedFieldsFromBlack().contains(sq)) {
+					possibleFields.add(targetField);
+				} else if (targetField.isTaken() && targetField.getPiece().isBlack()) {
 
-					Pawn blackPawn = (Pawn) targetSquare.getPiece();// only
+					Pawn blackPawn = (Pawn) targetField.getPiece();// only
 																	// possible
 																	// that this
 																	// piece is
 																	// pawn
 					if ( ! isProtected(blackPawn)) {
-						possibleSquares.add(targetSquare);
+						possibleFields.add(targetField);
 					}
 				}
 			}
 		} else {// king is black
-			for (Object sq : king.getAccesableSquares().toArray()) {
-				Square targetSquare = chessBoard.getSquare((Square) sq);
-				if (! targetSquare.isTaken()) {
-					possibleSquares.add(targetSquare);
+			for (Object sq : king.getAccesableFields().toArray()) {
+				Field targetField = chessBoard.getField((Field) sq);
+				if (! targetField.isTaken()) {
+					possibleFields.add(targetField);
 				} else // square is taken
-				if (targetSquare.getPiece().isWhite()) {
-					Pawn whitePawn = (Pawn) targetSquare.getPiece();// only
+				if (targetField.getPiece().isWhite()) {
+					Pawn whitePawn = (Pawn) targetField.getPiece();// only
 																	// possible
 																	// that this
 																	// piece is
 																	// pawn
 					if (!isProtected(whitePawn)) {
-						possibleSquares.add(targetSquare);
+						possibleFields.add(targetField);
 					}
 				}
 			}
 		}
-		return possibleSquares;
+		return possibleFields;
 	}
 	
-	public List<Square> getAttackedSquaresFromBlack() {
-		List<Square> attackedSquaresFromBlack = new ArrayList<Square>();
+	public List<Field> getAttackedFieldsFromBlack() {
+		List<Field> attackedFieldsFromBlack = new ArrayList<Field>();
 		for(Piece p : getBlackPieces()) {
-			List<Square> attackedSquares = p.getAttackedSquares();
-			for (Square as : attackedSquares) {
+			List<Field> attackedFields = p.getAttackedFields();
+			for (Field as : attackedFields) {
 				if (! (as instanceof board.Edge)) {
-					attackedSquaresFromBlack.add(as);
+					attackedFieldsFromBlack.add(as);
 				}
 			}
 		}
-		return attackedSquaresFromBlack;
+		return attackedFieldsFromBlack;
 	}
 	
 	private boolean isProtected(Pawn pawn) {
-		Square pos = pawn.getPosition();
+		Field pos = pawn.getPosition();
 		if (pawn.isWhite()) {
 			
 		}else { //pawn is black
-			Square upLeft = pos.oneSquareLeftUp();
+			Field upLeft = pos.oneFieldLeftUp();
 			Piece p = upLeft.getPiece();
 			if (p instanceof Pawn && p.isBlack()) {
 				return true;
 			}
-			Square upRight = pos.oneSquareRightUp();
+			Field upRight = pos.oneFieldRightUp();
 			p = upRight.getPiece();
 			if (p instanceof Pawn && p.isBlack()) {
 				return true;
 			}
 			
 			King blackKing = getBlackKing();
-			if (blackKing.getAccesableSquares().contains(pos)){
+			if (blackKing.getAccesableFields().contains(pos)){
 				return true;
 			}
 		}
@@ -256,41 +256,41 @@ public class Position {
 		return null;
 	}
 	
-	public List<Square> getAttackedSquaresFromWhite() {
-		List<Square> attackedSquaresFromWhite = new ArrayList<Square>();
+	public List<Field> getAttackedFieldsFromWhite() {
+		List<Field> attackedFieldsFromWhite = new ArrayList<Field>();
 		for(Piece p : getBlackPieces()) {
-			List<Square> attackedSquares = p.getAttackedSquares();
-			for (Square as : attackedSquares) {
+			List<Field> attackedFields = p.getAttackedFields();
+			for (Field as : attackedFields) {
 				if (! (as instanceof board.Edge)) {
-					attackedSquaresFromWhite.add(as);
+					attackedFieldsFromWhite.add(as);
 				}
 			}
 		}
-		return attackedSquaresFromWhite;
+		return attackedFieldsFromWhite;
 	}
 
 	
 	ArrayList<Move> getPossibleMoves(boolean is_black) {
 		boolean is_white = ! is_black;
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
-		ArrayList<Square> accessableSquares;
+		ArrayList<Field> accessableFields;
 		if (is_white) {
 			for (Piece piece : getWhitePieces()) {
-				accessableSquares = getPossibleFields(piece);
-				for (Square target : accessableSquares) {
+				accessableFields = getPossibleFields(piece);
+				for (Field target : accessableFields) {
 					Move move = new Move();
-					move.setCurrentSquare(piece.getPosition());
-					move.setTargetSquare(target);
+					move.setCurrentField(piece.getPosition());
+					move.setTargetField(target);
 					possibleMoves.add(move);
 				}
 			}
 		} else { // black to move
 			for (Piece piece : getBlackPieces()) {
-				accessableSquares = getPossibleFields(piece);
-				for (Square target : accessableSquares) {
+				accessableFields = getPossibleFields(piece);
+				for (Field target : accessableFields) {
 					Move move = new Move();
-					move.setCurrentSquare(piece.getPosition());
-			    	move.setTargetSquare(target);
+					move.setCurrentField(piece.getPosition());
+			    	move.setTargetField(target);
 					possibleMoves.add(move);
 				}
 			}
@@ -298,32 +298,32 @@ public class Position {
 		return possibleMoves;
 	}
 	
-	private  ArrayList<Square> getPossibleSquaresForPawn(Pawn pawn) {
-		ArrayList<Square> possibleSquares = new ArrayList<Square>();
-		for (Object sq : pawn.getAccesableSquares()) {
-			Square targetSquare = chessBoard.getSquare((Square) sq);
-			if (!targetSquare.isTaken()) {
-				possibleSquares.add(targetSquare);
+	private  ArrayList<Field> getPossibleFieldsForPawn(Pawn pawn) {
+		ArrayList<Field> possibleFields = new ArrayList<Field>();
+		for (Object sq : pawn.getAccesableFields()) {
+			Field targetField = chessBoard.getField((Field) sq);
+			if (!targetField.isTaken()) {
+				possibleFields.add(targetField);
 			}
 		}
 		if (pawn.isWhite()) {
-			for (Object sq : pawn.getAttackedSquares().toArray()) {
-				Square targetSquare = chessBoard.getSquare((Square) sq);
-				if (targetSquare.isTaken() && targetSquare.getPiece().isBlack()
-						&& (targetSquare.getPiece() instanceof Pawn)) {
-					possibleSquares.add(targetSquare);
+			for (Object sq : pawn.getAttackedFields().toArray()) {
+				Field targetField = chessBoard.getField((Field) sq);
+				if (targetField.isTaken() && targetField.getPiece().isBlack()
+						&& (targetField.getPiece() instanceof Pawn)) {
+					possibleFields.add(targetField);
 				}
 			}
 		} else {// pawn is black
-			for (Object sq : pawn.getAttackedSquares().toArray()) {
-				Square targetSquare = chessBoard.getSquare((Square) sq);
-				if (targetSquare.isTaken() && targetSquare.getPiece().isWhite()
-						&& (targetSquare.getPiece() instanceof Pawn)) {
-					possibleSquares.add(targetSquare);
+			for (Object sq : pawn.getAttackedFields().toArray()) {
+				Field targetField = chessBoard.getField((Field) sq);
+				if (targetField.isTaken() && targetField.getPiece().isWhite()
+						&& (targetField.getPiece() instanceof Pawn)) {
+					possibleFields.add(targetField);
 				}
 			}
 		}
-		return possibleSquares;
+		return possibleFields;
 	}
 	
 }

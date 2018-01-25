@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import board.Square;
+import board.Field;
 import game.Game;
 
 public class UserInterface extends JPanel {
@@ -15,7 +15,7 @@ public class UserInterface extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Game game;
 	private ChessGraphics chessGraphics;
-	Square markedSquare;
+	Field markedField;
 
 	public UserInterface(final Game game) {
 		super();
@@ -33,7 +33,7 @@ public class UserInterface extends JPanel {
 		this.setBackground(Color.WHITE);
 		chessGraphics.drawChessBoard(graphics, game);
 		chessGraphics.drawPieces(graphics, game, this);
-		chessGraphics.markSquare(graphics, markedSquare, this);
+		chessGraphics.markField(graphics, markedField, this);
 	}
 
 	public class MouseMover implements MouseListener{
@@ -84,7 +84,7 @@ public class UserInterface extends JPanel {
 			synchronized(game){
 				columnClicked = event.getX()/64;
 				rowClicked = 9 - event.getY()/64;
-				markedSquare = game.getChessBoard().getSquare(rowClicked, columnClicked);
+				markedField = game.getChessBoard().getField(rowClicked, columnClicked);
 			    UserInterface.this.repaint();
 				game.notify();
 			}

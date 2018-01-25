@@ -8,7 +8,7 @@ import pieces.Pawn;
 import pieces.Piece;
 import pieces.Piece.PieceColour;
 import board.ChessBoard;
-import board.Square;
+import board.Field;
 
 public class MoveValidator {
 
@@ -20,83 +20,83 @@ public class MoveValidator {
 		return false;
 	}
 
-	private static ArrayList<Square> getPossibleSquaresForKing(King king) {
-		ArrayList<Square> possibleSquares = new ArrayList<Square>();
+	private static ArrayList<Field> getPossibleFieldsForKing(King king) {
+		ArrayList<Field> possibleFields = new ArrayList<Field>();
 		if (king.isWhite()) {
-			for (Object sq : king.getAccesableSquares().toArray()) {
-				Square targetSquare = CHESS_BOARD.getSquare((Square) sq);
-				if ( ! targetSquare.isTaken() &&
-					 ! game.getAttackedSquaresFromBlack().containsKey(sq)) {
-					possibleSquares.add(targetSquare);
-				} else if (targetSquare.getPiece().isBlack()) {
+			for (Object sq : king.getAccesableFields().toArray()) {
+				Field targetField = CHESS_BOARD.getField((Field) sq);
+				if ( ! targetField.isTaken() &&
+					 ! game.getAttackedFieldsFromBlack().containsKey(sq)) {
+					possibleFields.add(targetField);
+				} else if (targetField.getPiece().isBlack()) {
 
-					Pawn blackPawn = (Pawn) targetSquare.getPiece();// only
+					Pawn blackPawn = (Pawn) targetField.getPiece();// only
 																	// possible
 																	// that this
 																	// piece is
 																	// pawn
 					if ( ! isProtected(blackPawn)) {
-						possibleSquares.add(targetSquare);
+						possibleFields.add(targetField);
 					}
 				}
 			}
 		} else {// king is black
-			for (Object sq : king.getAccesableSquares().toArray()) {
-				Square targetSquare = CHESS_BOARD.getSquare((Square) sq);
-				if (! targetSquare.isTaken()) {
-					possibleSquares.add(targetSquare);
+			for (Object sq : king.getAccesableFields().toArray()) {
+				Field targetField = CHESS_BOARD.getField((Field) sq);
+				if (! targetField.isTaken()) {
+					possibleFields.add(targetField);
 				} else // square is taken
-				if (targetSquare.getPiece().isWhite()) {
-					Pawn whitePawn = (Pawn) targetSquare.getPiece();// only
+				if (targetField.getPiece().isWhite()) {
+					Pawn whitePawn = (Pawn) targetField.getPiece();// only
 																	// possible
 																	// that this
 																	// piece is
 																	// pawn
 					if (!isProtected(whitePawn)) {
-						possibleSquares.add(targetSquare);
+						possibleFields.add(targetField);
 					}
 				}
 			}
 		}
-		return possibleSquares;
+		return possibleFields;
 	}
 
 	private boolean isProtected(Pawn pawn) {
-		Square pawnPosition = pawn.getPosition();
+		Field pawnPosition = pawn.getPosition();
 		if (pawn.isWhite()) {
-			return (game.getAttackedSquaresFromWhite()
+			return (game.getAttackedFieldsFromWhite()
 					.containsKey(pawnPosition));
 		} else {
-			return (game.getAttackedSquaresFromBlack()
+			return (game.getAttackedFieldsFromBlack()
 					.containsKey(pawnPosition));
 		}
 	}
 
-	private static ArrayList<Square> getPossibleSquaresForPawn(Pawn pawn) {
-		ArrayList<Square> possibleSquares = new ArrayList<Square>();
-		for (Object sq : pawn.getAccesableSquares()) {
-			Square targetSquare = CHESS_BOARD.getSquare((Square) sq);
-			if (!targetSquare.isTaken()) {
-				possibleSquares.add(targetSquare);
+	private static ArrayList<Field> getPossibleFieldsForPawn(Pawn pawn) {
+		ArrayList<Field> possibleFields = new ArrayList<Field>();
+		for (Object sq : pawn.getAccesableFields()) {
+			Field targetField = CHESS_BOARD.getField((Field) sq);
+			if (!targetField.isTaken()) {
+				possibleFields.add(targetField);
 			}
 		}
 		if (pawn.isWhite()) {
-			for (Object sq : pawn.getAttackedSquares().toArray()) {
-				Square targetSquare = CHESS_BOARD.getSquare((Square) sq);
-				if (targetSquare.isTaken() && targetSquare.getPiece().isBlack()
-						&& (targetSquare.getPiece() instanceof Pawn)) {
-					possibleSquares.add(targetSquare);
+			for (Object sq : pawn.getAttackedFields().toArray()) {
+				Field targetField = CHESS_BOARD.getField((Field) sq);
+				if (targetField.isTaken() && targetField.getPiece().isBlack()
+						&& (targetField.getPiece() instanceof Pawn)) {
+					possibleFields.add(targetField);
 				}
 			}
 		} else {// pawn is black
-			for (Object sq : pawn.getAttackedSquares().toArray()) {
-				Square targetSquare = CHESS_BOARD.getSquare((Square) sq);
-				if (targetSquare.isTaken() && targetSquare.getPiece().isWhite()
-						&& (targetSquare.getPiece() instanceof Pawn)) {
-					possibleSquares.add(targetSquare);
+			for (Object sq : pawn.getAttackedFields().toArray()) {
+				Field targetField = CHESS_BOARD.getField((Field) sq);
+				if (targetField.isTaken() && targetField.getPiece().isWhite()
+						&& (targetField.getPiece() instanceof Pawn)) {
+					possibleFields.add(targetField);
 				}
 			}
 		}
-		return possibleSquares;
+		return possibleFields;
 	}
 }

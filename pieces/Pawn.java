@@ -2,47 +2,47 @@ package pieces;
 
 import java.util.ArrayList;
 
-import board.Square;
+import board.Field;
 import exceptions.InvalidMoveException;
 
 public class Pawn extends Piece {
 
-	public Pawn(PieceColour colour, Square position) {
+	public Pawn(PieceColour colour, Field position) {
 
 		this.position = position;
 		this.pieceColour = colour;
 	}
 
 	@Override
-	public boolean canMove(Square targetSquare) throws InvalidMoveException {
-		if (targetSquare.isValidSquare() && isMoveValid(targetSquare)) {
+	public boolean canMove(Field targetField) throws InvalidMoveException {
+		if (targetField.isValidField() && isMoveValid(targetField)) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isMoveValid(Square targetSquare) {
-		Square currentPosition = this.getPosition();
+	private boolean isMoveValid(Field targetField) {
+		Field currentPosition = this.getPosition();
 		Piece.PieceColour colour = this.getPieceColour();
 
 		switch (colour) {
 		// white pawns
 		case WHITE:
 
-			if (targetSquare.isOneSquareUpFrom(currentPosition)
-					&& !targetSquare.isTaken()) {
+			if (targetField.isOneFieldUpFrom(currentPosition)
+					&& !targetField.isTaken()) {
 				return true;
 			}
-			if ((targetSquare.isOneSquareLeftUpFrom(currentPosition) || targetSquare
-					.isOneSquareRightUpFrom(currentPosition))
-					&& (targetSquare.isTaken() == true && targetSquare
+			if ((targetField.isOneFieldLeftUpFrom(currentPosition) || targetField
+					.isOneFieldRightUpFrom(currentPosition))
+					&& (targetField.isTaken() == true && targetField
 							.getPiece().getPieceColour()
 							.equals(PieceColour.BLACK))) {
 				return true;
 			}
 			if (currentPosition.getRow() == 2
-					&& targetSquare.isTwoSquaresUpFrom(currentPosition)
-					&& !targetSquare.isTaken()) {
+					&& targetField.isTwoFieldsUpFrom(currentPosition)
+					&& !targetField.isTaken()) {
 				return true;
 			}
 			break;
@@ -50,19 +50,19 @@ public class Pawn extends Piece {
 		// black pawns
 		case BLACK:
 
-			if (targetSquare.isOneSquareDownFrom(currentPosition)
-					&& !targetSquare.isTaken()) {
+			if (targetField.isOneFieldDownFrom(currentPosition)
+					&& !targetField.isTaken()) {
 				return true;
 			}
-			if ((targetSquare.isOneSquareLeftDownFrom(currentPosition) || targetSquare
-					.isOneSquareRightDownFrom(currentPosition))
-					&& (targetSquare.isTaken() && targetSquare.getPiece()
+			if ((targetField.isOneFieldLeftDownFrom(currentPosition) || targetField
+					.isOneFieldRightDownFrom(currentPosition))
+					&& (targetField.isTaken() && targetField.getPiece()
 							.getPieceColour().equals(PieceColour.WHITE))) {
 				return true;
 			}
 			if (currentPosition.getRow() == 7
-					&& targetSquare.isTwoSquaresdDownFrom(currentPosition)
-					&& !targetSquare.isTaken()) {
+					&& targetField.isTwoFieldsdDownFrom(currentPosition)
+					&& !targetField.isTaken()) {
 				return true;
 			}
 			break;
@@ -73,47 +73,47 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public ArrayList<Square> getAccesableSquares() {
-		ArrayList<Square> accessableSquares = new ArrayList<Square>();
+	public ArrayList<Field> getAccesableFields() {
+		ArrayList<Field> accessableFields = new ArrayList<Field>();
 		if (this.isWhite()) {
 			if (this.getPosition().getRow() == 2) {
-				accessableSquares.add(position.twoSquaresUp());
+				accessableFields.add(position.twoFieldsUp());
 			}
-			accessableSquares.add(position.oneSquareUp());
-			return accessableSquares;
+			accessableFields.add(position.oneFieldUp());
+			return accessableFields;
 		} else {// pawn is black
 			if (this.getPosition().getRow() == 7) {
-				accessableSquares.add(position.twoSquaresDown());
+				accessableFields.add(position.twoFieldsDown());
 			}
-			accessableSquares.add(position.oneSquareDown());
-			return accessableSquares;
+			accessableFields.add(position.oneFieldDown());
+			return accessableFields;
 		}
 	}
 
 	@Override
-	public ArrayList<Square> getAttackedSquares() {
-		ArrayList<Square> attackedSquares = new ArrayList<Square>();
-		Square target;
+	public ArrayList<Field> getAttackedFields() {
+		ArrayList<Field> attackedFields = new ArrayList<Field>();
+		Field target;
 		if (this.isWhite()) {
-			target = position.oneSquareLeftUp();
+			target = position.oneFieldLeftUp();
 			if (target != null) {
-				attackedSquares.add(target);
+				attackedFields.add(target);
 			}
-			target = position.oneSquareRightUp();
+			target = position.oneFieldRightUp();
 			if (target != null) {
-				attackedSquares.add(target);
+				attackedFields.add(target);
 			}
 		} else {// pawn is black
-			target = position.oneSquareLeftDown();
+			target = position.oneFieldLeftDown();
 			if (target != null) {
-				attackedSquares.add(target);
+				attackedFields.add(target);
 			}
-			target = position.oneSquareRightDown();
+			target = position.oneFieldRightDown();
 			if (target != null) {
-				attackedSquares.add(target);
+				attackedFields.add(target);
 			}
 		}
-		return attackedSquares;
+		return attackedFields;
 	}
 
 	public String toString() {
@@ -124,37 +124,37 @@ public class Pawn extends Piece {
 		}
 	}
 	/*
-	 * public List<Square> getPossibleSquares(Game game) {
+	 * public List<Field> getPossibleFields(Game game) {
 	 * 
-	 * List<Square> accessableSquares = new ArrayList<Square>(); Square
+	 * List<Field> accessableFields = new ArrayList<Field>(); Field
 	 * currentPosition = this.getPosition();
 	 * 
 	 * if (this.getPieceColour().equals(PieceColour.WHITE)) {
 	 * 
-	 * for (Square enemySquare : this.getAccesableSquares(game)){ if
-	 * (enemySquare != null && enemySquare.isTaken() &&
-	 * enemySquare.getPiece().getPieceColour().equals(PieceColour.BLACK)){
-	 * accessableSquares.add(enemySquare); } } Square possibleSquare =
-	 * game.getChessBoard().getSquare(this.position.oneSquareUp()); if
-	 * (possibleSquare.isValidSquare() && !possibleSquare.isTaken()){
-	 * accessableSquares.add(possibleSquare); } if (currentPosition.getRow() ==
-	 * 2){ possibleSquare =
-	 * game.getChessBoard().getSquare(this.position.twoSquaresUp()); if
-	 * (!possibleSquare.oneSquareDown().isTaken() && !possibleSquare.isTaken()){
-	 * accessableSquares.add(possibleSquare); } } } else {
+	 * for (Field enemyField : this.getAccesableFields(game)){ if
+	 * (enemyField != null && enemyField.isTaken() &&
+	 * enemyField.getPiece().getPieceColour().equals(PieceColour.BLACK)){
+	 * accessableFields.add(enemyField); } } Field possibleField =
+	 * game.getChessBoard().getField(this.position.oneFieldUp()); if
+	 * (possibleField.isValidField() && !possibleField.isTaken()){
+	 * accessableFields.add(possibleField); } if (currentPosition.getRow() ==
+	 * 2){ possibleField =
+	 * game.getChessBoard().getField(this.position.twoFieldsUp()); if
+	 * (!possibleField.oneFieldDown().isTaken() && !possibleField.isTaken()){
+	 * accessableFields.add(possibleField); } } } else {
 	 * 
-	 * for (Square enemySquare : this.getAccesableSquares(game)){ if
-	 * (enemySquare != null && enemySquare.isTaken() &&
-	 * enemySquare.getPiece().getPieceColour().equals(PieceColour.WHITE)){
-	 * accessableSquares.add(enemySquare); } }
+	 * for (Field enemyField : this.getAccesableFields(game)){ if
+	 * (enemyField != null && enemyField.isTaken() &&
+	 * enemyField.getPiece().getPieceColour().equals(PieceColour.WHITE)){
+	 * accessableFields.add(enemyField); } }
 	 * 
-	 * Square possibleSquare =
-	 * game.getChessBoard().getSquare(this.position.oneSquareDown()); if
-	 * (possibleSquare.isValidSquare() && !possibleSquare.isTaken()){
-	 * accessableSquares.add(possibleSquare); } if (currentPosition.getRow() ==
-	 * 7){ possibleSquare =
-	 * game.getChessBoard().getSquare(this.position.twoSquaresDown()); if
-	 * (!possibleSquare.oneSquareDown().isTaken() && !possibleSquare.isTaken()){
-	 * accessableSquares.add(possibleSquare); } } } return accessableSquares; }
+	 * Field possibleField =
+	 * game.getChessBoard().getField(this.position.oneFieldDown()); if
+	 * (possibleField.isValidField() && !possibleField.isTaken()){
+	 * accessableFields.add(possibleField); } if (currentPosition.getRow() ==
+	 * 7){ possibleField =
+	 * game.getChessBoard().getField(this.position.twoFieldsDown()); if
+	 * (!possibleField.oneFieldDown().isTaken() && !possibleField.isTaken()){
+	 * accessableFields.add(possibleField); } } } return accessableFields; }
 	 */
 }

@@ -2,12 +2,12 @@ package pieces;
 
 import java.util.ArrayList;
 
-import board.Square;
+import board.Field;
 import exceptions.InvalidMoveException;
 
 public class King extends Piece {
 
-	public King(PieceColour colour, Square position) {
+	public King(PieceColour colour, Field position) {
 		this.position = position;
 		this.pieceColour = colour;
 	}
@@ -24,15 +24,15 @@ public class King extends Piece {
 	}
 
 	@Override
-	public boolean canMove(Square targetSquare) throws InvalidMoveException {
-		if (targetSquare.isValidSquare() && isMoveValid(targetSquare) && isSquareAccessible(targetSquare)) {
+	public boolean canMove(Field targetField) throws InvalidMoveException {
+		if (targetField.isValidField() && isMoveValid(targetField) && isFieldAccessible(targetField)) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isSquareAccessible(Square targetSquare) {
-		if (!targetSquare.isTaken()){
+	private boolean isFieldAccessible(Field targetField) {
+		if (!targetField.isTaken()){
 			return true;
 		}
         
@@ -40,13 +40,13 @@ public class King extends Piece {
 		
 		switch (colour){
 		case WHITE:
-			if (targetSquare.getPiece().getPieceColour().equals(PieceColour.BLACK)){
+			if (targetField.getPiece().getPieceColour().equals(PieceColour.BLACK)){
 				return true;
 			}else {
 				return false;
 			}
 		case BLACK:
-			if (targetSquare.getPiece().getPieceColour().equals(PieceColour.WHITE)){
+			if (targetField.getPiece().getPieceColour().equals(PieceColour.WHITE)){
 				return true;
 			}else {
 				return false;
@@ -54,18 +54,18 @@ public class King extends Piece {
 		}
 		return false;
 	}
-	private boolean isMoveValid(Square targetSquare)
+	private boolean isMoveValid(Field targetField)
 			throws InvalidMoveException {
 
-		Square currentPosition = this.getPosition();		
-		if ((targetSquare.isOneSquareUpFrom(currentPosition)
-				|| targetSquare.isOneSquareRightFrom(currentPosition)
-				|| targetSquare.isOneSquareUpFrom(currentPosition)
-				|| targetSquare.isOneSquareDownFrom(currentPosition)
-				|| targetSquare.isOneSquareLeftUpFrom(currentPosition)
-				|| targetSquare.isOneSquareRightUpFrom(currentPosition)
-				|| targetSquare.isOneSquareLeftDownFrom(currentPosition) || targetSquare
-				.isOneSquareRightDownFrom(currentPosition))) {
+		Field currentPosition = this.getPosition();		
+		if ((targetField.isOneFieldUpFrom(currentPosition)
+				|| targetField.isOneFieldRightFrom(currentPosition)
+				|| targetField.isOneFieldUpFrom(currentPosition)
+				|| targetField.isOneFieldDownFrom(currentPosition)
+				|| targetField.isOneFieldLeftUpFrom(currentPosition)
+				|| targetField.isOneFieldRightUpFrom(currentPosition)
+				|| targetField.isOneFieldLeftDownFrom(currentPosition) || targetField
+				.isOneFieldRightDownFrom(currentPosition))) {
 
 			return true;
 		}
@@ -73,46 +73,46 @@ public class King extends Piece {
 	}
 
 	//all the fields surrounding the king
-	public ArrayList<Square> getAccesableSquares() {
+	public ArrayList<Field> getAccesableFields() {
 
-     ArrayList <Square> accessableSquares = new ArrayList<Square>();
+     ArrayList <Field> accessableFields = new ArrayList<Field>();
 
-     	 Square leftSquare = position.oneSquareLeft();
-         if (leftSquare != null){
-        	 accessableSquares.add(leftSquare);
+     	 Field leftField = position.oneFieldLeft();
+         if (leftField != null){
+        	 accessableFields.add(leftField);
          }
-         Square rightSquare = position.oneSquareRight();
-         if (rightSquare !=null){
-        	 accessableSquares.add(rightSquare);
+         Field rightField = position.oneFieldRight();
+         if (rightField !=null){
+        	 accessableFields.add(rightField);
          }
-         Square upSquare = position.oneSquareUp();
-         if(upSquare != null){
-        	 accessableSquares.add(upSquare);
+         Field upField = position.oneFieldUp();
+         if(upField != null){
+        	 accessableFields.add(upField);
          }
-         Square downSquare = position.oneSquareDown();
-         if (downSquare != null){
-        	 accessableSquares.add(downSquare);
+         Field downField = position.oneFieldDown();
+         if (downField != null){
+        	 accessableFields.add(downField);
          }
-         Square leftUpSquare = position.oneSquareLeftUp();
-         if (leftUpSquare != null){
-        	 accessableSquares.add(leftUpSquare);
+         Field leftUpField = position.oneFieldLeftUp();
+         if (leftUpField != null){
+        	 accessableFields.add(leftUpField);
          }
-         Square leftDownSquare = position.oneSquareLeftDown();
-         if (leftDownSquare != null){
-         	accessableSquares.add(leftDownSquare);
+         Field leftDownField = position.oneFieldLeftDown();
+         if (leftDownField != null){
+         	accessableFields.add(leftDownField);
          }
-         Square rightUpSquare = position.oneSquareRightUp();
-         if (rightUpSquare != null){
-        	 accessableSquares.add(rightUpSquare);
+         Field rightUpField = position.oneFieldRightUp();
+         if (rightUpField != null){
+        	 accessableFields.add(rightUpField);
          }
-         Square rightDownSquare = position.oneSquareRightDown();
-         if(rightDownSquare != null){
-        	 accessableSquares.add(rightDownSquare);
+         Field rightDownField = position.oneFieldRightDown();
+         if(rightDownField != null){
+        	 accessableFields.add(rightDownField);
          }
-         return   accessableSquares;
+         return   accessableFields;
     }
 	
-	public ArrayList<Square> getAttackedSquares(){
-		return getAccesableSquares();
+	public ArrayList<Field> getAttackedFields(){
+		return getAccesableFields();
 	}
 }

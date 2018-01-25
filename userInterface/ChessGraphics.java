@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import pieces.King;
 import pieces.Pawn;
 import pieces.Piece.PieceColour;
-import board.Square;
+import board.Field;
 
 public class ChessGraphics {
 
@@ -19,7 +19,7 @@ public class ChessGraphics {
 	private final String pathToBlackKing = "/home/daniel/pawnchess/userInterface/black_king.png";
 	private final String pathToWhitePawn = "/home/daniel/pawnchess/userInterface/white_pawn.png";
 	private final String pathToBlackPawn = "/home/daniel/pawnchess/userInterface/black_pawn.png";
-	private final String pathToMarkedSquare = "/home/daniel/pawnchess/userInterface/marked_square.png";
+	private final String pathToMarkedField = "/home/daniel/pawnchess/userInterface/marked_square.png";
 	
 	private final int squareSize = 64;
 	private final Color WOODEN_BOARD_BLACK = new Color(150, 50, 30);
@@ -32,18 +32,18 @@ public class ChessGraphics {
 	private Image blackKing;
 	private Image whitePawn;
 	private Image blackPawn;
-    private Image markedSquare;
+    private Image markedField;
 	
 	ChessGraphics() {
 		whiteKing = new ImageIcon(pathToWhiteKing).getImage();
 		blackKing = new ImageIcon(pathToBlackKing).getImage();
 		whitePawn = new ImageIcon(pathToWhitePawn).getImage();
 		blackPawn = new ImageIcon(pathToBlackPawn).getImage();
-		markedSquare = new ImageIcon(pathToMarkedSquare).getImage();
+		markedField = new ImageIcon(pathToMarkedField).getImage();
 	}
 
 	void drawChessBoard(Graphics graphics, Game game) {
-		for (Square sq : game.getChessBoard().toArray()){
+		for (Field sq : game.getChessBoard().toArray()){
 			if (sq.isWhite()){
 				graphics.setColor(FANCY_BOARD_WHITE);
 			}else {
@@ -54,7 +54,7 @@ public class ChessGraphics {
 	}
 
 	void drawPieces(Graphics graphics, Game game, UserInterface ui) {
-		for (Square sq : game.getChessBoard().toArray()) {
+		for (Field sq : game.getChessBoard().toArray()) {
 			if (sq.isTaken()) {
 				if (sq.getPiece() instanceof Pawn) {
 					if (sq.getPiece().getPieceColour()
@@ -76,9 +76,9 @@ public class ChessGraphics {
 		}
 	}
 
-	public void markSquare(Graphics graphics, Square sq, UserInterface ui) {
+	public void markField(Graphics graphics, Field sq, UserInterface ui) {
 		if (sq != null && sq.isTaken()){
-			graphics.drawImage(markedSquare, sq.getX(), sq.getY(), ui);
+			graphics.drawImage(markedField, sq.getX(), sq.getY(), ui);
 		}
 	}
 }

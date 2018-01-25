@@ -1,44 +1,44 @@
 package game;
 
 import pieces.Piece;
-import board.Square;
+import board.Field;
 
 public class Move {
 
-	private Square currentSquare;
-	private Square targetSquare;
+	private Field currentField;
+	private Field targetField;
 	private int rating=0;
 	
-	public Move(Square currentSquare, Square targetSquare) {
-		this.currentSquare = currentSquare;
-		this.targetSquare = targetSquare;
+	public Move(Field currentField, Field targetField) {
+		this.currentField = currentField;
+		this.targetField = targetField;
 	}
 	
 	public Move() {
-		this.currentSquare = null;
-		this.targetSquare = null;
+		this.currentField = null;
+		this.targetField = null;
 	}
 
 	
 	public Move(int [] current, int [] target) {
-		this.currentSquare = new Square(current[0], current[1]);
-		this.targetSquare = new Square(target[0], target[1]);
+		this.currentField = new Field(current[0], current[1]);
+		this.targetField = new Field(target[0], target[1]);
 	}
 
-	public Square getCurrentSquare() {
-		return currentSquare;
+	public Field getCurrentField() {
+		return currentField;
 	}
 
-	public void setCurrentSquare(Square currentSquare) {
-		this.currentSquare = currentSquare;
+	public void setCurrentField(Field currentField) {
+		this.currentField = currentField;
 	}
 
-	public Square getTargetSquare() {
-		return targetSquare;
+	public Field getTargetField() {
+		return targetField;
 	}
 
-	public void setTargetSquare(Square targetSquare) {
-		this.targetSquare = targetSquare;
+	public void setTargetField(Field targetField) {
+		this.targetField = targetField;
 	}
 
 	public void setRating(int rating) {
@@ -50,7 +50,7 @@ public class Move {
 	}
 
 	public Piece getPiece() {
-		return currentSquare.getPiece();
+		return currentField.getPiece();
 	}
 
 	public void calculateRating(Game game) {
@@ -64,10 +64,10 @@ public class Move {
 	@Override
 	public String toString(){
 		 return String.format("[%d %d] [%d %d]", 
-				             this.getCurrentSquare().getRow(),
-							 this.getCurrentSquare().getColumn(),
-							 this.getTargetSquare().getRow(),
-							 this.getTargetSquare().getColumn()
+				             this.getCurrentField().getRow(),
+							 this.getCurrentField().getColumn(),
+							 this.getTargetField().getRow(),
+							 this.getTargetField().getColumn()
 							 );
 	 }
 
@@ -75,15 +75,15 @@ public class Move {
 	public boolean equals(Object o) {
 		if (o instanceof Move) {
 			Move move = (Move) o;
-			return this.currentSquare.equals(move.currentSquare)
-					&& this.targetSquare.equals(move.targetSquare);
+			return this.currentField.equals(move.currentField)
+					&& this.targetField.equals(move.targetField);
 		}
 		return false;
 	}
 	
 	@Override
 	public int hashCode(){
-		return this.currentSquare.hashCode();
+		return this.currentField.hashCode();
 	}
 	
 	public static Move max(Move first, Move second) {

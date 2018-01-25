@@ -4,42 +4,42 @@ import pieces.Piece;
 
 public class ChessBoard {
 
-	private final Square[][] SQUARES = new Square[10][10];
+	private final Field[][] FIELDS = new Field[10][10];
 
 	public ChessBoard() {
 
 		for (int i = 0; i <= 9; i++) {
-			SQUARES[0][i] = new Edge(0,i);
+			FIELDS[0][i] = new Edge(0,i);
 		}
 
 		for (int i = 0; i <= 9; i++) {
-			SQUARES[9][i] = new Edge(9,i);
+			FIELDS[9][i] = new Edge(9,i);
 		}
 
 		for (int i = 1; i <= 8; i++) {
-			SQUARES[i][0] = new Edge(i,0);
+			FIELDS[i][0] = new Edge(i,0);
 		}
 		for (int i = 1; i <= 8; i++) {
-			SQUARES[i][9] = new Edge(i,9);
+			FIELDS[i][9] = new Edge(i,9);
 		}
 		
 		for (int i = 1; i <= 8; i++) {
 			for (int j = 1; j <= 8; j++) {
-				SQUARES[i][j] = new Square(i, j);
-				SQUARES[i][j].setTaken(false);
+				FIELDS[i][j] = new Field(i, j);
+				FIELDS[i][j].setTaken(false);
 			}
 		}
 	}
 
 	public ChessBoard(ChessBoard cb) {
-		Square[][] newSquares = new Square[10][10];
-		Square[][] squares = cb.getSquares();
+		Field[][] newFIELDS = new Field[10][10];
+		Field[][] FIELDS = cb.getFields();
 		for (int i = 0; i <= 9; i++) {
 			for (int j = 0; j <= 9; j++) {
-				newSquares[i][j] = new Square(squares[i][j]);
+				newFIELDS[i][j] = new Field(FIELDS[i][j]);
 				
-				SQUARES[i][j] = new Square(i, j);
-				SQUARES[i][j].setTaken(false);
+				FIELDS[i][j] = new Field(i, j);
+				FIELDS[i][j].setTaken(false);
 			}
 		}
 		
@@ -50,7 +50,7 @@ public class ChessBoard {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 9; i >= 0; i--) {
 			for (int j = 0; j <= 9 ; j++) {
-				sb.append(SQUARES[i][j].toString());
+				sb.append(FIELDS[i][j].toString());
 			}
 			sb.append("\n");
 		}
@@ -58,54 +58,54 @@ public class ChessBoard {
 		return sb.toString();
 	}
 
-	public boolean setPiece(Piece piece, Square target) {
+	public boolean setPiece(Piece piece, Field target) {
 		if (!target.isTaken() || (target.isTaken() && 
 				                 ! target.getPiece().getPieceColour().
 						           equals(piece.getPieceColour()))) {
 			piece.setPosition(target);
-			SQUARES[target.getRow()][target.getColumn()].setPiece(piece);
-			SQUARES[target.getRow()][target.getColumn()].setTaken(true);
+			FIELDS[target.getRow()][target.getColumn()].setPiece(piece);
+			FIELDS[target.getRow()][target.getColumn()].setTaken(true);
 			return true;
 		} else {
 			return false;
 		}
 	}
-	public Square getSquare(int row, int column) {
-		return SQUARES[row][column];
+	public Field getField(int row, int column) {
+		return FIELDS[row][column];
 	}
 
-	public Square getSquare(Square square) {
-		if (square.isValidSquare()) {
-			return SQUARES[square.getRow()][square.getColumn()];
+	public Field getField(Field square) {
+		if (square.isValidField()) {
+			return FIELDS[square.getRow()][square.getColumn()];
 		}
 		return null;
 	}
 
-	public Piece getPiece(Square square) {
-		return  getSquare(square).getPiece();
+	public Piece getPiece(Field square) {
+		return  getField(square).getPiece();
 		//return square.getPiece();
 	}
 
-	public void freeSquare(Square sq) {
+	public void freeField(Field sq) {
 		sq.setTaken(false);
 	}
 
-	public Square[][] getSquares() {
-		return this.SQUARES;
+	public Field[][] getFields() {
+		return this.FIELDS;
 	}
 	
 	public void setEmptyField(int row, int col){
-		Square field = this.getSquare(row, col);
-		this.freeSquare(field);
+		Field field = this.getField(row, col);
+		this.freeField(field);
 	}
 
-	public Square[] toArray() {
-		Square[] result = new Square[64];
+	public Field[] toArray() {
+		Field[] result = new Field[64];
 		int k = 0;
 		
 		for (int i = 1; i <= 8; i++) {
 			for (int j = 1; j <= 8; j++) {
-				result[k++] = SQUARES[i][j];
+				result[k++] = FIELDS[i][j];
 			}
 		}
 		return result;

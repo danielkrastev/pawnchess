@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import board.ChessBoard;
-import board.Square;
+import board.Field;
 import exceptions.InvalidMoveException;
 import pieces.King;
 import pieces.Pawn;
@@ -23,8 +23,6 @@ public class Game {
 
 	private HashSet<Piece> whitePieces;
 	private HashSet<Piece> blackPieces;
-	private HashMap<Square, Integer> attackedSquaresFromWhite;
-	private HashMap<Square, Integer> attackedSquaresFromBlack;
 	private ArrayList<Move> listOfMoves;
 
 	private UserInterface gui;
@@ -42,9 +40,6 @@ public class Game {
 		blackPieces = new HashSet<Piece>();
 		listOfMoves = new ArrayList<Move>();
 
-		attackedSquaresFromWhite = new HashMap<Square, Integer>();
-		attackedSquaresFromBlack = new HashMap<Square, Integer>();
-		
 		randomGenerator = new Random();
 	}
 
@@ -52,8 +47,8 @@ public class Game {
 
 		// updateWhitePieces();
 		// updateBlackPieces();
-		// updateAttackedSquaresFromWhite();
-		// updateAttackedSquaresFromBlack();
+		// updateAttackedFieldsFromWhite();
+		// updateAttackedFieldsFromBlack();
 		boolean gameFinished = false;
 		
 		while (! gameFinished) {
@@ -85,8 +80,8 @@ public class Game {
 					//check if pawn reached 8th or 1st rank.
 					Piece piece = currentMove.getPiece();
 					if(piece instanceof Pawn){
-						if(currentMove.getTargetSquare().getRow() == 1 || 
-     						currentMove.getTargetSquare().getRow() == 8	) {
+						if(currentMove.getTargetField().getRow() == 1 || 
+     						currentMove.getTargetField().getRow() == 8	) {
 							LOGGER.log(Level.INFO, "Game ended!");
 							gameFinished = true;
 							if(piece.isWhite()) {
@@ -127,42 +122,34 @@ public class Game {
 		return false;
 	}
 
-	public HashMap<Square, Integer> getAttackedSquaresFromWhite() {
-		return this.attackedSquaresFromWhite;
-	}
-
-	public HashMap<Square, Integer> getAttackedSquaresFromBlack() {
-		return this.attackedSquaresFromBlack;
-	}
 
 	private boolean isMoveEscapingChess(Move move, PieceColour turn) {
-
-		Square curentSquare = move.getCurrentSquare();
-		Square targetSquare = move.getTargetSquare();
+		Field curentField = move.getCurrentField();
+		Field targetField = move.getTargetField();
 
 		if (turn.equals(PieceColour.WHITE)) {
-			if (curentSquare.getPiece().equals(WHITE_KING)) {
-				if (!attackedSquaresFromBlack.containsKey(targetSquare)) {
+			if (curentField.getPiece().equals(WHITE_KING)) {
+				if (!attackedFieldsFromBlack.containsKey(targetField)) {
 					return true;
 				}
 			} else {
-				if (targetSquare.isTaken()
-						&& (targetSquare.isOneSquareLeftUpFrom(WHITE_KING
-								.getPosition()) || targetSquare
-								.isOneSquareRightUpFrom(WHITE_KING.getPosition()))) {
+				if (targetField.isTaken()
+						&& (targetField.isOneFieldLeftUpFrom(WHITE_KING
+								.getPosition()) || targetField
+								.isOneFieldRightUpFrom(WHITE_KING.getPosition()))) {
 					return true;
 				}
 			}
 		} else {
-			if (curentSquare.getPiece().equals(BLACK_KING)) {
-				if (!attackedSquaresFromWhite.containsKey(targetSquare)) {
+			if (curentField.getPiece().equals(BLACK_KING)) {
+				if (!attackedFieldsFromWhite.containsKey(targetField)) {
 					return true;
 				}
 			} else {
-				if (targetSquare.isTaken()
-						&& (targetSquare.isOneSquareLeftDownFrom(BLACK_KING
-								.getPosition()) || targetSquare
-								.isOneSquareRightDownFrom(BLACK_KING
+				if (targetField.isTaken()
+						&& (targetField.isOneFieldLeftDownFrom(BLACK_KING
+								.getPosition()) || targetField
+								.isOneFieldRightDownFrom(BLACK_KING
 										.getPosition()))) {
 					return true;
 				}
@@ -182,10 +169,10 @@ public class Game {
 
 	private boolean isCheckDeclared() {
 
-		if (attackedSquaresFromWhite.containsKey(BLACK_KING.getPosition())) {
+		if (attackedFieldsFromWhite.containsKey(BLACK_KING.getPosition())) {
 			return true;
 		}
-		if (attackedSquaresFromBlack.containsKey(WHITE_KING.getPosition())) {
+		if (attackedFieldsFromBlack.containsKey(WHITE_KING.getPosition())) {
 			return true;
 		}
 		return false;
@@ -198,8 +185,8 @@ public class Game {
 
 	public Move getPlayersMove() {
 		Move playersMove = new Move();
-		Square current;
-		Square target;
+		Field current;
+		Field target;
 
 		LOGGER.log(Level.INFO, "Waiting for player's move:\nCurrent square: ");
 
@@ -209,15 +196,15 @@ public class Game {
 				int column = mouseMover.getClickedColumn();
 				int row = mouseMover.getClickedRow();
 
-				Square temp = this.getChessBoard().getSquare(row, column);
+				Field temp = this.getChessBoard().getField(row, column);
 				if ( !temp.isTaken()
 					|| temp.getPiece().isBlack()) {
 						throw new InvalidMoveException("Piece not clicked on!");
 				}
 
-				current = this.getChessBoard().getSquare(row, column);
+				current = this.getChessBoard().getField(row, column);
 				LOGGER.log(Level.INFO, current.printCoordinates());
-				playersMove.setCurrentSquare(current);
+				playersMove.setCurrentField(current);
 				
 				LOGGER.log(Level.INFO, "target square:");
 
@@ -225,9 +212,9 @@ public class Game {
 				column = mouseMover.getClickedColumn();
 				row = mouseMover.getClickedRow();
 
-				target = this.getChessBoard().getSquare(row, column);
+				target = this.getChessBoard().getField(row, column);
 				LOGGER.log(Level.INFO, target.printCoordinates());
-				playersMove.setTargetSquare(target);
+				playersMove.setTargetField(target);
 
 				return playersMove;
 
@@ -245,28 +232,28 @@ public class Game {
 	 * Move move) {
 	 * 
 	 * if (colour.equals(PieceColour.WHITE)) { if
-	 * (move.getTargetSquare().getRow() == 8) return true; } else { if
-	 * (move.getTargetSquare().getRow() == 1) return true; }
+	 * (move.getTargetField().getRow() == 8) return true; } else { if
+	 * (move.getTargetField().getRow() == 1) return true; }
 	 * 
-	 * Square attacker = move.getTargetSquare(); boolean kingCannotMove = true;
+	 * Field attacker = move.getTargetField(); boolean kingCannotMove = true;
 	 * 
 	 * if (colour.equals(PieceColour.BLACK)) { Object[]
-	 * accessableSquaresFromWhiteKing = whiteKing
-	 * .getPossibleSquares(this).toArray();
+	 * accessableFieldsFromWhiteKing = whiteKing
+	 * .getPossibleFields(this).toArray();
 	 * 
-	 * for (Object sq : accessableSquaresFromWhiteKing) { Square square =
-	 * (Square) sq; if (!attackedSquaresFromBlack.containsKey(square)) {
+	 * for (Object sq : accessableFieldsFromWhiteKing) { Field square =
+	 * (Field) sq; if (!attackedFieldsFromBlack.containsKey(square)) {
 	 * kingCannotMove = false; } }
 	 * 
-	 * if (kingCannotMove && attackedSquaresFromWhite.get(attacker) == 1) {
-	 * return true; } } else { Object[] accessableSquaresFromBlackKing =
-	 * blackKing .getPossibleSquares(this).toArray();
+	 * if (kingCannotMove && attackedFieldsFromWhite.get(attacker) == 1) {
+	 * return true; } } else { Object[] accessableFieldsFromBlackKing =
+	 * blackKing .getPossibleFields(this).toArray();
 	 * 
-	 * for (Object sq : accessableSquaresFromBlackKing) { Square square =
-	 * (Square) sq; if (!attackedSquaresFromWhite.containsKey(square)) {
+	 * for (Object sq : accessableFieldsFromBlackKing) { Field square =
+	 * (Field) sq; if (!attackedFieldsFromWhite.containsKey(square)) {
 	 * kingCannotMove = false; } }
 	 * 
-	 * if (kingCannotMove && attackedSquaresFromBlack.get(attacker) == 1) {
+	 * if (kingCannotMove && attackedFieldsFromBlack.get(attacker) == 1) {
 	 * return true; } } return false; }
 	 */
 	
@@ -312,11 +299,6 @@ public class Game {
 		return null;
 	}
 
-	private void undoMove(Move move) {
-		CHESS_BOARD.setPiece(move.getPiece(), move.getCurrentSquare());
-		CHESS_BOARD.freeSquare(move.getTargetSquare());
-	}
-	
 	public HashSet<Piece> getWhitePieces() {
 		return whitePieces;
 	}

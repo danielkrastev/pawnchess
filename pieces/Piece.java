@@ -1,7 +1,7 @@
 package pieces;
 
 import java.util.ArrayList;
-import board.Square;
+import board.Field;
 import exceptions.InvalidMoveException;
 
 public abstract class Piece {
@@ -35,10 +35,10 @@ public abstract class Piece {
 		return !isWhite();
 	}
 	
-	abstract public boolean canMove(Square targetSquare)
+	abstract public boolean canMove(Field targetField)
 			throws InvalidMoveException;
 
-	public abstract ArrayList<Square> getAccesableSquares();
-	public abstract ArrayList<Square> getAttackedSquares();
+	public abstract ArrayList<Field> getAccesableFields();
+	public abstract ArrayList<Field> getAttackedFields();
 
 }
