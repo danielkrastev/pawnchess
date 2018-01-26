@@ -1,6 +1,9 @@
 package board;
 
+import pieces.King;
+import pieces.Pawn;
 import pieces.Piece;
+import pieces.Piece.PieceColour;
 
 public class ChessBoard {
 
@@ -9,20 +12,20 @@ public class ChessBoard {
 	public ChessBoard() {
 
 		for (int i = 0; i <= 9; i++) {
-			FIELDS[0][i] = new Edge(0,i);
+			FIELDS[0][i] = new Edge(0, i);
 		}
 
 		for (int i = 0; i <= 9; i++) {
-			FIELDS[9][i] = new Edge(9,i);
+			FIELDS[9][i] = new Edge(9, i);
 		}
 
 		for (int i = 1; i <= 8; i++) {
-			FIELDS[i][0] = new Edge(i,0);
+			FIELDS[i][0] = new Edge(i, 0);
 		}
 		for (int i = 1; i <= 8; i++) {
-			FIELDS[i][9] = new Edge(i,9);
+			FIELDS[i][9] = new Edge(i, 9);
 		}
-		
+
 		for (int i = 1; i <= 8; i++) {
 			for (int j = 1; j <= 8; j++) {
 				FIELDS[i][j] = new Field(i, j);
@@ -31,25 +34,35 @@ public class ChessBoard {
 		}
 	}
 
+	// Copy constructor
 	public ChessBoard(ChessBoard cb) {
-		Field[][] newFIELDS = new Field[10][10];
-		Field[][] FIELDS = cb.getFields();
+		Field[][] newFields = new Field[10][10];
+		Field[][] oldFields = cb.getFields();
 		for (int i = 0; i <= 9; i++) {
 			for (int j = 0; j <= 9; j++) {
-				newFIELDS[i][j] = new Field(FIELDS[i][j]);
-				
-				FIELDS[i][j] = new Field(i, j);
-				FIELDS[i][j].setTaken(false);
+				newFields[i][j] = new Field(oldFields[i][j]);
+				if (oldFields[i][j].isTaken()) {
+					Piece oldPiece = oldFields[i][j].getPiece();
+					PieceColour colour = oldPiece.getPieceColour();
+					if (oldPiece instanceof King) {
+						King newKing = new King((King) oldPiece);
+						newKing.setCurrentField(newFields[i][j]);
+						newFields[i][j].setPiece(newKing);
+					}
+					if (oldPiece instanceof Pawn) {
+						Pawn newPawn = new Pawn((Pawn) oldPiece);
+						newPawn.setCurrentField(newFields[i][j]);
+						newFields[i][j].setPiece(newPawn);
+					}
+				}
 			}
 		}
-		
 	}
-	
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 9; i >= 0; i--) {
-			for (int j = 0; j <= 9 ; j++) {
+			for (int j = 0; j <= 9; j++) {
 				sb.append(FIELDS[i][j].toString());
 			}
 			sb.append("\n");
@@ -59,10 +72,9 @@ public class ChessBoard {
 	}
 
 	public boolean setPiece(Piece piece, Field target) {
-		if (!target.isTaken() || (target.isTaken() && 
-				                 ! target.getPiece().getPieceColour().
-						           equals(piece.getPieceColour()))) {
-			piece.setPosition(target);
+		if (!target.isTaken()
+				|| (target.isTaken() && !target.getPiece().getPieceColour().equals(piece.getPieceColour()))) {
+			piece.setCurrentField(target);
 			FIELDS[target.getRow()][target.getColumn()].setPiece(piece);
 			FIELDS[target.getRow()][target.getColumn()].setTaken(true);
 			return true;
@@ -70,6 +82,7 @@ public class ChessBoard {
 			return false;
 		}
 	}
+
 	public Field getField(int row, int column) {
 		return FIELDS[row][column];
 	}
@@ -82,8 +95,8 @@ public class ChessBoard {
 	}
 
 	public Piece getPiece(Field square) {
-		return  getField(square).getPiece();
-		//return square.getPiece();
+		return getField(square).getPiece();
+		// return square.getPiece();
 	}
 
 	public void freeField(Field sq) {
@@ -93,8 +106,8 @@ public class ChessBoard {
 	public Field[][] getFields() {
 		return this.FIELDS;
 	}
-	
-	public void setEmptyField(int row, int col){
+
+	public void setEmptyField(int row, int col) {
 		Field field = this.getField(row, col);
 		this.freeField(field);
 	}
@@ -102,7 +115,7 @@ public class ChessBoard {
 	public Field[] toArray() {
 		Field[] result = new Field[64];
 		int k = 0;
-		
+
 		for (int i = 1; i <= 8; i++) {
 			for (int j = 1; j <= 8; j++) {
 				result[k++] = FIELDS[i][j];

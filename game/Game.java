@@ -111,7 +111,6 @@ public class Game {
 		//List<Move> possibleMoves = currentPosition.getPossibleMoves(true);
 		//int index = randomGenerator.nextInt(possibleMoves.size());
 		//return possibleMoves.get(index);
-		//return new Move(new int [] {7,5}, new int [] {5,5}); 
 	}
 
 	public boolean validate(Move move, boolean is_black) {
@@ -121,7 +120,6 @@ public class Game {
 		}
 		return false;
 	}
-
 
 	private boolean isMoveEscapingChess(Move move, PieceColour turn) {
 		Field curentField = move.getCurrentField();
@@ -305,14 +303,6 @@ public class Game {
 
 	public HashSet<Piece> getBlackPieces() {
 		return blackPieces;
-	}
-
-	public PieceColour getCurrentPlayer() {
-		return currentPlayer;
-	}
-
-	public void setCurrentPlayer(PieceColour currentPlayer) {
-		this.currentPlayer = currentPlayer;
 	}
 
 	public void setMouseMover(UserInterface.MouseMover mover) {

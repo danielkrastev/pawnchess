@@ -11,6 +11,16 @@ public abstract class Piece {
 	}
 
 	protected PieceColour pieceColour;
+	protected Field currentField;
+	
+	
+	public Field getCurrentField() {
+		return currentField;
+	}
+
+	public void setCurrentField(Field currentField) {
+		this.currentField = currentField;
+	}
 
 	public PieceColour getPieceColour() {
 		return pieceColour;

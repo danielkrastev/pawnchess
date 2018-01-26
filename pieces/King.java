@@ -8,13 +8,17 @@ import exceptions.InvalidMoveException;
 public class King extends Piece {
 
 	public King(PieceColour colour, Field position) {
-		this.position = position;
+		this.currentField = position;
 		this.pieceColour = colour;
 	}
 	public King(PieceColour colour) {
 		this.pieceColour = colour;
 	}
 
+	public King(King old) {
+		this.pieceColour = old.getPieceColour();
+	}
+	
 	public String toString() {
 		if (this.pieceColour.equals(PieceColour.WHITE)) {
 			return new String(" K ");
@@ -56,16 +60,14 @@ public class King extends Piece {
 	}
 	private boolean isMoveValid(Field targetField)
 			throws InvalidMoveException {
-
-		Field currentPosition = this.getPosition();		
-		if ((targetField.isOneFieldUpFrom(currentPosition)
-				|| targetField.isOneFieldRightFrom(currentPosition)
-				|| targetField.isOneFieldUpFrom(currentPosition)
-				|| targetField.isOneFieldDownFrom(currentPosition)
-				|| targetField.isOneFieldLeftUpFrom(currentPosition)
-				|| targetField.isOneFieldRightUpFrom(currentPosition)
-				|| targetField.isOneFieldLeftDownFrom(currentPosition) || targetField
-				.isOneFieldRightDownFrom(currentPosition))) {
+		if ((targetField.isOneFieldUpFrom(currentField)
+				|| targetField.isOneFieldRightFrom(currentField)
+				|| targetField.isOneFieldUpFrom(currentField)
+				|| targetField.isOneFieldDownFrom(currentField)
+				|| targetField.isOneFieldLeftUpFrom(currentField)
+				|| targetField.isOneFieldRightUpFrom(currentField)
+				|| targetField.isOneFieldLeftDownFrom(currentField) || targetField
+				.isOneFieldRightDownFrom(currentField))) {
 
 			return true;
 		}
@@ -77,35 +79,35 @@ public class King extends Piece {
 
      ArrayList <Field> accessableFields = new ArrayList<Field>();
 
-     	 Field leftField = position.oneFieldLeft();
+     	 Field leftField = currentField.oneFieldLeft();
          if (leftField != null){
         	 accessableFields.add(leftField);
          }
-         Field rightField = position.oneFieldRight();
+         Field rightField = currentField.oneFieldRight();
          if (rightField !=null){
         	 accessableFields.add(rightField);
          }
-         Field upField = position.oneFieldUp();
+         Field upField = currentField.oneFieldUp();
          if(upField != null){
         	 accessableFields.add(upField);
          }
-         Field downField = position.oneFieldDown();
+         Field downField = currentField.oneFieldDown();
          if (downField != null){
         	 accessableFields.add(downField);
          }
-         Field leftUpField = position.oneFieldLeftUp();
+         Field leftUpField = currentField.oneFieldLeftUp();
          if (leftUpField != null){
         	 accessableFields.add(leftUpField);
          }
-         Field leftDownField = position.oneFieldLeftDown();
+         Field leftDownField = currentField.oneFieldLeftDown();
          if (leftDownField != null){
          	accessableFields.add(leftDownField);
          }
-         Field rightUpField = position.oneFieldRightUp();
+         Field rightUpField = currentField.oneFieldRightUp();
          if (rightUpField != null){
         	 accessableFields.add(rightUpField);
          }
-         Field rightDownField = position.oneFieldRightDown();
+         Field rightDownField = currentField.oneFieldRightDown();
          if(rightDownField != null){
         	 accessableFields.add(rightDownField);
          }

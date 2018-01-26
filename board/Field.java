@@ -1,7 +1,9 @@
 package board;
 
 import pieces.King;
+import pieces.Pawn;
 import pieces.Piece;
+import pieces.Piece.PieceColour;
 
 public class Field {
 
@@ -10,22 +12,18 @@ public class Field {
 	private boolean taken;
 	private Piece piece;
 	private static final int squareSize = 64;
+	
 
 	public Field() {
 	}
 	
+	//Copy constructor
 	public Field(Field sq){
 		this.row = sq.getRow();
 		this.column = sq.getColumn();
 		this.taken = sq.isTaken();
 		this.piece = null;
 		
-		if (this.isTaken()) {
-			Piece oldPiece = sq.getPiece();
-			if (oldPiece instanceof King) {
-				King newKing = new King()
-			}
-		}
 	}
 	
 	public Field(int row, int column) {
@@ -68,7 +66,7 @@ public class Field {
 	}
 
 	public boolean isWhite() {
-		if (this.isValidSquare()) {
+		if (this.isValidField()) {
 			if (column % 2 == 0) {
 				if (row % 2 != 0) {
 					return true;
@@ -87,10 +85,10 @@ public class Field {
 	}
 
 	public boolean isBlack() {
-		return isValidSquare() && !isWhite();
+		return isValidField() && !isWhite();
 	}
 
-	public boolean isValidSquare() {
+	public boolean isValidField() {
 		if (column >= 1 && column <= 8 && row >= 1 && row <= 8) {
 			return true;
 		}
@@ -101,7 +99,7 @@ public class Field {
 		if (this.isTaken()) {
 			return new String(this.getPiece().toString());
 		} else {
-			if (this.isValidSquare()) {
+			if (this.isValidField()) {
 				if (this.isWhite()) {
 					return "   ";
 				} else {
@@ -112,7 +110,7 @@ public class Field {
 		return null;
 	}
 
-	public boolean isOneSquareLeftFrom(Field pos) {
+	public boolean isOneFieldLeftFrom(Field pos) {
 		if ((this.column == pos.column - 1) && (this.row == pos.row)) {
 			return true;
 		} else {
@@ -120,7 +118,7 @@ public class Field {
 		}
 	}
 
-	public boolean isOneSquareRightFrom(Field pos) {
+	public boolean isOneFieldRightFrom(Field pos) {
 		if ((this.column == pos.column + 1) && (this.row == pos.row)) {
 			return true;
 		} else {
@@ -128,7 +126,7 @@ public class Field {
 		}
 	}
 
-	public boolean isOneSquareUpFrom(Field pos) {
+	public boolean isOneFieldUpFrom(Field pos) {
 		if ((this.row == pos.row + 1) && (this.column == pos.column)) {
 			return true;
 		} else {
@@ -136,7 +134,7 @@ public class Field {
 		}
 	}
 
-	public boolean isOneSquareDownFrom(Field pos) {
+	public boolean isOneFieldDownFrom(Field pos) {
 		if ((this.row == pos.row - 1) && (this.column == pos.column)) {
 			return true;
 		} else {
@@ -145,8 +143,8 @@ public class Field {
 
 	}
 
-	public boolean isOneSquareLeftUpFrom(Field square) {
-		if ((this.column == square.column - 1) && (this.row == square.row + 1)) {
+	public boolean isOneFieldLeftUpFrom(Field Field) {
+		if ((this.column == Field.column - 1) && (this.row == Field.row + 1)) {
 			return true;
 		} else {
 			return false;
@@ -154,8 +152,8 @@ public class Field {
 
 	}
 
-	public boolean isOneSquareRightUpFrom(Field square) {
-		if ((this.column == square.column + 1) && (this.row == square.row + 1)) {
+	public boolean isOneFieldRightUpFrom(Field Field) {
+		if ((this.column == Field.column + 1) && (this.row == Field.row + 1)) {
 			return true;
 		} else {
 			return false;
@@ -163,8 +161,8 @@ public class Field {
 
 	}
 
-	public boolean isOneSquareLeftDownFrom(Field square) {
-		if ((this.column == square.column - 1) && (this.row == square.row - 1)) {
+	public boolean isOneFieldLeftDownFrom(Field Field) {
+		if ((this.column == Field.column - 1) && (this.row == Field.row - 1)) {
 			return true;
 		} else {
 			return false;
@@ -172,15 +170,15 @@ public class Field {
 
 	}
 
-	public boolean isOneSquareRightDownFrom(Field square) {
-		if ((this.column == square.column + 1) && (this.row == square.row - 1)) {
+	public boolean isOneFieldRightDownFrom(Field Field) {
+		if ((this.column == Field.column + 1) && (this.row == Field.row - 1)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public boolean isTwoSquaresUpFrom(Field pos) {
+	public boolean isTwoFieldsUpFrom(Field pos) {
 		if ((this.column == pos.column) && (this.row == pos.row + 2)) {
 			return true;
 		} else {
@@ -188,7 +186,7 @@ public class Field {
 		}
 	}
 
-	public boolean isTwoSquaresdDownFrom(Field pos) {
+	public boolean isTwoFieldsdDownFrom(Field pos) {
 		if ((this.column == pos.column) && (this.row == pos.row - 2)) {
 			return true;
 		} else {
@@ -200,92 +198,92 @@ public class Field {
 		return new String(this.getColumn() + "," + this.getRow());
 	}
 
-	public Field oneSquareLeft() {
+	public Field oneFieldLeft() {
 		Field sq = new Field(row, column - 1);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field twoSquaresUp() {
+	public Field twoFieldsUp() {
 		Field sq = new Field(row + 2, column);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field twoSquaresDown() {
+	public Field twoFieldsDown() {
 		Field sq = new Field(row - 2, column);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field oneSquareRight() {
+	public Field oneFieldRight() {
 		Field sq = new Field(row, column + 1);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field oneSquareUp() {
+	public Field oneFieldUp() {
 
 		Field sq = new Field(row + 1, column);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field oneSquareDown() {
+	public Field oneFieldDown() {
 		Field sq = new Field(row - 1, column);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field oneSquareLeftUp() {
+	public Field oneFieldLeftUp() {
 		Field sq = new Field(row + 1, column - 1);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field oneSquareRightUp() {
+	public Field oneFieldRightUp() {
 
 		Field sq = new Field(row + 1, column + 1);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field oneSquareLeftDown() {
+	public Field oneFieldLeftDown() {
 		Field sq = new Field(row - 1, column - 1);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
 		}
 	}
 
-	public Field oneSquareRightDown() {
+	public Field oneFieldRightDown() {
 		Field sq = new Field(row - 1, column + 1);
-		if (sq.isValidSquare()) {
+		if (sq.isValidField()) {
 			return sq;
 		} else {
 			return null;
@@ -294,9 +292,9 @@ public class Field {
 
 	public boolean equals(Object o) {
 		if (o instanceof Field) {
-			Field square = (Field) o;
+			Field Field = (Field) o;
 
-			if (this.getColumn() == square.getColumn() && this.getRow() == square.getRow()) {
+			if (this.getColumn() == Field.getColumn() && this.getRow() == Field.getRow()) {
 				return true;
 			}
 		}

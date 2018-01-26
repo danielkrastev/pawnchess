@@ -42,6 +42,13 @@ public class Position {
 	    this.currentPlayer = currentPlayer;
 	}
 	
+	//copy constructor
+	public Position(Position old) {
+	    this.chessBoard = new ChessBoard(old.getChessBoard());
+	    this.currentPlayer = old.getCurrentPlayer();
+	}
+	
+	
 	public Position(String fen) throws Exception {
 		
 		this.chessBoard  = new ChessBoard();
@@ -149,14 +156,9 @@ public class Position {
 	}
 	
 	public Position _makeMove(Move currentMove) {
-		Position newPos = new Position(this.getChessBoard(), this.getCurrentPlayer());
-		Field current_field = currentMove.getCurrentField();
-		Field target_field = currentMove.getTargetField();
-		Piece p = chessBoard.getPiece(current_field);
-		chessBoard.freeField(currentMove.getCurrentField());
-		chessBoard.setPiece(p, target_field);
-		changeTurn();
-		return this;
+		Position newPos = new Position(this);
+		newPos.makeMove(currentMove);
+		return newPos;
 	}
 	
 	public ArrayList<Field> getPossibleFields(Piece piece) {
@@ -224,7 +226,7 @@ public class Position {
 	}
 	
 	private boolean isProtected(Pawn pawn) {
-		Field pos = pawn.getPosition();
+		Field pos = pawn.getCurrentField();
 		if (pawn.isWhite()) {
 			
 		}else { //pawn is black
@@ -279,7 +281,7 @@ public class Position {
 				accessableFields = getPossibleFields(piece);
 				for (Field target : accessableFields) {
 					Move move = new Move();
-					move.setCurrentField(piece.getPosition());
+					move.setCurrentField(piece.getCurrentField());
 					move.setTargetField(target);
 					possibleMoves.add(move);
 				}
@@ -289,7 +291,7 @@ public class Position {
 				accessableFields = getPossibleFields(piece);
 				for (Field target : accessableFields) {
 					Move move = new Move();
-					move.setCurrentField(piece.getPosition());
+					move.setCurrentField(piece.getCurrentField());
 			    	move.setTargetField(target);
 					possibleMoves.add(move);
 				}

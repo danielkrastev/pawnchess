@@ -7,12 +7,23 @@ import exceptions.InvalidMoveException;
 
 public class Pawn extends Piece {
 
-	public Pawn(PieceColour colour, Field position) {
+	public Pawn(PieceColour colour, Field currentField) {
 
-		this.position = position;
+		this.currentField = currentField;
 		this.pieceColour = colour;
 	}
 
+	public Pawn(PieceColour colour) {
+		this.pieceColour = colour;
+	}
+
+	//Copy constructor
+	public Pawn(Pawn old) {
+		this.pieceColour = old.getPieceColour();
+	}
+
+	
+	
 	@Override
 	public boolean canMove(Field targetField) throws InvalidMoveException {
 		if (targetField.isValidField() && isMoveValid(targetField)) {
@@ -22,7 +33,7 @@ public class Pawn extends Piece {
 	}
 
 	private boolean isMoveValid(Field targetField) {
-		Field currentPosition = this.getPosition();
+		Field currentPosition = this.getCurrentField();
 		Piece.PieceColour colour = this.getPieceColour();
 
 		switch (colour) {
@@ -76,16 +87,16 @@ public class Pawn extends Piece {
 	public ArrayList<Field> getAccesableFields() {
 		ArrayList<Field> accessableFields = new ArrayList<Field>();
 		if (this.isWhite()) {
-			if (this.getPosition().getRow() == 2) {
-				accessableFields.add(position.twoFieldsUp());
+			if (currentField.getRow() == 2) {
+				accessableFields.add(currentField.twoFieldsUp());
 			}
-			accessableFields.add(position.oneFieldUp());
+			accessableFields.add(currentField.oneFieldUp());
 			return accessableFields;
 		} else {// pawn is black
-			if (this.getPosition().getRow() == 7) {
-				accessableFields.add(position.twoFieldsDown());
+			if (this.currentField.getRow() == 7) {
+				accessableFields.add(currentField.twoFieldsDown());
 			}
-			accessableFields.add(position.oneFieldDown());
+			accessableFields.add(currentField.oneFieldDown());
 			return accessableFields;
 		}
 	}
@@ -95,20 +106,20 @@ public class Pawn extends Piece {
 		ArrayList<Field> attackedFields = new ArrayList<Field>();
 		Field target;
 		if (this.isWhite()) {
-			target = position.oneFieldLeftUp();
+			target = currentField.oneFieldLeftUp();
 			if (target != null) {
 				attackedFields.add(target);
 			}
-			target = position.oneFieldRightUp();
+			target = currentField.oneFieldRightUp();
 			if (target != null) {
 				attackedFields.add(target);
 			}
 		} else {// pawn is black
-			target = position.oneFieldLeftDown();
+			target = currentField.oneFieldLeftDown();
 			if (target != null) {
 				attackedFields.add(target);
 			}
-			target = position.oneFieldRightDown();
+			target = currentField.oneFieldRightDown();
 			if (target != null) {
 				attackedFields.add(target);
 			}
