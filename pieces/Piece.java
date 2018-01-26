@@ -9,16 +9,7 @@ public abstract class Piece {
 	public enum PieceColour {
 		WHITE, BLACK
 	}
-	
-	protected int [] boardPosition;
-	
-	public int [] getPosition() {
-		return boardPosition;
-	}
 
-	public void setPosition(int [] position) {
-		this.boardPosition = position;
-	}
 	protected PieceColour pieceColour;
 
 	public PieceColour getPieceColour() {
@@ -28,6 +19,7 @@ public abstract class Piece {
 	public void setPieceColour(PieceColour pieceColour) {
 		this.pieceColour = pieceColour;
 	}
+
 
 	public String toString() {
 		return "Unidentified square";
@@ -42,11 +34,11 @@ public abstract class Piece {
 	public boolean isBlack(){
 		return !isWhite();
 	}
-
+	
 	abstract public boolean canMove(Field targetField)
 			throws InvalidMoveException;
 
-	public abstract ArrayList<int[]> getAccesableFields();
-	public abstract ArrayList<int[]> getAttackedFields();
+	public abstract ArrayList<Field> getAccesableFields();
+	public abstract ArrayList<Field> getAttackedFields();
 
 }

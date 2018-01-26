@@ -172,9 +172,8 @@ public class Position {
 	private ArrayList<Field> getPossibleFieldsForKing(King king) {
 		ArrayList<Field> possibleFields = new ArrayList<Field>();
 		if (king.isWhite()) {
-			for (Object field : king.getAccesableFields().toArray()) {
-				field = (int [][]) field;
-				Field targetField = chessBoard.getField(field[0], field[1]);
+			for (Object sq : king.getAccesableFields().toArray()) {
+				Field targetField = chessBoard.getField((Field) sq);
 				if ( ! targetField.isTaken() &&
 					 ! getAttackedFieldsFromBlack().contains(sq)) {
 					possibleFields.add(targetField);

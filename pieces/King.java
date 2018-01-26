@@ -7,8 +7,8 @@ import exceptions.InvalidMoveException;
 
 public class King extends Piece {
 
-	public King(PieceColour colour, int [][] position) {
-		//this.position = position;
+	public King(PieceColour colour, Field position) {
+		this.position = position;
 		this.pieceColour = colour;
 	}
 	public King(PieceColour colour) {
@@ -54,7 +54,6 @@ public class King extends Piece {
 		}
 		return false;
 	}
-
 	private boolean isMoveValid(Field targetField)
 			throws InvalidMoveException {
 
@@ -74,46 +73,46 @@ public class King extends Piece {
 	}
 
 	//all the fields surrounding the king
-	public ArrayList<int []> getAccesableFields() {
+	public ArrayList<Field> getAccesableFields() {
 
-     ArrayList <int []> accessableFields = new ArrayList<int[]>();
+     ArrayList <Field> accessableFields = new ArrayList<Field>();
 
-     	 int [] leftField = boardPosition.oneFieldLeft();
+     	 Field leftField = position.oneFieldLeft();
          if (leftField != null){
         	 accessableFields.add(leftField);
          }
-         Field rightField = boardPosition.oneFieldRight();
+         Field rightField = position.oneFieldRight();
          if (rightField !=null){
         	 accessableFields.add(rightField);
          }
-         Field upField = boardPosition.oneFieldUp();
+         Field upField = position.oneFieldUp();
          if(upField != null){
         	 accessableFields.add(upField);
          }
-         Field downField = boardPosition.oneFieldDown();
+         Field downField = position.oneFieldDown();
          if (downField != null){
         	 accessableFields.add(downField);
          }
-         Field leftUpField = boardPosition.oneFieldLeftUp();
+         Field leftUpField = position.oneFieldLeftUp();
          if (leftUpField != null){
         	 accessableFields.add(leftUpField);
          }
-         Field leftDownField = boardPosition.oneFieldLeftDown();
+         Field leftDownField = position.oneFieldLeftDown();
          if (leftDownField != null){
          	accessableFields.add(leftDownField);
          }
-         Field rightUpField = boardPosition.oneFieldRightUp();
+         Field rightUpField = position.oneFieldRightUp();
          if (rightUpField != null){
         	 accessableFields.add(rightUpField);
          }
-         Field rightDownField = boardPosition.oneFieldRightDown();
+         Field rightDownField = position.oneFieldRightDown();
          if(rightDownField != null){
         	 accessableFields.add(rightDownField);
          }
          return   accessableFields;
     }
 	
-	public ArrayList<int []> getAttackedFields(){
+	public ArrayList<Field> getAttackedFields(){
 		return getAccesableFields();
 	}
 }

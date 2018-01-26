@@ -7,8 +7,9 @@ import exceptions.InvalidMoveException;
 
 public class Pawn extends Piece {
 
-	public Pawn(PieceColour colour, int [][] position) {
-		this.boardPosition = position;
+	public Pawn(PieceColour colour, Field position) {
+
+		this.position = position;
 		this.pieceColour = colour;
 	}
 
@@ -20,8 +21,8 @@ public class Pawn extends Piece {
 		return false;
 	}
 
-	private boolean isMoveValid(int [][] targetField) {
-		int [][] currentPosition = this.getPosition();
+	private boolean isMoveValid(Field targetField) {
+		Field currentPosition = this.getPosition();
 		Piece.PieceColour colour = this.getPieceColour();
 
 		switch (colour) {
@@ -76,15 +77,15 @@ public class Pawn extends Piece {
 		ArrayList<Field> accessableFields = new ArrayList<Field>();
 		if (this.isWhite()) {
 			if (this.getPosition().getRow() == 2) {
-				accessableFields.add(boardPosition.twoFieldsUp());
+				accessableFields.add(position.twoFieldsUp());
 			}
-			accessableFields.add(boardPosition.oneFieldUp());
+			accessableFields.add(position.oneFieldUp());
 			return accessableFields;
 		} else {// pawn is black
 			if (this.getPosition().getRow() == 7) {
-				accessableFields.add(boardPosition.twoFieldsDown());
+				accessableFields.add(position.twoFieldsDown());
 			}
-			accessableFields.add(boardPosition.oneFieldDown());
+			accessableFields.add(position.oneFieldDown());
 			return accessableFields;
 		}
 	}
@@ -94,20 +95,20 @@ public class Pawn extends Piece {
 		ArrayList<Field> attackedFields = new ArrayList<Field>();
 		Field target;
 		if (this.isWhite()) {
-			target = boardPosition.oneFieldLeftUp();
+			target = position.oneFieldLeftUp();
 			if (target != null) {
 				attackedFields.add(target);
 			}
-			target = boardPosition.oneFieldRightUp();
+			target = position.oneFieldRightUp();
 			if (target != null) {
 				attackedFields.add(target);
 			}
 		} else {// pawn is black
-			target = boardPosition.oneFieldLeftDown();
+			target = position.oneFieldLeftDown();
 			if (target != null) {
 				attackedFields.add(target);
 			}
-			target = boardPosition.oneFieldRightDown();
+			target = position.oneFieldRightDown();
 			if (target != null) {
 				attackedFields.add(target);
 			}
