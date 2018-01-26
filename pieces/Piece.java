@@ -12,11 +12,11 @@ public abstract class Piece {
 	
 	protected int [] boardPosition;
 	
-	public int [] getPosition() {
+	public int [] getBoardPosition() {
 		return boardPosition;
 	}
 
-	public void setPosition(int [] position) {
+	public void setBoardPosition(int [] position) {
 		this.boardPosition = position;
 	}
 	protected PieceColour pieceColour;
@@ -46,7 +46,7 @@ public abstract class Piece {
 	abstract public boolean canMove(Field targetField)
 			throws InvalidMoveException;
 
-	public abstract ArrayList<int[]> getAccesableFields();
-	public abstract ArrayList<int[]> getAttackedFields();
+	public abstract ArrayList<Field> getAccesableFields(Field boardPosition);
+	public abstract ArrayList<Field> getAttackedFields(Field boardPosition);
 
 }

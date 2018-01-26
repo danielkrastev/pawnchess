@@ -7,7 +7,7 @@ import exceptions.InvalidMoveException;
 
 public class King extends Piece {
 
-	public King(PieceColour colour, int [][] position) {
+	public King(PieceColour colour, int [] position) {
 		//this.position = position;
 		this.pieceColour = colour;
 	}
@@ -30,12 +30,28 @@ public class King extends Piece {
 		}
 		return false;
 	}
+	
+	private boolean isMoveValid(Field currentField, Field targetField)
+			throws InvalidMoveException {
+		if ((targetField.isOneFieldUpFrom(currentField)
+				|| targetField.isOneFieldRightFrom(currentField)
+				|| targetField.isOneFieldUpFrom(currentField)
+				|| targetField.isOneFieldDownFrom(currentField)
+				|| targetField.isOneFieldLeftUpFrom(currentField)
+				|| targetField.isOneFieldRightUpFrom(currentField)
+				|| targetField.isOneFieldLeftDownFrom(currentField) 
+				|| targetField.isOneFieldRightDownFrom(currentField))) {
+
+			return true;
+		}
+		return false;
+	}
 
 	private boolean isFieldAccessible(Field targetField) {
 		if (!targetField.isTaken()){
 			return true;
 		}
-        
+		
 		PieceColour colour = this.getPieceColour();
 		
 		switch (colour){
@@ -55,30 +71,10 @@ public class King extends Piece {
 		return false;
 	}
 
-	private boolean isMoveValid(Field targetField)
-			throws InvalidMoveException {
-
-		Field currentPosition = this.getPosition();		
-		if ((targetField.isOneFieldUpFrom(currentPosition)
-				|| targetField.isOneFieldRightFrom(currentPosition)
-				|| targetField.isOneFieldUpFrom(currentPosition)
-				|| targetField.isOneFieldDownFrom(currentPosition)
-				|| targetField.isOneFieldLeftUpFrom(currentPosition)
-				|| targetField.isOneFieldRightUpFrom(currentPosition)
-				|| targetField.isOneFieldLeftDownFrom(currentPosition) || targetField
-				.isOneFieldRightDownFrom(currentPosition))) {
-
-			return true;
-		}
-		return false;
-	}
-
 	//all the fields surrounding the king
-	public ArrayList<int []> getAccesableFields() {
-
-     ArrayList <int []> accessableFields = new ArrayList<int[]>();
-
-     	 int [] leftField = boardPosition.oneFieldLeft();
+	public ArrayList<Field> getAccesableFields(Field boardPosition) {
+     ArrayList <Field> accessableFields = new ArrayList<Field>();
+     	 Field leftField =  boardPosition.oneFieldLeft();
          if (leftField != null){
         	 accessableFields.add(leftField);
          }
@@ -113,7 +109,7 @@ public class King extends Piece {
          return   accessableFields;
     }
 	
-	public ArrayList<int []> getAttackedFields(){
-		return getAccesableFields();
+	public ArrayList<Field> getAttackedFields(Field boardPosition){
+		return getAccesableFields(boardPosition);
 	}
 }

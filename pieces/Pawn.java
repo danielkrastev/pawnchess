@@ -7,7 +7,7 @@ import exceptions.InvalidMoveException;
 
 public class Pawn extends Piece {
 
-	public Pawn(PieceColour colour, int [][] position) {
+	public Pawn(PieceColour colour, int [] position) {
 		this.boardPosition = position;
 		this.pieceColour = colour;
 	}
@@ -20,27 +20,24 @@ public class Pawn extends Piece {
 		return false;
 	}
 
-	private boolean isMoveValid(int [][] targetField) {
-		int [][] currentPosition = this.getPosition();
+	private boolean isMoveValid(Field currentField, Field targetField) {
 		Piece.PieceColour colour = this.getPieceColour();
-
 		switch (colour) {
 		// white pawns
 		case WHITE:
-
-			if (targetField.isOneFieldUpFrom(currentPosition)
+			if (targetField.isOneFieldUpFrom(currentField)
 					&& !targetField.isTaken()) {
 				return true;
 			}
-			if ((targetField.isOneFieldLeftUpFrom(currentPosition) || targetField
-					.isOneFieldRightUpFrom(currentPosition))
+			if ((targetField.isOneFieldLeftUpFrom(currentField) || targetField
+					.isOneFieldRightUpFrom(currentField))
 					&& (targetField.isTaken() == true && targetField
 							.getPiece().getPieceColour()
 							.equals(PieceColour.BLACK))) {
 				return true;
 			}
-			if (currentPosition.getRow() == 2
-					&& targetField.isTwoFieldsUpFrom(currentPosition)
+			if (currentField.getRow() == 2
+					&& targetField.isTwoFieldsUpFrom(currentField)
 					&& !targetField.isTaken()) {
 				return true;
 			}
@@ -48,19 +45,18 @@ public class Pawn extends Piece {
 
 		// black pawns
 		case BLACK:
-
-			if (targetField.isOneFieldDownFrom(currentPosition)
+			if (targetField.isOneFieldDownFrom(currentField)
 					&& !targetField.isTaken()) {
 				return true;
 			}
-			if ((targetField.isOneFieldLeftDownFrom(currentPosition) || targetField
-					.isOneFieldRightDownFrom(currentPosition))
+			if ((targetField.isOneFieldLeftDownFrom(currentField) || targetField
+					.isOneFieldRightDownFrom(currentField))
 					&& (targetField.isTaken() && targetField.getPiece()
 							.getPieceColour().equals(PieceColour.WHITE))) {
 				return true;
 			}
-			if (currentPosition.getRow() == 7
-					&& targetField.isTwoFieldsdDownFrom(currentPosition)
+			if (currentField.getRow() == 7
+					&& targetField.isTwoFieldsdDownFrom(currentField)
 					&& !targetField.isTaken()) {
 				return true;
 			}
@@ -72,16 +68,16 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public ArrayList<Field> getAccesableFields() {
+	public ArrayList<Field> getAccesableFields(Field boardPosition) {
 		ArrayList<Field> accessableFields = new ArrayList<Field>();
 		if (this.isWhite()) {
-			if (this.getPosition().getRow() == 2) {
+			if (boardPosition.getRow() == 2) {
 				accessableFields.add(boardPosition.twoFieldsUp());
 			}
 			accessableFields.add(boardPosition.oneFieldUp());
 			return accessableFields;
 		} else {// pawn is black
-			if (this.getPosition().getRow() == 7) {
+			if (boardPosition.getRow() == 7) {
 				accessableFields.add(boardPosition.twoFieldsDown());
 			}
 			accessableFields.add(boardPosition.oneFieldDown());
@@ -90,7 +86,7 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public ArrayList<Field> getAttackedFields() {
+	public ArrayList<Field> getAttackedFields(Field boardPosition) {
 		ArrayList<Field> attackedFields = new ArrayList<Field>();
 		Field target;
 		if (this.isWhite()) {

@@ -62,7 +62,7 @@ public class ChessBoard {
 		if (!target.isTaken() || (target.isTaken() && 
 				                 ! target.getPiece().getPieceColour().
 						           equals(piece.getPieceColour()))) {
-			piece.setPosition(target);
+			piece.setBoardPosition(new int [] {target.getRow(),target.getColumn()});
 			FIELDS[target.getRow()][target.getColumn()].setPiece(piece);
 			FIELDS[target.getRow()][target.getColumn()].setTaken(true);
 			return true;

@@ -238,7 +238,6 @@ public class Field {
 	}
 
 	public Field oneFieldUp() {
-
 		Field sq = new Field(row + 1, column);
 		if (sq.isValidField()) {
 			return sq;
