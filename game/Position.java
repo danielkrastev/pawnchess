@@ -42,6 +42,12 @@ public class Position {
 	    this.currentPlayer = currentPlayer;
 	}
 	
+	//copy constructor
+	public Position(Position old) {
+		this.chessBoard = new ChessBoard(old.getChessBoard());
+	    this.currentPlayer = old.getCurrentPlayer();
+	}
+	
 	public Position(String fen) throws Exception {
 		
 		this.chessBoard  = new ChessBoard();
@@ -67,7 +73,9 @@ public class Position {
 				} else {
 					col ++;
 					int [] boardPos =  {row, col};
+					int po = 1 + + + + +2;
 					switch (c) {
+					
 						case 'P':
 							Pawn white_pawn = new Pawn(PieceColour.WHITE, boardPos);
 							chessBoard.setPiece(white_pawn, chessBoard.getField(row, col));
@@ -150,14 +158,14 @@ public class Position {
 	}
 	
 	public Position _makeMove(Move currentMove) {
-		Position newPos = new Position(this.getChessBoard(), this.getCurrentPlayer());
-		Field current_field = currentMove.getCurrentField();
-		Field target_field = currentMove.getTargetField();
-		Piece p = chessBoard.getPiece(current_field);
-		chessBoard.freeField(currentMove.getCurrentField());
-		chessBoard.setPiece(p, target_field);
-		changeTurn();
-		return this;
+		Position newPos = new Position(this);
+		Field newCurrent = newPos.chessBoard.getField(currentMove.getCurrentField().getRow(),
+														currentMove.getCurrentField().getColumn());
+		Field newTarget = newPos.chessBoard.getField(currentMove.getTargetField().getRow(),
+				currentMove.getTargetField().getColumn());
+		Move newMove = new Move(newCurrent, newTarget);
+		newPos.makeMove(newMove);
+		return newPos;
 	}
 	
 	public ArrayList<Field> getPossibleFields(Piece piece) {

@@ -12,6 +12,12 @@ public class Pawn extends Piece {
 		this.pieceColour = colour;
 	}
 
+	//copy constructor
+	public Pawn(Pawn old){
+		this.boardPosition = new int [] {old.getBoardPosition()[0], old.getBoardPosition()[1]};
+		this.pieceColour = old.getPieceColour();
+	}
+	
 	@Override
 	public boolean canMove(Field targetField) throws InvalidMoveException {
 		if (targetField.isValidField() && isMoveValid(targetField)) {
@@ -19,7 +25,7 @@ public class Pawn extends Piece {
 		}
 		return false;
 	}
-
+	
 	private boolean isMoveValid(Field currentField, Field targetField) {
 		Piece.PieceColour colour = this.getPieceColour();
 		switch (colour) {

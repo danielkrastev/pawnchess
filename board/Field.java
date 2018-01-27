@@ -1,6 +1,7 @@
 package board;
 
 import pieces.King;
+import pieces.Pawn;
 import pieces.Piece;
 
 public class Field {
@@ -13,18 +14,22 @@ public class Field {
 
 	public Field() {
 	}
-	
+
 	/*Copy constructor*/
-	public Field(Field sq){
-		this.row = sq.getRow();
-		this.column = sq.getColumn();
-		this.taken = sq.isTaken();
+	public Field(Field old){
+		this.row = old.getRow();
+		this.column = old.getColumn();
+		this.taken = old.isTaken();
 		this.piece = null;
-		
+
 		if (this.isTaken()) {
-			Piece oldPiece = sq.getPiece();
+			Piece oldPiece = old.getPiece();
 			if (oldPiece instanceof King) {
-				King newKing = new King()
+				King newKing = new King((King) oldPiece);
+				this.piece = newKing;
+			}else if (oldPiece instanceof Pawn) {
+				Pawn newPawn = new Pawn((Pawn) oldPiece);
+				this.piece = newPawn;
 			}
 		}
 	}

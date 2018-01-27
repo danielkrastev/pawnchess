@@ -42,7 +42,15 @@ public abstract class Piece {
 	public boolean isBlack(){
 		return !isWhite();
 	}
-
+	
+	public int getRow() {
+		return boardPosition[0];
+	}
+	
+	public int getColumn(){
+		return boardPosition[1];
+	}
+	
 	abstract public boolean canMove(Field targetField)
 			throws InvalidMoveException;
 

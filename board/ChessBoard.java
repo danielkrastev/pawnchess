@@ -4,7 +4,7 @@ import pieces.Piece;
 
 public class ChessBoard {
 
-	private final Field[][] FIELDS = new Field[10][10];
+	private Field[][] FIELDS = new Field[10][10];
 
 	public ChessBoard() {
 
@@ -31,20 +31,20 @@ public class ChessBoard {
 		}
 	}
 
+	//Copy constructor
 	public ChessBoard(ChessBoard cb) {
-		Field[][] newFIELDS = new Field[10][10];
-		Field[][] FIELDS = cb.getFields();
+		FIELDS = new Field[10][10];
+		Field [][] oldFields = cb.getFields();
 		for (int i = 0; i <= 9; i++) {
 			for (int j = 0; j <= 9; j++) {
-				newFIELDS[i][j] = new Field(FIELDS[i][j]);
-				
-				FIELDS[i][j] = new Field(i, j);
-				FIELDS[i][j].setTaken(false);
+				Field f = oldFields[i][j];
+				if (f instanceof Edge)
+					FIELDS[i][j] = new Edge((Edge)f);
+				else
+					FIELDS[i][j] = new Field(f);
 			}
 		}
-		
 	}
-	
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

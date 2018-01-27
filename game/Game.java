@@ -27,7 +27,7 @@ public class Game {
 
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
-	static private final int DEPTH = 2;
+	static private final int DEPTH = 1;
 	private MoveValidator moveValidator;
 	private Position currentPosition;
 	private Random randomGenerator;
@@ -106,11 +106,11 @@ public class Game {
 	}
 
 	private Move getEngineMove(Position currentPosition) {
-		//MoveRating mv = miniMax(DEPTH, currentPosition, true);
-		//return mv.getMove();
-		List<Move> possibleMoves = currentPosition.getPossibleMoves(true);
-		int index = randomGenerator.nextInt(possibleMoves.size());
-		return possibleMoves.get(index);
+		MoveRating mv = miniMax(DEPTH, currentPosition, true);
+		return mv.getMove();
+		//List<Move> possibleMoves = currentPosition.getPossibleMoves(true);
+		//int index = randomGenerator.nextInt(possibleMoves.size());
+		//return possibleMoves.get(index);
 	}
 
 	public boolean validate(Move move, boolean is_black) {
@@ -263,7 +263,7 @@ public class Game {
 			Move bestMove = null;
 			for (Move possibleMove : possibleMoves) {
 				Position possiblePosition = position._makeMove(possibleMove);
-				int rating = Rating.ratePosition(position);
+				int rating = Rating.ratePosition(possiblePosition);
 
 				if (rating > bestRating) {
 					bestRating = rating;
@@ -277,13 +277,14 @@ public class Game {
 			MoveRating bestMove = new MoveRating(null, best_move_rating);
 			for (Move possibleMove : possibleMoves) {
 				Position possible_position = position._makeMove(possibleMove);
-				MoveRating currentMoveRating = miniMax(depth-1, position, false);
+				MoveRating currentMoveRating = miniMax(depth-1, possible_position, false);
 				if (currentMoveRating.getRating() > bestMove.getRating()) {
 					bestMove = currentMoveRating;
 				}
 				return bestMove;
 			}
 		}else {
+			/*//*/
 			int best_move_rating = Integer.MAX_VALUE;
 			MoveRating bestMove = new MoveRating(null, best_move_rating);
 			for (Move possibleMove : possibleMoves) {

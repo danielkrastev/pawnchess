@@ -7,10 +7,17 @@ import exceptions.InvalidMoveException;
 
 public class King extends Piece {
 
-	public King(PieceColour colour, int [] position) {
-		//this.position = position;
+	public King(PieceColour colour, int [] boardPosition) {
+		this.boardPosition = boardPosition;
 		this.pieceColour = colour;
 	}
+	
+	//copy constructor
+	public King(King old){
+		this.boardPosition = new int [] {old.getBoardPosition()[0], old.getBoardPosition()[1]};
+		this.pieceColour = old.getPieceColour();
+	}
+	
 	public King(PieceColour colour) {
 		this.pieceColour = colour;
 	}

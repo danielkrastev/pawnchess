@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import userInterface.UserInterface;
 import game.Game;
 
-
 public class TestGame {
 
 	public static void main(String[] args) {

@@ -45,11 +45,11 @@ public class Rating {
 			{ 0, 2, 2, 4, 5, 5, 4, 3, 2, 0 }, { 0, 2, 2, 4, 5, 5, 4, 3, 2, 0 },
 			{ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-	public static int ratePosition(Position game) {
+	public static int ratePosition(Position position) {
 		int rating = 0;
-		rating += calculateMaterialRating(game);
-		rating += calculatePiecePositionRating(game);
-		if (game.getCurrentPlayer() == PieceColour.WHITE){
+		//rating += calculateMaterialRating(position);
+		rating += calculatePiecePositionRating(position);
+		if (position.getCurrentPlayer() == PieceColour.BLACK){
 			rating = 0 - rating;
 		}
 		return rating;
@@ -60,48 +60,38 @@ public class Rating {
 		//return 1;
 	}		
 
-	private static int calculatePiecePositionRating(Position game) {
-
+	private static int calculatePiecePositionRating(Position position) {
 		int positionPts = 0;
-
-		for (Piece p : game.getBlackPieces()) {
+		for (Piece p : position.getBlackPieces()) {
 			if (p instanceof Pawn) {
-				if (game.getCurrentPlayer().equals(PieceColour.BLACK)) {
-					positionPts += blackPawnsRatingBoard[p.getPosition()
-							.getColumn()][p.getPosition().getRow()];
+				if (position.getCurrentPlayer().equals(PieceColour.WHITE)) {
+					positionPts += blackPawnsRatingBoard[p.getRow()][p.getColumn()];
 				} else {
-					positionPts -= blackPawnsRatingBoard[p.getPosition()
-							.getColumn()][p.getPosition().getRow()];
+					positionPts -= blackPawnsRatingBoard[p.getRow()][p.getColumn()];
 				}
 			} else if (p instanceof King) {
-				if (game.getCurrentPlayer().equals(PieceColour.BLACK)) {
-					positionPts += blackKingRatingBoard[p.getPosition()
-							.getColumn()][p.getPosition().getRow()];
+				if (position.getCurrentPlayer().equals(PieceColour.WHITE)) {
+					positionPts += blackKingRatingBoard[p.getRow()][p.getColumn()];
 				} else {
-					positionPts -= whiteKingRatingBoard[p.getPosition()
-							.getColumn()][p.getPosition().getRow()];
+					positionPts -= whiteKingRatingBoard[p.getRow()][p.getColumn()];
 				}
 			}
 		}
-		for (Piece p : game.getWhitePieces()) {
+		
+		for (Piece p : position.getWhitePieces()) {
 			if (p instanceof Pawn) {
-				if (game.getCurrentPlayer().equals(PieceColour.BLACK)) {
-					positionPts -= blackPawnsRatingBoard[p.getPosition()
-							.getColumn()][p.getPosition().getRow()];
+				if (position.getCurrentPlayer().equals(PieceColour.WHITE)) {
+					positionPts -= blackPawnsRatingBoard[p.getRow()][p.getColumn()];
 				} else {
-					positionPts += whitePawnsRatingBoard[p.getPosition()
-							.getColumn()][p.getPosition().getRow()];
+					positionPts += whitePawnsRatingBoard[p.getRow()][p.getColumn()];
 				}
 			} else if (p instanceof King) {
-				if (game.getCurrentPlayer().equals(PieceColour.BLACK)) {
-					positionPts -= blackKingRatingBoard[p.getPosition()
-							.getColumn()][p.getPosition().getRow()];
+				if (position.getCurrentPlayer().equals(PieceColour.WHITE)) {
+					positionPts -= blackKingRatingBoard[p.getRow()][p.getColumn()];
 				} else {
-					positionPts += whiteKingRatingBoard[p.getPosition()
-							.getColumn()][p.getPosition().getRow()];
+					positionPts += whiteKingRatingBoard[p.getRow()][p.getColumn()];
 				}
 			}
-			
 		}
 		return positionPts;
 	}
