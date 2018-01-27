@@ -53,10 +53,7 @@ public class Move {
 		return currentField.getPiece();
 	}
 
-	public void calculateRating(Game game) {
-	     this.rating = Rating.positionRating(game);
-	}
-
+	
 	public int getRating() {
 	    return this.rating;
 	}

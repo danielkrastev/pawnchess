@@ -5,7 +5,6 @@ import pieces.Pawn;
 import pieces.Piece;
 
 public class Field {
-
 	protected int column;
 	protected int row;
 	private boolean taken;

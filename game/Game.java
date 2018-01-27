@@ -44,20 +44,14 @@ public class Game {
 	}
 
 	public void start() throws Exception {
-
-		// updateWhitePieces();
-		// updateBlackPieces();
-		// updateAttackedFieldsFromWhite();
-		// updateAttackedFieldsFromBlack();
 		boolean gameFinished = false;
-		
 		while (! gameFinished) {
 			try {
 				LOGGER.log(Level.INFO, currentPosition.getCurrentPlayer() + " to move:\nCurrent position:\n"
 						+ currentPosition.toString());
-				// if (isCheckDeclared()) {
-				// LOGGER.log(Level.INFO, "Check!");
-				// }
+				if (currentPosition.isCheckDeclared()) {
+				    LOGGER.log(Level.INFO, "Check!");
+				}
 				boolean is_black = true;
 				if (currentPosition.getCurrentPlayer().equals(PieceColour.WHITE))
 					is_black = false;
@@ -166,17 +160,6 @@ public class Game {
 		return this.currentPosition;
 	}
 
-	private boolean isCheckDeclared() {
-
-		if (attackedFieldsFromWhite.containsKey(BLACK_KING.getPosition())) {
-			return true;
-		}
-		if (attackedFieldsFromBlack.containsKey(WHITE_KING.getPosition())) {
-			return true;
-		}
-		return false;
-	}
-
 	
 	public String toString() {
 		return currentPosition.getChessBoard().toString();
@@ -194,7 +177,7 @@ public class Game {
 				this.wait();
 				int column = mouseMover.getClickedColumn();
 				int row = mouseMover.getClickedRow();
-
+				
 				Field temp = this.getChessBoard().getField(row, column);
 				if ( !temp.isTaken()
 					|| temp.getPiece().isBlack()) {
@@ -264,8 +247,8 @@ public class Game {
 			for (Move possibleMove : possibleMoves) {
 				Position possiblePosition = position._makeMove(possibleMove);
 				int rating = Rating.ratePosition(possiblePosition);
-
-				if (rating > bestRating) {
+				LOGGER.log(Level.INFO, String.format("%s - %s", possibleMove, rating));
+				if (rating >= bestRating) {
 					bestRating = rating;
 					bestMove = possibleMove;
 				}
@@ -278,7 +261,7 @@ public class Game {
 			for (Move possibleMove : possibleMoves) {
 				Position possible_position = position._makeMove(possibleMove);
 				MoveRating currentMoveRating = miniMax(depth-1, possible_position, false);
-				if (currentMoveRating.getRating() > bestMove.getRating()) {
+				if (currentMoveRating.getRating() >= bestMove.getRating()) {
 					bestMove = currentMoveRating;
 				}
 				return bestMove;
@@ -290,7 +273,7 @@ public class Game {
 			for (Move possibleMove : possibleMoves) {
 				Position possible_position = position._makeMove(possibleMove);
 				MoveRating currentMoveRating = miniMax(depth-1, position, false);
-				if (currentMoveRating.getRating() < bestMove.getRating()) {
+				if (currentMoveRating.getRating() <= bestMove.getRating()) {
 					bestMove = currentMoveRating;
 				}
 				return bestMove;
