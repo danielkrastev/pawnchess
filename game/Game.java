@@ -33,13 +33,9 @@ public class Game {
 	private Random randomGenerator;
 	
 	public Game() throws Exception {
-
 		currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
-
-		whitePieces = new HashSet<Piece>();
-		blackPieces = new HashSet<Piece>();
+		//currentPosition = new Position("4k3/8/3PPP2/8/8/8/8/4K3");
 		listOfMoves = new ArrayList<Move>();
-
 		randomGenerator = new Random();
 	}
 
@@ -62,6 +58,10 @@ public class Game {
 					currentMove = getPlayersMove();
 				} else {
 					currentMove = getEngineMove(currentPosition);
+					if (currentMove == null) {
+						LOGGER.log(Level.INFO, "No possible moves");
+						gameFinished = true;
+					}
 					LOGGER.log(Level.INFO, "The program decides " + currentMove);
 				}
 				boolean isMoveValid = validate(currentMove, is_black);
@@ -97,14 +97,15 @@ public class Game {
 				e.printStackTrace();
 			}
 		}
+		LOGGER.log(Level.INFO, "Game over");
 	}
 
 	private Move getEngineMove(Position currentPosition) {
 		MoveRating mv = miniMax(DEPTH, currentPosition, true);
-		return mv.getMove();
-		//List<Move> possibleMoves = currentPosition.getPossibleMoves(true);
-		//int index = randomGenerator.nextInt(possibleMoves.size());
-		//return possibleMoves.get(index);
+		if (mv != null) {
+			return mv.getMove();
+		}
+		return null;
 	}
 
 	public boolean validate(Move move, boolean is_black) {
@@ -151,7 +152,6 @@ public class Game {
 		return false;
 	}
 
-	
 	public ChessBoard getChessBoard() {
 		return this.getCurrentPosition().getChessBoard();
 	}
@@ -238,9 +238,12 @@ public class Game {
 	 * if (kingCannotMove && attackedFieldsFromBlack.get(attacker) == 1) {
 	 * return true; } } return false; }
 	 */
-	
+
 	static MoveRating miniMax(int depth, Position position, boolean  is_black){
 		ArrayList<Move> possibleMoves = position.getPossibleMoves(is_black);
+		if (possibleMoves.isEmpty()){
+			return null;
+		}
 		if (depth <= 1) {
 			int bestRating = 0;
 			Move bestMove = null;

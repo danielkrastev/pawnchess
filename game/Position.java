@@ -179,32 +179,38 @@ public class Position {
 	}
 	
 	private ArrayList<Field> getPossibleFieldsForKing(King king) {
+		/*
+		 * Moves out the attacked fields from the opposite pieces
+		 * 
+		 * */
 		ArrayList<Field> possibleFields = new ArrayList<Field>();
-		Field currentField = chessBoard.getField(king.getBoardPosition()[0],
- 												king.getBoardPosition()[1]);
+		Field currentField = chessBoard.getField(king.getRow(), king.getColumn());
 		if (king.isWhite()) {
-			for (Field field : king.getAccesableFields(currentField)) {
-				Field targetField = this.chessBoard.getField(field);
-				if ( ! targetField.isTaken() &&
-					 ! getAttackedFieldsFromBlack().contains(targetField)) {
-					possibleFields.add(targetField);
+		    for (Field field : king.getAccesableFields(currentField)) {
+			    Field targetField = chessBoard.getField(field);
+				if ( ! targetField.isTaken()) {
+					if (! getAttackedFieldsFromBlack().contains(targetField)){
+						possibleFields.add(targetField);						
+					}
 				} else if (targetField.isTaken() && targetField.getPiece().isBlack()) {
-
-					Pawn blackPawn = (Pawn) targetField.getPiece();// only
+					Pawn blackPawn = (Pawn) targetField.getPiece(); // only
 																	// possible
 																	// that this
 																	// piece is
 																	// pawn
-					if ( ! isProtected(blackPawn)) {
+					if (!isProtected(blackPawn)) {
 						possibleFields.add(targetField);
 					}
 				}
 			}
 		} else {// king is black
+			List<Field> attackedFieldsFromWhite = getAttackedFieldsFromWhite();
 			for (Field field : king.getAccesableFields(currentField)) {
 				Field targetField = this.chessBoard.getField(field);
-				if (! targetField.isTaken()) {
-					possibleFields.add(targetField);
+				if ( ! targetField.isTaken()) {
+					if (! attackedFieldsFromWhite.contains(targetField)) {
+						possibleFields.add(targetField);
+					}
 				} else // square is taken
 				if (targetField.getPiece().isWhite()) {
 					Pawn whitePawn = (Pawn) targetField.getPiece();// only
@@ -296,7 +302,7 @@ public class Position {
 	
 	public List<Field> getAttackedFieldsFromWhite() {
 		List<Field> attackedFieldsFromWhite = new ArrayList<Field>();
-		for(Piece p : getBlackPieces()) {
+		for(Piece p : getWhitePieces()) {
 			List<Field> attackedFields = p.getAttackedFields(chessBoard.getField(p.getRow(), p.getColumn()));
 			for (Field as : attackedFields) {
 				if (! (as instanceof board.Edge)) {
@@ -306,7 +312,6 @@ public class Position {
 		}
 		return attackedFieldsFromWhite;
 	}
-
 	
 	ArrayList<Move> getPossibleMoves(boolean is_black) {
 		boolean is_white = ! is_black;
@@ -317,8 +322,8 @@ public class Position {
 				accessableFields = getPossibleFields(piece);
 				for (Field target : accessableFields) {
 					Move move = new Move();
-					move.setCurrentField(chessBoard.getField(piece.getBoardPosition()[0],
-															 piece.getBoardPosition()[1]));
+					move.setCurrentField(chessBoard.getField(piece.getRow(),
+															 piece.getColumn()));
 					move.setTargetField(target);
 					possibleMoves.add(move);
 				}
@@ -346,7 +351,7 @@ public class Position {
 		}
 		King whiteKing = this.getWhiteKing();
 		Field whiteKingPosition = chessBoard.getField(whiteKing.getRow(), whiteKing.getColumn());
-		if (this.getAttackedFieldsFromBlack().contains(blackKingPosition)) {
+		if (this.getAttackedFieldsFromBlack().contains(whiteKingPosition)) {
 			return true;
 		}
 		return false;
@@ -381,5 +386,4 @@ public class Position {
 		}
 		return possibleFields;
 	}
-	
 }
