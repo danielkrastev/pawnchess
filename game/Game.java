@@ -45,7 +45,7 @@ public class Game {
 			try {
 				LOGGER.log(Level.INFO, currentPosition.getCurrentPlayer() + " to move:\nCurrent position:\n"
 						+ currentPosition.toString());
-				if (currentPosition.isCheckDeclared()) {
+				if (currentPosition.isCheckDeclared()){
 				    LOGGER.log(Level.INFO, "Check!");
 				}
 				boolean is_black = true;
@@ -112,42 +112,6 @@ public class Game {
 		List<Move> possibleMoves = currentPosition.getPossibleMoves(is_black);
 		if (possibleMoves.contains(move)){
 			return true;
-		}
-		return false;
-	}
-
-
-	private boolean isMoveEscapingChess(Move move, PieceColour turn) {
-		Field curentField = move.getCurrentField();
-		Field targetField = move.getTargetField();
-
-		if (turn.equals(PieceColour.WHITE)) {
-			if (curentField.getPiece().equals(WHITE_KING)) {
-				if (!attackedFieldsFromBlack.containsKey(targetField)) {
-					return true;
-				}
-			} else {
-				if (targetField.isTaken()
-						&& (targetField.isOneFieldLeftUpFrom(WHITE_KING
-								.getPosition()) || targetField
-								.isOneFieldRightUpFrom(WHITE_KING.getPosition()))) {
-					return true;
-				}
-			}
-		} else {
-			if (curentField.getPiece().equals(BLACK_KING)) {
-				if (!attackedFieldsFromWhite.containsKey(targetField)) {
-					return true;
-				}
-			} else {
-				if (targetField.isTaken()
-						&& (targetField.isOneFieldLeftDownFrom(BLACK_KING
-								.getPosition()) || targetField
-								.isOneFieldRightDownFrom(BLACK_KING
-										.getPosition()))) {
-					return true;
-				}
-			}
 		}
 		return false;
 	}

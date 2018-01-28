@@ -317,7 +317,7 @@ public class Position {
 		boolean is_white = ! is_black;
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
 		ArrayList<Field> accessableFields;
-		if (is_white) {
+		if (is_white) { //white to move
 			for (Piece piece : getWhitePieces()) {
 				accessableFields = getPossibleFields(piece);
 				for (Field target : accessableFields) {
@@ -325,6 +325,13 @@ public class Position {
 					move.setCurrentField(chessBoard.getField(piece.getRow(),
 															 piece.getColumn()));
 					move.setTargetField(target);
+					//check for check
+					if (isCheckDeclaredOnWhite()) {
+						Position resultPosition = _makeMove(move);
+						if (resultPosition.isCheckDeclaredOnWhite()){
+							continue;
+						}
+					}
 					possibleMoves.add(move);
 				}
 			}
@@ -336,6 +343,13 @@ public class Position {
 					move.setCurrentField(chessBoard.getField(piece.getBoardPosition()[0],
 							 			 piece.getBoardPosition()[1]));
 			    	move.setTargetField(target);
+			    	//check for check
+					if (isCheckDeclaredOnBlack()) {
+						Position resultPosition = _makeMove(move);
+						if (resultPosition.isCheckDeclaredOnBlack()){
+							continue;
+						}
+					}
 					possibleMoves.add(move);
 				}
 			}
@@ -343,18 +357,26 @@ public class Position {
 		return possibleMoves;
 	}
 	
-	public boolean isCheckDeclared() {
+	public boolean isCheckDeclaredOnBlack() {
 		King blackKing = this.getBlackKing();
 		Field blackKingPosition = chessBoard.getField(blackKing.getRow(), blackKing.getColumn());
 		if (this.getAttackedFieldsFromWhite().contains(blackKingPosition)) {
 			return true;
 		}
+		return false;
+	}
+	
+	public boolean isCheckDeclaredOnWhite() {
 		King whiteKing = this.getWhiteKing();
 		Field whiteKingPosition = chessBoard.getField(whiteKing.getRow(), whiteKing.getColumn());
 		if (this.getAttackedFieldsFromBlack().contains(whiteKingPosition)) {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isCheckDeclared() {
+		return isCheckDeclaredOnWhite() || isCheckDeclaredOnBlack();
 	}
 	
 	private  ArrayList<Field> getPossibleFieldsForPawn(Pawn pawn) {
@@ -386,4 +408,41 @@ public class Position {
 		}
 		return possibleFields;
 	}
+	
+	private boolean isMoveEscapingChess(Move move, PieceColour turn) {
+		Field curentField = chessBoard.getField(move.getCurrentField());
+		Field targetField = chessBoard.getField(move.getTargetField());
+
+		if (turn.equals(PieceColour.WHITE)) {
+			if (curentField.getPiece().equals(WHITE_KING)) {
+				if (!attackedFieldsFromBlack.containsKey(targetField)) {
+					return true;
+				}
+			} else {
+				if (targetField.isTaken()
+						&& (targetField.isOneFieldLeftUpFrom(WHITE_KING
+								.getPosition()) || targetField
+								.isOneFieldRightUpFrom(WHITE_KING.getPosition()))) {
+					return true;
+				}
+			}
+		} else {
+			if (curentField.getPiece().equals(BLACK_KING)) {
+				if (!attackedFieldsFromWhite.containsKey(targetField)) {
+					return true;
+				}
+			} else {
+				if (targetField.isTaken()
+						&& (targetField.isOneFieldLeftDownFrom(BLACK_KING
+								.getPosition()) || targetField
+								.isOneFieldRightDownFrom(BLACK_KING
+										.getPosition()))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	
 }
