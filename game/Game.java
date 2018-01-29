@@ -21,32 +21,32 @@ public class Game {
 	private UserInterface.MouseMover mouseMover;
 	static private final int DEPTH = 3;
 	private Position currentPosition;
-	//private Random randomGenerator;
-	
+	// private Random randomGenerator;
+
 	public Game() throws Exception {
 		/*
 		 * FEN notation starts from the 8th rank
-		 * */
-		//starting position
-		//currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
-		//currentPosition = new Position("4k3/8/3PPP2/8/8/8/8/4K3");
-		//candidate 1
-		//currentPosition = new Position("2k5/8/8/7P/p4p2/8/8/3K4");
-		//test position 1, test with depth 1 and 2, see that it works with 2
-		currentPosition = new Position("2k5/8/8/8/8/p4p2/3K4/8");
-		
+		 */
+		// starting position
+		currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
+		// currentPosition = new Position("4k3/8/3PPP2/8/8/8/8/4K3");
+		// candidate 1
+		// currentPosition = new Position("2k5/8/8/7P/p4p2/8/8/3K4");
+		// test position 1, test with depth 1 and 2, see that it works with 2
+		// currentPosition = new Position("2k5/8/8/8/8/p4p2/3K4/8");
+
 		listOfMoves = new ArrayList<Move>();
-		//randomGenerator = new Random();
+		// randomGenerator = new Random();
 	}
 
 	public void start() throws Exception {
 		boolean gameFinished = false;
-		while (! gameFinished) {
+		while (!gameFinished) {
 			try {
 				LOGGER.log(Level.INFO, currentPosition.getCurrentPlayer() + " to move:\nCurrent position:\n"
 						+ currentPosition.toString());
-				if (currentPosition.isCheckDeclared()){
-				    LOGGER.log(Level.INFO, "Check!");
+				if (currentPosition.isCheckDeclared()) {
+					LOGGER.log(Level.INFO, "Check!");
 				}
 				boolean is_black = true;
 				if (currentPosition.getCurrentPlayer().equals(PieceColour.WHITE))
@@ -70,18 +70,16 @@ public class Game {
 					LOGGER.log(Level.INFO, "THE MOVE IS VALID");
 					currentPosition.makeMove(currentMove);
 					gui.repaint();
-					
-					//check if pawn reached 8th or 1st rank.
+
+					// check if pawn reached 8th or 1st rank.
 					Piece piece = currentMove.getPiece();
-					if(piece instanceof Pawn){
-						if(currentMove.getTargetField().getRow() == 1 || 
-     						currentMove.getTargetField().getRow() == 8	) {
+					if (piece instanceof Pawn) {
+						if (currentMove.getTargetField().getRow() == 1 || currentMove.getTargetField().getRow() == 8) {
 							LOGGER.log(Level.INFO, "Game ended!");
 							gameFinished = true;
-							if(piece.isWhite()) {
+							if (piece.isWhite()) {
 								LOGGER.log(Level.INFO, "White won!");
-							}
-							else {
+							} else {
 								LOGGER.log(Level.INFO, "Black won");
 							}
 						}
@@ -110,7 +108,7 @@ public class Game {
 
 	public boolean validate(Move move, boolean is_black) {
 		List<Move> possibleMoves = currentPosition.getPossibleMoves(is_black);
-		if (possibleMoves.contains(move)){
+		if (possibleMoves.contains(move)) {
 			return true;
 		}
 		return false;
@@ -140,17 +138,16 @@ public class Game {
 				this.wait();
 				int column = mouseMover.getClickedColumn();
 				int row = mouseMover.getClickedRow();
-				
+
 				Field temp = this.getChessBoard().getField(row, column);
-				if ( !temp.isTaken()
-					|| temp.getPiece().isBlack()) {
-						throw new InvalidMoveException("Piece not clicked on!");
+				if (!temp.isTaken() || temp.getPiece().isBlack()) {
+					throw new InvalidMoveException("Piece not clicked on!");
 				}
 
 				current = this.getChessBoard().getField(row, column);
 				LOGGER.log(Level.INFO, current.printCoordinates());
 				playersMove.setCurrentField(current);
-				
+
 				LOGGER.log(Level.INFO, "target square:");
 
 				this.wait();
@@ -173,64 +170,62 @@ public class Game {
 	}
 
 	/*
-	 * private boolean isCheckMateDeclaredOrPawnreachedEnd(PieceColour colour,
-	 * Move move) {
+	 * private boolean isCheckMateDeclaredOrPawnreachedEnd(PieceColour colour, Move
+	 * move) {
 	 * 
-	 * if (colour.equals(PieceColour.WHITE)) { if
-	 * (move.getTargetField().getRow() == 8) return true; } else { if
-	 * (move.getTargetField().getRow() == 1) return true; }
+	 * if (colour.equals(PieceColour.WHITE)) { if (move.getTargetField().getRow() ==
+	 * 8) return true; } else { if (move.getTargetField().getRow() == 1) return
+	 * true; }
 	 * 
 	 * Field attacker = move.getTargetField(); boolean kingCannotMove = true;
 	 * 
 	 * if (colour.equals(PieceColour.BLACK)) { Object[]
-	 * accessableFieldsFromWhiteKing = whiteKing
+	 * accessableFieldsFromWhiteKing = whiteKing .getPossibleFields(this).toArray();
+	 * 
+	 * for (Object sq : accessableFieldsFromWhiteKing) { Field square = (Field) sq;
+	 * if (!attackedFieldsFromBlack.containsKey(square)) { kingCannotMove = false; }
+	 * }
+	 * 
+	 * if (kingCannotMove && attackedFieldsFromWhite.get(attacker) == 1) { return
+	 * true; } } else { Object[] accessableFieldsFromBlackKing = blackKing
 	 * .getPossibleFields(this).toArray();
 	 * 
-	 * for (Object sq : accessableFieldsFromWhiteKing) { Field square =
-	 * (Field) sq; if (!attackedFieldsFromBlack.containsKey(square)) {
-	 * kingCannotMove = false; } }
+	 * for (Object sq : accessableFieldsFromBlackKing) { Field square = (Field) sq;
+	 * if (!attackedFieldsFromWhite.containsKey(square)) { kingCannotMove = false; }
+	 * }
 	 * 
-	 * if (kingCannotMove && attackedFieldsFromWhite.get(attacker) == 1) {
-	 * return true; } } else { Object[] accessableFieldsFromBlackKing =
-	 * blackKing .getPossibleFields(this).toArray();
-	 * 
-	 * for (Object sq : accessableFieldsFromBlackKing) { Field square =
-	 * (Field) sq; if (!attackedFieldsFromWhite.containsKey(square)) {
-	 * kingCannotMove = false; } }
-	 * 
-	 * if (kingCannotMove && attackedFieldsFromBlack.get(attacker) == 1) {
-	 * return true; } } return false; }
+	 * if (kingCannotMove && attackedFieldsFromBlack.get(attacker) == 1) { return
+	 * true; } } return false; }
 	 */
 
-	static MoveRating miniMax(int depth, Position position, boolean  is_black){
+	static MoveRating miniMax(int depth, Position position, boolean is_black) {
 		ArrayList<Move> possibleMoves = position.getPossibleMoves(is_black);
-		if (possibleMoves.isEmpty()){
+		if (possibleMoves.isEmpty()) {
 			return null;
 		}
 		StringBuilder printSpaces = new StringBuilder(" ");
-		for (int i=0; i<4-depth; i++) {
+		for (int i = 0; i < 4 - depth; i++) {
 			printSpaces = printSpaces.append(" ");
 		}
-		
+
 		if (depth <= 1) {
 			int bestRating;
 			Move bestMove = null;
-            if (is_black){
-            	bestRating = Integer.MIN_VALUE;
-            }else {
-            	bestRating = Integer.MAX_VALUE;
-            }
-			
+			if (is_black) {
+				bestRating = Integer.MIN_VALUE;
+			} else {
+				bestRating = Integer.MAX_VALUE;
+			}
+
 			for (Move possibleMove : possibleMoves) {
 				Position possiblePosition = position._makeMove(possibleMove);
 				int rating = Rating.ratePosition(possiblePosition);
-				 
-				LOGGER.log(Level.INFO, String.format("%s%s - %s", printSpaces,
-														possibleMove, rating));
-				if (is_black && rating >= bestRating){
+
+				LOGGER.log(Level.INFO, String.format("%s%s - %s", printSpaces, possibleMove, rating));
+				if (is_black && rating >= bestRating) {
 					bestRating = rating;
 					bestMove = possibleMove;
-				}else if (!is_black && rating <= bestRating) {
+				} else if (!is_black && rating <= bestRating) {
 					bestRating = rating;
 					bestMove = possibleMove;
 				}
@@ -242,20 +237,20 @@ public class Game {
 			MoveRating bestMove = new MoveRating(null, best_move_rating);
 			for (Move possibleMove : possibleMoves) {
 				Position possible_position = position._makeMove(possibleMove);
-				MoveRating possibleMoveRating = miniMax(depth-1, possible_position, false);
+				MoveRating possibleMoveRating = miniMax(depth - 1, possible_position, false);
 				if (possibleMoveRating.getRating() >= bestMove.getRating()) {
 					bestMove.setRating(possibleMoveRating.getRating());
 					bestMove.setMove(possibleMove);
 				}
 			}
 			return bestMove;
-		}else {
-			/*//*/
+		} else {
+			/* // */
 			int best_move_rating = Integer.MAX_VALUE;
 			MoveRating bestMove = new MoveRating(null, best_move_rating);
 			for (Move possibleMove : possibleMoves) {
 				Position possible_position = position._makeMove(possibleMove);
-				MoveRating possibleMoveRating = miniMax(depth-1, possible_position, true);
+				MoveRating possibleMoveRating = miniMax(depth - 1, possible_position, true);
 				if (possibleMoveRating.getRating() <= bestMove.getRating()) {
 					bestMove.setRating(possibleMoveRating.getRating());
 					bestMove.setMove(possibleMove);
@@ -270,6 +265,6 @@ public class Game {
 	}
 
 	public void setUI(UserInterface gui) {
-		this.gui=gui;
+		this.gui = gui;
 	}
 }

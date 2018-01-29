@@ -2,6 +2,7 @@ package pieces;
 
 import java.util.ArrayList;
 
+import board.Edge;
 import board.Field;
 import exceptions.InvalidMoveException;
 
@@ -96,22 +97,22 @@ public class Pawn extends Piece {
 		ArrayList<Field> attackedFields = new ArrayList<Field>();
 		Field target;
 		if (this.isWhite()) {
-			target = boardPosition.oneFieldLeftUp();
-			if (target != null) {
-				attackedFields.add(target);
+			Field leftUp = boardPosition.oneFieldLeftUp();
+			if (! (leftUp instanceof Edge)) {
+				attackedFields.add(leftUp);
 			}
-			target = boardPosition.oneFieldRightUp();
-			if (target != null) {
-				attackedFields.add(target);
+			Field rightUp = boardPosition.oneFieldRightUp();
+			if (! (rightUp instanceof Edge)) {
+				attackedFields.add(rightUp);
 			}
 		} else {// pawn is black
-			target = boardPosition.oneFieldLeftDown();
-			if (target != null) {
-				attackedFields.add(target);
+			Field leftDown = boardPosition.oneFieldLeftDown();
+			if (! (leftDown instanceof Edge)) {
+				attackedFields.add(leftDown);
 			}
-			target = boardPosition.oneFieldRightDown();
-			if (target != null) {
-				attackedFields.add(target);
+        	Field rightDown = boardPosition.oneFieldRightDown();
+        	if (! (leftDown instanceof Edge)) {
+				attackedFields.add(rightDown);
 			}
 		}
 		return attackedFields;
