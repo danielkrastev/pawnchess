@@ -15,12 +15,12 @@ public class Rating {
 			{ 0, 30, 35, 35, 36, 35, 35, 35, 30, 0 },
 			{ 0, 50, 50, 50, 50, 50, 50, 50, 50, 0 },
 			{ 0, 80, 80, 80, 80, 80, 80, 80, 80, 0 },
-			{ 0, 100, 100, 100, 100, 100, 100, 100, 100, 0 },
+			{ 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 	
 	private static final int[][] blackPawnsRatingBoard = {
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 100, 100, 100, 100, 100, 100, 100, 100, 0 },
+			{ 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 0 },
 			{ 0, 80, 80, 80, 80, 80, 80, 80, 80, 0 },
 			{ 0, 50, 50, 50, 50, 50, 50, 50, 50, 0 },
 			{ 0, 38, 40, 40, 40, 40, 40, 40, 38, 0 },
@@ -57,7 +57,7 @@ public class Rating {
 
 	public static int ratePosition(Position position) {
 		int rating = 0;
-		//rating += calculateMaterialRating(position);
+		rating += calculateMaterialRating(position);
 		rating += calculatePiecePositionRating(position);
 		if (position.getCurrentPlayer() == PieceColour.BLACK){
 			rating = 0 - rating;
@@ -65,9 +65,16 @@ public class Rating {
 		return rating;
 	}
 
-	private static int calculateMaterialRating(Position game) {
-		return game.getBlackPieces().size() - game.getWhitePieces().size();
-		//return 1;
+	private static int calculateMaterialRating(Position position) {
+		int materialPts = 0;
+		materialPts += (position.getBlackPieces().size() - position.getWhitePieces().size())*15;
+		if (position.getCurrentPlayer().equals(PieceColour.WHITE)) {
+		//evaluate position for black
+			return materialPts;
+		}else {
+		// evaluate for white	
+			return 0 - materialPts;
+		}
 	}		
 
 	private static int calculatePiecePositionRating(Position position) {
@@ -81,12 +88,27 @@ public class Rating {
 					positionPts += blackKingRatingBoard[p.getRow()][p.getColumn()];
 				}
 			}
+			for (Piece p : position.getWhitePieces()) {
+				if (p instanceof Pawn) {
+					positionPts -= whitePawnsRatingBoard[p.getRow()][p.getColumn()];
+				} else if (p instanceof King) {
+					positionPts -= whiteKingRatingBoard[p.getRow()][p.getColumn()];
+				}
+			}
 		}else {
+			//evaluate position for white
 			for (Piece p : position.getWhitePieces()) {
 				if (p instanceof Pawn) {
 					positionPts += whitePawnsRatingBoard[p.getRow()][p.getColumn()];
 				} else if (p instanceof King) {
 					positionPts += whiteKingRatingBoard[p.getRow()][p.getColumn()];
+				}
+			}
+			for (Piece p : position.getBlackPieces()) {
+				if (p instanceof Pawn) {
+					positionPts -= blackPawnsRatingBoard[p.getRow()][p.getColumn()];
+				} else if (p instanceof King) {
+					positionPts -= blackKingRatingBoard[p.getRow()][p.getColumn()];
 				}
 			}
 		}

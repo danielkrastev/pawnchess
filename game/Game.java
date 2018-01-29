@@ -1,17 +1,11 @@
 package game;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 import board.ChessBoard;
 import board.Field;
 import exceptions.InvalidMoveException;
-import pieces.King;
 import pieces.Pawn;
 import pieces.Piece;
 import pieces.Piece.PieceColour;
@@ -21,29 +15,28 @@ import java.util.logging.*;
 public class Game {
 	private static final Logger LOGGER = Logger.getLogger(Game.class.getName());
 
-	private HashSet<Piece> whitePieces;
-	private HashSet<Piece> blackPieces;
 	private ArrayList<Move> listOfMoves;
 
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
-	static private final int DEPTH = 2;
+	static private final int DEPTH = 3;
 	private Position currentPosition;
-	private Random randomGenerator;
+	//private Random randomGenerator;
 	
 	public Game() throws Exception {
 		/*
 		 * FEN notation starts from the 8th rank
 		 * */
+		//starting position
 		//currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
 		//currentPosition = new Position("4k3/8/3PPP2/8/8/8/8/4K3");
 		//candidate 1
 		//currentPosition = new Position("2k5/8/8/7P/p4p2/8/8/3K4");
-		
+		//test position 1, test with depth 1 and 2, see that it works with 2
 		currentPosition = new Position("2k5/8/8/8/8/p4p2/3K4/8");
 		
 		listOfMoves = new ArrayList<Move>();
-		randomGenerator = new Random();
+		//randomGenerator = new Random();
 	}
 
 	public void start() throws Exception {
@@ -94,7 +87,7 @@ public class Game {
 						}
 					}
 					if (is_white) {
-						Thread.sleep(2000);
+						Thread.sleep(1);
 					}
 				} else {
 					LOGGER.log(Level.INFO, "THE MOVE IS NOT VALID");
@@ -131,7 +124,6 @@ public class Game {
 		return this.currentPosition;
 	}
 
-	
 	public String toString() {
 		return currentPosition.getChessBoard().toString();
 	}
@@ -215,6 +207,11 @@ public class Game {
 		if (possibleMoves.isEmpty()){
 			return null;
 		}
+		StringBuilder printSpaces = new StringBuilder(" ");
+		for (int i=0; i<4-depth; i++) {
+			printSpaces = printSpaces.append(" ");
+		}
+		
 		if (depth <= 1) {
 			int bestRating;
 			Move bestMove = null;
@@ -227,7 +224,9 @@ public class Game {
 			for (Move possibleMove : possibleMoves) {
 				Position possiblePosition = position._makeMove(possibleMove);
 				int rating = Rating.ratePosition(possiblePosition);
-				LOGGER.log(Level.INFO, String.format("%s - %s", possibleMove, rating));
+				 
+				LOGGER.log(Level.INFO, String.format("%s%s - %s", printSpaces,
+														possibleMove, rating));
 				if (is_black && rating >= bestRating){
 					bestRating = rating;
 					bestMove = possibleMove;
@@ -264,14 +263,6 @@ public class Game {
 			}
 			return bestMove;
 		}
-	}
-
-	public HashSet<Piece> getWhitePieces() {
-		return whitePieces;
-	}
-
-	public HashSet<Piece> getBlackPieces() {
-		return blackPieces;
 	}
 
 	public void setMouseMover(UserInterface.MouseMover mover) {
