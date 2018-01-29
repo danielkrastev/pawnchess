@@ -27,14 +27,21 @@ public class Game {
 
 	private UserInterface gui;
 	private UserInterface.MouseMover mouseMover;
-	static private final int DEPTH = 1;
-	private MoveValidator moveValidator;
+	static private final int DEPTH = 2;
 	private Position currentPosition;
 	private Random randomGenerator;
 	
 	public Game() throws Exception {
-		currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
+		/*
+		 * FEN notation starts from the 8th rank
+		 * */
+		//currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
 		//currentPosition = new Position("4k3/8/3PPP2/8/8/8/8/4K3");
+		//candidate 1
+		//currentPosition = new Position("2k5/8/8/7P/p4p2/8/8/3K4");
+		
+		currentPosition = new Position("2k5/8/8/8/8/p4p2/3K4/8");
+		
 		listOfMoves = new ArrayList<Move>();
 		randomGenerator = new Random();
 	}
@@ -209,13 +216,22 @@ public class Game {
 			return null;
 		}
 		if (depth <= 1) {
-			int bestRating = 0;
+			int bestRating;
 			Move bestMove = null;
+            if (is_black){
+            	bestRating = Integer.MIN_VALUE;
+            }else {
+            	bestRating = Integer.MAX_VALUE;
+            }
+			
 			for (Move possibleMove : possibleMoves) {
 				Position possiblePosition = position._makeMove(possibleMove);
 				int rating = Rating.ratePosition(possiblePosition);
 				LOGGER.log(Level.INFO, String.format("%s - %s", possibleMove, rating));
-				if (rating >= bestRating) {
+				if (is_black && rating >= bestRating){
+					bestRating = rating;
+					bestMove = possibleMove;
+				}else if (!is_black && rating <= bestRating) {
 					bestRating = rating;
 					bestMove = possibleMove;
 				}
@@ -227,26 +243,27 @@ public class Game {
 			MoveRating bestMove = new MoveRating(null, best_move_rating);
 			for (Move possibleMove : possibleMoves) {
 				Position possible_position = position._makeMove(possibleMove);
-				MoveRating currentMoveRating = miniMax(depth-1, possible_position, false);
-				if (currentMoveRating.getRating() >= bestMove.getRating()) {
-					bestMove = currentMoveRating;
+				MoveRating possibleMoveRating = miniMax(depth-1, possible_position, false);
+				if (possibleMoveRating.getRating() >= bestMove.getRating()) {
+					bestMove.setRating(possibleMoveRating.getRating());
+					bestMove.setMove(possibleMove);
 				}
-				return bestMove;
 			}
+			return bestMove;
 		}else {
 			/*//*/
 			int best_move_rating = Integer.MAX_VALUE;
 			MoveRating bestMove = new MoveRating(null, best_move_rating);
 			for (Move possibleMove : possibleMoves) {
 				Position possible_position = position._makeMove(possibleMove);
-				MoveRating currentMoveRating = miniMax(depth-1, position, false);
-				if (currentMoveRating.getRating() <= bestMove.getRating()) {
-					bestMove = currentMoveRating;
+				MoveRating possibleMoveRating = miniMax(depth-1, possible_position, true);
+				if (possibleMoveRating.getRating() <= bestMove.getRating()) {
+					bestMove.setRating(possibleMoveRating.getRating());
+					bestMove.setMove(possibleMove);
 				}
-				return bestMove;
 			}
+			return bestMove;
 		}
-		return null;
 	}
 
 	public HashSet<Piece> getWhitePieces() {

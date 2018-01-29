@@ -206,93 +206,92 @@ public class Field {
 	}
 
 	public Field oneFieldLeft() {
-		Field sq = new Field(row, column - 1);
+		Field sq = new Field(row, column-1);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row, column-1);
 		}
 	}
 
 	public Field twoFieldsUp() {
-		Field sq = new Field(row + 2, column);
+		Field sq = new Field(row+2, column);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row+2, column);
 		}
 	}
 
 	public Field twoFieldsDown() {
-		Field sq = new Field(row - 2, column);
+		Field sq = new Field(row-2, column);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Field(row-2, column);
 		}
 	}
 
 	public Field oneFieldRight() {
-		Field sq = new Field(row, column + 1);
+		Field sq = new Field(row, column+1);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row, column+1);
 		}
 	}
 
 	public Field oneFieldUp() {
-		Field sq = new Field(row + 1, column);
+		Field sq = new Field(row+1, column);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row+1, column);
 		}
 	}
 
 	public Field oneFieldDown() {
-		Field sq = new Field(row - 1, column);
+		Field sq = new Field(row-1, column);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row-1, column);
 		}
 	}
 
 	public Field oneFieldLeftUp() {
-		Field sq = new Field(row + 1, column - 1);
+		Field sq = new Field(row+1, column-1);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row+1, column-1);
 		}
 	}
 
 	public Field oneFieldRightUp() {
-
-		Field sq = new Field(row + 1, column + 1);
+		Field sq = new Field(row+1, column+1);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row+1, column+1);
 		}
 	}
 
 	public Field oneFieldLeftDown() {
-		Field sq = new Field(row - 1, column - 1);
+		Field sq = new Field(row-1, column-1);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row-1, column-1);
 		}
 	}
 
 	public Field oneFieldRightDown() {
-		Field sq = new Field(row - 1, column + 1);
+		Field sq = new Field(row-1, column+1);
 		if (sq.isValidField()) {
 			return sq;
 		} else {
-			return null;
+			return new Edge(row-1, column+1);
 		}
 	}
 
@@ -308,16 +307,16 @@ public class Field {
 	}
 
 	public int getX() {
-		return (this.column) * squareSize;
+		return (this.column)*squareSize;
 	}
 
 	public int getY() {
-		return (9 - this.row) * squareSize;
+		return (9-this.row)*squareSize;
 	}
 
 	@Override
 	public int hashCode() {
-		return column + (row - 1) * 8;
+		return column + (row-1)*8;
 	}
 
 	public String printCoordinates() {

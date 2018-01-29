@@ -74,16 +74,12 @@ public class ChessBoard {
 		return FIELDS[row][column];
 	}
 
-	public Field getField(Field square) {
-		if (square.isValidField()) {
-			return FIELDS[square.getRow()][square.getColumn()];
-		}
-		return null;
+	public Field getField(Field field) {
+		return FIELDS[field.getRow()][field.getColumn()];
 	}
 
 	public Piece getPiece(Field square) {
-		return  getField(square).getPiece();
-		//return square.getPiece();
+		return getField(square).getPiece();
 	}
 
 	public void freeField(Field sq) {

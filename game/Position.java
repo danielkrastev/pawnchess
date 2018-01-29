@@ -340,8 +340,8 @@ public class Position {
 				accessableFields = getPossibleFields(piece);
 				for (Field target : accessableFields) {
 					Move move = new Move();
-					move.setCurrentField(chessBoard.getField(piece.getBoardPosition()[0],
-							 			 piece.getBoardPosition()[1]));
+					move.setCurrentField(chessBoard.getField(piece.getRow(),
+							 			 					 piece.getColumn()));
 			    	move.setTargetField(target);
 			    	//check for check
 					if (isCheckDeclaredOnBlack()) {
@@ -381,8 +381,8 @@ public class Position {
 	
 	private  ArrayList<Field> getPossibleFieldsForPawn(Pawn pawn) {
 		ArrayList<Field> possibleFields = new ArrayList<Field>();
-		Field currentField = chessBoard.getField(pawn.getBoardPosition()[0],
- 												 pawn.getBoardPosition()[1]);
+		Field currentField = chessBoard.getField(pawn.getRow(),
+ 												 pawn.getColumn());
 		for (Field sq : pawn.getAccesableFields(currentField)) {
 			Field targetField = chessBoard.getField((Field) sq);
 			if (!targetField.isTaken()) {

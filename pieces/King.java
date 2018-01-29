@@ -2,6 +2,7 @@ package pieces;
 
 import java.util.ArrayList;
 
+import board.Edge;
 import board.Field;
 import exceptions.InvalidMoveException;
 
@@ -58,9 +59,7 @@ public class King extends Piece {
 		if (!targetField.isTaken()){
 			return true;
 		}
-		
 		PieceColour colour = this.getPieceColour();
-		
 		switch (colour){
 		case WHITE:
 			if (targetField.getPiece().getPieceColour().equals(PieceColour.BLACK)){
@@ -78,39 +77,39 @@ public class King extends Piece {
 		return false;
 	}
 
-	//all the fields surrounding the king
+	//all the fields surrounding the king, except the board edges :/
 	public ArrayList<Field> getAccesableFields(Field boardPosition) {
      ArrayList <Field> accessableFields = new ArrayList<Field>();
      	 Field leftField =  boardPosition.oneFieldLeft();
-         if (leftField != null){
+         if (!(leftField instanceof Edge)){
         	 accessableFields.add(leftField);
          }
          Field rightField = boardPosition.oneFieldRight();
-         if (rightField !=null){
+         if (!(rightField instanceof Edge)){
         	 accessableFields.add(rightField);
          }
          Field upField = boardPosition.oneFieldUp();
-         if(upField != null){
+         if (!(upField instanceof Edge)){
         	 accessableFields.add(upField);
          }
          Field downField = boardPosition.oneFieldDown();
-         if (downField != null){
+         if (!(downField instanceof Edge)){
         	 accessableFields.add(downField);
          }
          Field leftUpField = boardPosition.oneFieldLeftUp();
-         if (leftUpField != null){
+         if (!(leftUpField instanceof Edge)){
         	 accessableFields.add(leftUpField);
          }
          Field leftDownField = boardPosition.oneFieldLeftDown();
-         if (leftDownField != null){
+         if (!(leftDownField instanceof Edge)){
          	accessableFields.add(leftDownField);
          }
          Field rightUpField = boardPosition.oneFieldRightUp();
-         if (rightUpField != null){
+         if (!(rightUpField instanceof Edge)){
         	 accessableFields.add(rightUpField);
          }
          Field rightDownField = boardPosition.oneFieldRightDown();
-         if(rightDownField != null){
+         if(!(rightDownField instanceof Edge)){
         	 accessableFields.add(rightDownField);
          }
          return   accessableFields;
