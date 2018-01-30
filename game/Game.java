@@ -28,8 +28,8 @@ public class Game {
 		 * FEN notation starts from the 8th rank
 		 */
 		// starting position
-		currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
-		// currentPosition = new Position("4k3/8/3PPP2/8/8/8/8/4K3");
+		// currentPosition = new Position("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3");
+	       currentPosition = new Position("4k3/8/3PPP2/8/8/8/8/4K3");
 		// candidate 1
 		// currentPosition = new Position("2k5/8/8/7P/p4p2/8/8/3K4");
 		// test position 1, test with depth 1 and 2, see that it works with 2
@@ -251,9 +251,11 @@ public class Game {
 			for (Move possibleMove : possibleMoves) {
 				Position possible_position = position._makeMove(possibleMove);
 				MoveRating possibleMoveRating = miniMax(depth - 1, possible_position, true);
-				if (possibleMoveRating.getRating() <= bestMove.getRating()) {
-					bestMove.setRating(possibleMoveRating.getRating());
-					bestMove.setMove(possibleMove);
+				if (possibleMoveRating != null) {
+					if (possibleMoveRating.getRating() <= bestMove.getRating()) {
+						bestMove.setRating(possibleMoveRating.getRating());
+						bestMove.setMove(possibleMove);
+					}
 				}
 			}
 			return bestMove;
