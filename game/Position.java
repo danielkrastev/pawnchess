@@ -218,7 +218,7 @@ public class Position {
 																	// that this
 																	// piece is
 																	// pawn
-					if (!isProtected(whitePawn)) {
+					if (! isProtected(whitePawn)) {
 						possibleFields.add(targetField);
 					}
 				}
@@ -242,20 +242,22 @@ public class Position {
 		return attackedFieldsFromBlack;
 	}
 	
-	private boolean isProtected(Pawn pawn) {
+	private boolean isProtected(Pawn pawn) { 
 		Field pawnPosition = chessBoard.getField(pawn.getRow(), pawn.getColumn());
 		if (pawn.isWhite()) {
 			Field leftDown = pawnPosition.oneFieldLeftDown();
+			leftDown = chessBoard.getField(leftDown);
 			Piece p = leftDown.getPiece();
 			if (p instanceof Pawn && p.isWhite()) {
 				return true;
 			}
 			Field rightDown = pawnPosition.oneFieldRightDown();
+			rightDown = chessBoard.getField(rightDown);
 			p = rightDown.getPiece();
-			if (p instanceof Pawn && p.isBlack()) {
+			if (p instanceof Pawn && p.isWhite()) {
 				return true;
 			}
-			
+
 			King whiteKing = getWhiteKing();
 			Field kingPosition = chessBoard.getField(whiteKing.getRow(), whiteKing.getColumn());
 			if (whiteKing.getAccesableFields(kingPosition).contains(pawnPosition)){
@@ -267,6 +269,7 @@ public class Position {
 			if (p instanceof Pawn && p.isBlack()) {
 				return true;
 			}
+
 			Field upRight = pawnPosition.oneFieldRightUp();
 			p = upRight.getPiece();
 			if (p instanceof Pawn && p.isBlack()) {
